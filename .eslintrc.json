@@ -1,0 +1,71 @@
+{
+  "env": {
+    "browser": false,
+    "es2022": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "metarhia",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:node/recommended"
+  ],
+  "plugins": ["prettier"],
+  "settings": {
+    "import/resolver": {
+      "eslint-import-resolver-custom-alias": {
+        "alias": {
+          "#tests": "./tests",
+          "#src": "./src",
+          "#modules": "./src/modules",
+          "#configs": "./src/configs",
+          "#common": "./src/common",
+          "#types": "./src/@types",
+          "#constants": "./src/common/constants",
+          "#services": "./src/common/infra/services",
+          "#errors": "./src/common/errors",
+          "#utils": "./src/common/utils",
+          "#v1": "./src/common/infra/web-server/rest-api/v1"
+        },
+        "extensions": [".js",".cjs",".mjs", ".ts", ".d.ts"]
+      }
+    }
+  },
+  "rules": {
+    "no-console": "error",
+    "prettier/prettier": "error",
+    "func-names": "error",
+    "no-process-exit": "error",
+    "class-methods-use-this": "off",
+    "node/no-missing-import": "off",
+    "node/no-missing-require": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any":"off",
+    "node/file-extension-in-import": ["error", "always", {
+      "tryExtensions": [".js", ".json", ".node"]
+    }],
+    "new-cap": "off",
+    "@typescript-eslint/no-unused-vars": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js"],
+      "rules": {
+        "no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+      }
+    },
+    {
+      "files": ["**/*.d.ts"],
+      "rules": {
+        "no-unused-vars": "off"
+      }
+    }
+  ]
+}

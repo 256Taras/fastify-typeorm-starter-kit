@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: starter-db-2
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      # the image will only initialize the database if the data directory is empty
+      POSTGRES_USER: postgres
+      POSTGRES_DB: starter-local-2
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5434:5432
+    # networks:
+    # - workshop
+  # database management tool
+  adminer:
+    image: adminer
+    restart: always
+    ports: ['8888:8080']
+  # an email testing tool: https://hub.docker.com/r/mailhog/mailhog/
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   restart: always
+  #   ports: ['1025:1025', '8025:8025']
+  # # https://docs.min.io/docs/minio-server-configuration-guide.html
+  # minio:
+  #   image: minio/minio
+  #   restart: always
+  #   volumes: ['minio:/data']
+  #   command: server /data
+  #   ports: ['9000:9000']
+  #   environment:
+  #     MINIO_ACCESS_KEY: starterkit
+  #     MINIO_SECRET_KEY: starterkit
+  # minio-client:
+  #   image: minio/mc
+  #   volumes: ['./minio.init:/minio.init']
+  #   entrypoint: sh
+  #   depends_on: ['minio']
+  #   command: /minio.init/init.sh
+  #   environment:
+  #     MINIO_ACCESS_KEY: starterkit
+  #     MINIO_SECRET_KEY: starterkit
+  #     MINIO_BUCKET: starterkit.local
+  #     MINIO_HOST: minio
+  #     MINIO_PORT: 9000
+  #     MINIO_IMAGES_DIR: images/
+
+volumes:
+  minio:
+# networks:
+#   workshop:
+#     name: workshop_local
+#     driver: bridge

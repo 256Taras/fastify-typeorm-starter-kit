@@ -1,0 +1,60 @@
+import { pagination } from "#utils";
+
+import { {{LowerCaseName}}Schemas } from "#modules/{{ModuleName}}/index.js";
+
+/**
+ * @type {import("fastify").FastifyPluginAsync}
+ */
+export default async function {{LowerCaseName}}RouterV1(app) {
+  const {
+    create{{UpperCaseName}}UseCase,
+    get{{UpperCaseName}}UseCase,
+    getOne{{UpperCaseName}}UseCase,
+    update{{UpperCaseName}}UseCase,
+    delete{{UpperCaseName}}UseCase,
+  } = app.diContainer.cradle;
+
+  app.post("/", {
+    schema: {{LowerCaseName}}Schemas.create,
+    preValidation: [app.auth([app.verifyJwt])],
+
+    handler(req) {
+      return create{{UpperCaseName}}UseCase(req.body);
+    },
+  });
+
+  app.get("/", {
+    schema: {{LowerCaseName}}Schemas.get,
+    preValidation: [app.auth([app.verifyJwt])],
+
+    handler(req) {
+      return get{{UpperCaseName}}UseCase(pagination(req));
+    },
+  });
+
+  app.get("/:id", {
+    schema: {{LowerCaseName}}Schemas.getOne,
+    preValidation: [app.auth([app.verifyJwt])],
+    handler(req) {
+      return getOne{{UpperCaseName}}UseCase(req.params.id);
+    },
+  });
+
+  app.put("/:id", {
+    schema: {{LowerCaseName}}Schemas.update,
+    preValidation: [app.auth([app.verifyJwt])],
+
+    handler(req) {
+      return update{{UpperCaseName}}UseCase(req.params.id);
+    },
+  });
+
+  app.delete("/:id", {
+    schema: {{LowerCaseName}}Schemas.delete,
+    preValidation: [app.auth([app.verifyJwt])],
+
+    handler(req) {
+      return delete{{UpperCaseName}}UseCase(req.params.id);
+    },
+  });
+}

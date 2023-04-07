@@ -1,0 +1,14 @@
+import { ResourceNotFoundException } from "#errors";
+import { STATUS_SUCCESS } from "#constants";
+
+export default async function delete{{UpperCaseName}}UseCase({ {{UpperCaseName}}, logger }, req) {
+  const { id } = req.params;
+
+  logger.debug(`Delete {{UpperCaseName}} with ${id}`);
+
+  const result = await {{UpperCaseName}}.destroy({ where: { id } });
+
+  if (!result) return new ResourceNotFoundException(`{{UpperCaseName}} with id ${id} not found`);
+
+  return STATUS_SUCCESS;
+}

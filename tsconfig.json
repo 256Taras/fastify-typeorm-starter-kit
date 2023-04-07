@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 18",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022"],
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false,
+    "strict": true,
+    "alwaysStrict": true,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "paths": {
+      "#tests/*": ["./tests/*"],
+      "#src/*": ["./src/*"],
+      "#modules/*": ["./src/modules/*"],
+      "#configs": ["./src/configs/index.js"],
+      "#types/*": ["./src/@types/*"],
+      "#common/*": ["./src/common/*"],
+      "#constants": ["./src/common/constants/index.js"],
+      "#services/*": ["./src/common/infra/services/*"],
+      "#errors": ["./src/common/errors/index.js"],
+      "#utils/*": ["./src/common/utils/*"],
+      "#v1": ["./src/common/infra/web-server/rest-api/v1/index.js"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js"
+  ]
+
+}

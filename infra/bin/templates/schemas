@@ -1,0 +1,55 @@
+import S from 'fluent-json-schema';
+
+import {
+  mixinTagForSchemas,
+  convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as manyToAjv,
+} from '#utils';
+import { commonSchemasV1 } from '#v1';
+import { defaultHttpErrorCollection } from '#errors';
+import { STATUS_SUCCESS, tables } from '#constants';
+
+export const {{LowerCaseName}}Schemas = mixinTagForSchemas(
+  {
+    create: {
+      security: [{ bearerTokenAuth: [] }],
+      body: S.object(),
+      response: {
+        201: S.object(),
+        ...manyToAjv(defaultHttpErrorCollection),
+      },
+    },
+    getOne: {
+      security: [{ bearerTokenAuth: [] }],
+      params: commonSchemasV1.id,
+      response: {
+        200: S.object(),
+        ...manyToAjv(defaultHttpErrorCollection),
+      },
+    },
+    get: {
+      security: [{ bearerTokenAuth: [] }],
+      querystring: commonSchemasV1.paginationQuery,
+      response: {
+        200: commonSchemasV1.pagination(S.object()),
+        ...manyToAjv(defaultHttpErrorCollection),
+      },
+    },
+    remove: {
+      security: [{ bearerTokenAuth: [] }],
+      params: commonSchemasV1.id,
+      response: {
+        200: STATUS_SUCCESS,
+        ...manyToAjv(defaultHttpErrorCollection),
+      },
+    },
+    update: {
+      security: [{ bearerTokenAuth: [] }],
+      body: S.object(),
+      response: {
+        200: STATUS_SUCCESS,
+        ...manyToAjv(defaultHttpErrorCollection),
+      },
+    },
+  },
+  tables.{{LowerCaseName}}
+);

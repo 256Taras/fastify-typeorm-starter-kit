@@ -1,0 +1,2 @@
+export * from './{{ModuleName}}.model.js';
+export * from './{{ModuleName}}.schemas.js';

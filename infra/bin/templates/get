@@ -1,0 +1,17 @@
+export default async function get{{UpperCaseName}}UseCase({ {{UpperCaseName}}, logger }, { page, limit, offset }) {
+  logger.debug(`Get all {{UpperCaseName}}`);
+
+  const { rows, count } = {{UpperCaseName}}.findAndCountAll({
+    raw: true,
+    distinct: true,
+    limit,
+    offset,
+    order: [["createdAt", req.query.order]],
+  });
+
+  return {
+    page,
+    total: count,
+    data: rows,
+  };
+}

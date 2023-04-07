@@ -1,0 +1,44 @@
+import { DataTypes, Model } from 'sequelize';
+import { randomUUID } from 'node:crypto';
+
+import { tables } from '#constants';
+
+export class {{UpperCaseName}} extends Model {}
+
+const attributes = {
+  id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: randomUUID(),
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'created_at',
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    field: 'updated_at',
+  },
+};
+
+/**
+ *
+ * @param {import('sequelize').Sequelize}sequelize
+ */
+export const init = (sequelize) => {
+  const option = {
+    sequelize,
+    tableName: tables.{{LowerCaseName}},
+    modelName: {{UpperCaseName}}.constructor.name,
+    timestamps: true,
+  };
+  {{UpperCaseName}}.init(attributes, option);
+};
+
+/**
+ *
+ * @param {import('sequelize').Sequelize}sequelize
+ */
+// export const associate = (sequelize) => {};
