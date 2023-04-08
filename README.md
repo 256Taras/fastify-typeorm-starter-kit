@@ -1,6 +1,29 @@
 ## 🚀  Description
 
-Template for Node.js projects with pre-built fastify setup.
+Template for developing applications based on a modular MVC structure using the latest Node.js features.
+This template is ideal for initial development, given that its purpose is to create MVPs. However,
+considering the possibility of further project expansion, it can also be used for an easy transition to N-layered or clean architecture in the future.
+With this approach, the project can be easily extended as needed, ensuring its stability and flexibility in the future.
+
+The template provides the ability to quickly start developing Node.js applications using Fastify and TypeORM.
+Fastify is a fast and efficient web framework for Node.js, and TypeORM is an ORM for Node.js that allows for easy database integration.
+
+The main idea of the template is to help developers create scalable web applications on Node.js using the latest Node.js features without using Babel or TypeScript.
+The template is a simplified alternative to the Nest.js framework, yet it maintains simplicity and ease of use, providing the following benefits:
+
+- Less infrastructure dependency: Fastify allows for quickly creating small, efficient HTTP servers, which are a lighter option compared to other frameworks like Express or Nest.js.
+
+- Simplicity: Fastify offers a simple yet powerful system of middleware and plugins, making it easy to use and extend.
+
+- High performance: Fastify offers speed compared to other frameworks and supports asynchronous requests.
+
+- Low complexity: Code that uses Fastify is simple and understandable, making it easier for developers to understand and extend.
+
+The template is an excellent option for developing MVPs, as it allows for quickly and efficiently creating web applications. It includes a set of components that help developers create the product in the shortest possible time, such as:
+
+- Well-structured and organized code, simplifying the development and support process.
+- Ready-made components that can be easily changed and configured to meet the project's needs.
+- The ability to add new components and features to the project without sacrificing stability and flexibility.
 
 ## ⚠️ Requirements
 
