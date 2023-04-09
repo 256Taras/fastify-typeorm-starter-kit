@@ -1,4 +1,4 @@
-# fastify-typeorm-starter-kit
+# 🧰 fastify-typeorm-starter-kit
 
 ## 🚀  Description
 
