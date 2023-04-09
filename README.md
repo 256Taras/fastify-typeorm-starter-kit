@@ -1,3 +1,5 @@
+# fastify-typeorm-starter-kit
+
 ## 🚀  Description
 
 Template for developing applications based on a modular MVC structure using the latest Node.js features.
@@ -75,7 +77,7 @@ The template is an excellent option for developing MVPs, as it allows for quickl
 - `start` - run appPlugin, load & validate env
 - `start:dev` - run appPlugin, load & validate env. use pretty print for logs
 - `start:dev:dev` - run appPlugin, load & validate env. use pretty print for logs with reload app supported only from node 18.7
-- `docker:infra:up` - starts infrastructure (db, smtp-server, imageproxy, adminer, s3-server) using docker-compose
+- `docker:infra:up` - starts infrastructure (db, adminer) using docker-compose
 - `docker:infra:down` - stops docker-compose from "docker:up"
 
 ## 🤌 Development culture
@@ -171,13 +173,12 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 
 ## 💡 Features
 
-- [x] auto load env: pre-built in 'start' script
 - [x] automatic loading of modules and plugins
 - [x] validate env:
 - [x] main script: initialize infra for proper server start, start server, add server stop handlers
 - [x] graceful shutdown
 - [x] configs: separate folder, split by files, setup using process env
-- [x] fastify server
+- [x] fastify application server
 - [x] auto documentation: fastify-swagger. \*Require fastify input & output schemas
 - [x] routers with input validation
 - [x] separate router handler
@@ -188,7 +189,6 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] loggerService service implementation with LOG_LEVELs: wrapped pino into console.log interface
 - [x] containerize in docker server and all 3rd parties if possible:
   - [x] server
-  - [ ] s3
   - [x] db (postgres)
 - [x] DI: At the file system level
 - [x] TDD: node:test or tap, DI, unit-tests, e2e
@@ -213,14 +213,14 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] rate limiting (https://www.npmjs.com/package/fastify-rate-limit)
   - [x] global rate limit
   - [x] rate limit per route
-- [ ] WebSockets pub sub adapter with support for scheme validation
+- [ ] webSockets pub sub adapter with support for scheme validation
 - [ ] request timeouts (implement manually, example: https://github.com/fastify/fastify-http-proxy/issues/74)
 - [x] request-scoped storage support, based on Asynchronous Local Storage to receive data without mutation request
 - [x] templates rendering support
 - [x] ability to run CPU intensive tasks in the Piscina worker pool
 - [x] covering utilities with .d.ts files
 - [ ] clustering based on child process
-- [x] utilities for functional programming
+- [ ] utilities for functional programming
    - [x] monads
    - [ ] pattern matching
 
@@ -235,4 +235,3 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [Deploy](./docs/deploy.md)
 - [Environment](./docs/env.md)
 - [FAQ](./docs/faq.md)
-# fastify-typeorm-starter-kit
