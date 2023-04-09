@@ -9,6 +9,8 @@ plugin](https://www.fastify.io/docs/latest/Plugins/), it is
 encapsulated (it can have its own independent plugins).
 The application server works in such a way that you create a folder and place there a file with the prefix [module-name].router.[api-version].js and based on this your routes are built.
 
+Here are some best practices to keep in mind:
+
 - If you need to share functionality between routes, place that
   functionality into the `plugins` folder, and share it via
   [decorators](https://www.fastify.io/docs/latest/Decorators/).
@@ -23,5 +25,5 @@ The application server works in such a way that you create a folder and place th
 - If you have more than one service or orm model, move it to a folder such as `services` `entities`
 
 - If you need to quickly add a module with `CRUD` operations, you can run the command `yarn module [your-module-name]` which will create all the base files.
--
+
 - If you're a bit confused about using async/await to write routes, you would better take a look at Promise resolution for more details.
