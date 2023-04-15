@@ -13,18 +13,18 @@ import fastifyCookie from "@fastify/cookie";
 import fastifyCsrf from "@fastify/csrf-protection";
 import fastifyPiscina from "fastify-piscina";
 import fastifyAutoLoad from "@fastify/autoload";
-
 import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 
 import { getDirName } from "#common/utils/common/index.js";
 import {
   globalHttpFastify404ErrorHandler,
   globalHttpFastifyErrorHandler,
-} from "#utils/http/http-fastify-error-handler.js";
+} from "#common/errors/fastify-error-handler.js";
 
 import sharedHealthCheckRouter from "#modules/health-check/router.js";
 import * as configs from "#configs";
-import appV1Plugin from "./v1/app.plugin.js";
+import appV1Plugin from "./v1/http.plugin.js";
+import wsPlugin from "../ws-server/websocket.plugin.js";
 
 export class RestApiServer {
   /**
@@ -57,6 +57,7 @@ export class RestApiServer {
     // @ts-ignore
     fastifyApp.setErrorHandler(globalHttpFastifyErrorHandler);
     // @ts-ignore
+
     fastifyApp.setNotFoundHandler(globalHttpFastify404ErrorHandler);
 
     // Load custom plugins
@@ -99,21 +100,19 @@ export class RestApiServer {
     /**
      * WARNING!!! The router must be Promise because the error issued by fastify is not clear
      */
-    fastifyApp.register(sharedHealthCheckRouter, { prefix: "/health-check" });
+    fastifyApp.register(sharedHealthCheckRouter, { prefix: "/api/health-check" });
     fastifyApp.register(appV1Plugin, { prefix: "/v1/", ...this.#options });
+    fastifyApp.register(wsPlugin);
 
     return fastifyApp;
   }
 
   async stop() {
-    await this.#fastify.close().then(
-      () => {
-        logger.info("Server has been successfully closed.");
-      },
-      (err) => {
-        logger.error("Server failed to close with error: ", err);
-      },
-    );
+    try {
+      logger.info("Server has been successfully closed.");
+    } catch (err) {
+      logger.error("Server failed to close with error: ", err);
+    }
   }
 
   /**

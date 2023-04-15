@@ -6,12 +6,12 @@ const DELIMITER_CODE_LENGTH = 3;
  * @param {import('../../../@types').HttpErrorResponseType} httpFastifyError
  */
 export const convertHttpErrorToFastifyAjvSchemaError = (httpFastifyError) => ({
-  [`${httpFastifyError.httpStatusCode}`]: {
+  [`${httpFastifyError.statusCode}`]: {
     type: "object",
-    required: ["code", "httpStatusCode", "userMessage"],
+    required: ["code", "statusCode", "userMessage"],
     properties: {
       code: { enum: [httpFastifyError.code] },
-      httpStatusCode: { enum: [httpFastifyError.httpStatusCode] },
+      statusCode: { enum: [httpFastifyError.statusCode] },
       userMessage: { enum: [httpFastifyError.userMessage] },
       developerMessage: { type: "string" },
     },

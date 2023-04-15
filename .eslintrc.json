@@ -31,7 +31,7 @@
           "#services": "./src/common/infra/services",
           "#errors": "./src/common/errors",
           "#utils": "./src/common/utils",
-          "#v1": "./src/common/infra/web-server/rest-api/v1"
+          "#v1": "./src/common/infra/api/http-server/v1"
         },
         "extensions": [".js",".cjs",".mjs", ".ts", ".d.ts"]
       }

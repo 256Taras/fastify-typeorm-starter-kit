@@ -1,5 +1,5 @@
 import { env } from "../../configs/env.js";
 
 export const cronConfig = {
-  autorun: env.C === "1",
+  autorun: env.ENABLE_CRON,
 };

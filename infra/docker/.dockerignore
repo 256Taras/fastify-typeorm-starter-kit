@@ -6,6 +6,7 @@ Dockerfile
 .gitignore
 docs
 .env
+docker.env
 **/.classpath
 **/.dockerignore
 **/.env
@@ -28,4 +29,4 @@ docs
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
-README.md
+pgadmin

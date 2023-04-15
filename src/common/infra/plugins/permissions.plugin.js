@@ -4,7 +4,7 @@ import { AccessControl } from "accesscontrol";
 import { ForbiddenException } from "#errors";
 
 import { permissionsConfig } from "#configs";
-import { userContext } from "#common/utils/http/user.context.js";
+import { userContext } from "#utils/common/user.context.js";
 
 /**
  * A Fastify plugin for implementing role-based access control.

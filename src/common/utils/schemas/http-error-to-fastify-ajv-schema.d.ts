@@ -8,7 +8,7 @@ export function convertHttpErrorToFastifyAjvSchemaError(
       code: {
         enum: number[];
       };
-      httpStatusCode: {
+      statusCode: {
         enum: number[];
       };
       userMessage: {
@@ -30,7 +30,7 @@ export function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(
       code: {
         enum: number[];
       };
-      httpStatusCode: {
+      statusCode: {
         enum: number[];
       };
       userMessage: {
@@ -52,7 +52,7 @@ export function convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection(
       code: {
         enum: number[];
       };
-      httpStatusCode: {
+      statusCode: {
         enum: number[];
       };
       userMessage: {

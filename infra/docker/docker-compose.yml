@@ -1,56 +1,54 @@
 version: '3.8'
 
 services:
+  # PostgreSQL database container
   db:
-    container_name: starter-db-2
-    image: postgres:14.1-alpine
+    # Name of the container
+    container_name: postgres
+    # PostgreSQL image and version to use
+    image: postgres:15.1-alpine
+    # Restart policy for the container
     restart: always
+    # Environment variables to pass to the container
     environment:
-      # the image will only initialize the database if the data directory is empty
-      POSTGRES_USER: postgres
-      POSTGRES_DB: starter-local-2
-      POSTGRES_PASSWORD: password
+      # The image will only initialize the database if the data directory is empty
+      POSTGRES_USER: oonhvxbf
+      POSTGRES_DB: oonhvxbf
+      POSTGRES_PASSWORD: WNDWxbMlQEQLCqkQQybNREkQyOJMZ5eD
+    # Port mapping for the container
     ports:
-      - 5434:5432
-    # networks:
-    # - workshop
-  # database management tool
-  adminer:
-    image: adminer
-    restart: always
-    ports: ['8888:8080']
-  # an email testing tool: https://hub.docker.com/r/mailhog/mailhog/
-  # mailhog:
-  #   image: mailhog/mailhog
-  #   restart: always
-  #   ports: ['1025:1025', '8025:8025']
-  # # https://docs.min.io/docs/minio-server-configuration-guide.html
-  # minio:
-  #   image: minio/minio
-  #   restart: always
-  #   volumes: ['minio:/data']
-  #   command: server /data
-  #   ports: ['9000:9000']
-  #   environment:
-  #     MINIO_ACCESS_KEY: starterkit
-  #     MINIO_SECRET_KEY: starterkit
-  # minio-client:
-  #   image: minio/mc
-  #   volumes: ['./minio.init:/minio.init']
-  #   entrypoint: sh
-  #   depends_on: ['minio']
-  #   command: /minio.init/init.sh
-  #   environment:
-  #     MINIO_ACCESS_KEY: starterkit
-  #     MINIO_SECRET_KEY: starterkit
-  #     MINIO_BUCKET: starterkit.local
-  #     MINIO_HOST: minio
-  #     MINIO_PORT: 9000
-  #     MINIO_IMAGES_DIR: images/
+      - 5433:5432
+    # Environment file to load environment variables from
+    env_file: [ '../../configs/.env.docker' ]
+    networks:
+      - starter-network
 
-volumes:
-  minio:
-# networks:
-#   workshop:
-#     name: workshop_local
-#     driver: bridge
+  # Database management tool container
+  pgadmin:
+    # Define a container name for the pgadmin service
+    container_name: pgadmin
+    # Use the dpage/pgadmin4:5.7 image for the service
+    image: dpage/pgadmin4:5.7
+    # Always restart the container if it stops
+    restart: always
+    # Set environment variables for the service
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: oonhvxbf
+    # Expose port 80 in the container and map it to port 8080 on the host
+    ports:
+      - 8888:80
+    # Mount a local directory to the container to store pgadmin data
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    # Specify that the service depends on the db service
+    depends_on:
+      - db
+    networks:
+      - starter-network
+
+networks:
+  starter-network:
+
+
+

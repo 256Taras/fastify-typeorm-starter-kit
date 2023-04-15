@@ -2,16 +2,16 @@ import { serverConfig, appConfig } from "#configs";
 
 import { logger } from "#services/logger/logger.service.js";
 import AppDataSource from "../infra/database/typeorm.config.js";
-import RestApi from "./common/infra/web-server/rest-api/server.js";
+import RestApi from "#common/infra/api/http-server/server.js";
 
 // Graceful shutdown
 const gracefulShutdown = async () => {
   // begin
-  logger.info(`Stopping server on port ${serverConfig.port}`);
+  logger.info(`[${appConfig.applicationName}] Stopping server on port ${serverConfig.port}`);
 
   // init handler of force shutdown
   const timeout = setTimeout(() => {
-    logger.info(`Server on port ${serverConfig.port} stop forcefully`);
+    logger.info(`[${appConfig.applicationName}] Server on port ${serverConfig.port} stop forcefully`);
     // eslint-disable-next-line no-process-exit
     process.exit(1);
   }, serverConfig.shutdownTimeout);
@@ -38,7 +38,7 @@ const initStopHandlers = () => {
   });
 
   process.on("SIGHUP", async () => {
-    logger.info(`[${appConfig.applicationName}] SIGINT signal received`);
+    logger.info(`[${appConfig.applicationName}] SIGHUP signal received`);
     await gracefulShutdown();
   });
 
@@ -89,9 +89,11 @@ const main = async () => {
 
 process.on("exit", (code) => logger.info(`[${appConfig.applicationName}] Exit with code: ${code}.`));
 
-main().catch((err) => {
+try {
+  await main();
+} catch (err) {
   // eslint-disable-next-line no-console
   console.error(err);
   // eslint-disable-next-line no-process-exit
   process.exit(1);
-});
+}

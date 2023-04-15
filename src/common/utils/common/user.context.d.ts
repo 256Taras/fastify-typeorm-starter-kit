@@ -1,4 +1,4 @@
-import { IUser } from "#src/modules/users/types";
+import { IUser } from "#modules/users/types";
 import { IRefreshTokenUserPayload } from "#modules/auth/types";
 
 /**

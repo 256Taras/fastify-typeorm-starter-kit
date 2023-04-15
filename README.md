@@ -1,5 +1,3 @@
-# 🧰 fastify-typeorm-starter-kit
-
 ## 🚀  Description
 
 Template for developing applications based on a modular MVC structure using the latest Node.js features.
@@ -24,7 +22,9 @@ The template is a simplified alternative to the Nest.js framework, yet it mainta
 The template is an excellent option for developing MVPs, as it allows for quickly and efficiently creating web applications. It includes a set of components that help developers create the product in the shortest possible time, such as:
 
 - Well-structured and organized code, simplifying the development and support process.
+
 - Ready-made components that can be easily changed and configured to meet the project's needs.
+
 - The ability to add new components and features to the project without sacrificing stability and flexibility.
 
 ## ⚠️ Requirements
@@ -213,7 +213,7 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] rate limiting (https://www.npmjs.com/package/fastify-rate-limit)
   - [x] global rate limit
   - [x] rate limit per route
-- [ ] webSockets pub sub adapter with support for scheme validation
+- [x] WebSockets adapter with support for scheme validation
 - [ ] request timeouts (implement manually, example: https://github.com/fastify/fastify-http-proxy/issues/74)
 - [x] request-scoped storage support, based on Asynchronous Local Storage to receive data without mutation request
 - [x] templates rendering support

@@ -1,6 +1,6 @@
 export interface IHttpErrorResponse {
   code: number;
-  httpStatusCode: number;
+  statusCode: number;
   userMessage: string;
   developerMessage: string;
 }

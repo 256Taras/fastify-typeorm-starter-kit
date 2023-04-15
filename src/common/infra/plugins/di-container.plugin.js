@@ -3,7 +3,7 @@ import * as awilix from "awilix";
 import fp from "fastify-plugin";
 
 import * as nconf from "#configs";
-import { userContext, userRefreshTokenContext } from "#common/utils/http/user.context.js";
+import { userContext, userRefreshTokenContext } from "#utils/common/user.context.js";
 import { getDirName } from "#common/utils/common/index.js";
 import { logger } from "#services/logger/logger.service.js";
 import AppDataSource from "../../../../infra/database/typeorm.config.js";

@@ -1,4 +1,4 @@
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import { appConfig } from "#configs";
 
 import { TEMP_STORAGE_PATH, UPLOAD_SERVER_PATH, UPLOAD_UI_PATH } from "#constants";
@@ -10,21 +10,18 @@ export const toServerPath = (filePath) => `${UPLOAD_SERVER_PATH}/${filePath}`;
 
 export const toUrl = (filePath) => (filePath ? `${appConfig.applicationUrl}/${toUiPath(filePath)}` : null);
 
-export const removeUploadIfExists = (filePath) => {
+export const removeUploadIfExists = async (filePath) => {
   const serverPath = toServerPath(filePath);
 
-  if (!fs.existsSync(serverPath)) {
-    return Promise.resolve();
+  try {
+    // if exist
+    await fs.access(serverPath);
+    // remove
+    await fs.unlink(serverPath);
+  } catch (err) {
+    logger.error(err);
+    throw new Error("Failed to remove upload");
   }
-
-  return new Promise((resolve) => {
-    fs.unlink(serverPath, (err, res) => {
-      if (err) {
-        logger.error(err);
-      }
-      resolve(res);
-    });
-  });
 };
 
 export const uploadFile = async (uploadedFile, folder) => {
@@ -34,50 +31,14 @@ export const uploadFile = async (uploadedFile, folder) => {
       `${UPLOAD_SERVER_PATH}/${folder}`.replace(/\/$/, ""),
     );
 
-    fs.renameSync(uploadedFile.path, newPath);
+    await fs.rename(uploadedFile.path, newPath);
 
     return newPath.replace(`${UPLOAD_SERVER_PATH}/`, "");
   } catch (e) {
-    // @ts-ignore
-    logger.error(e.message);
+    logger.error(e);
 
     throw new Error("Upload error");
   }
-};
-
-/**
- * Track temp uploads to remove them after request completed
- */
-export const trackUploads = (req, res, next) => {
-  logger.info("Track temp uploads");
-
-  const tempUploads = [];
-
-  const body = req.body || {};
-
-  const handleFileFields = (field) => {
-    if (field.path && field.path.startsWith(TEMP_STORAGE_PATH)) {
-      tempUploads.push(field.path);
-    }
-  };
-
-  Object.keys(body).forEach((key) => {
-    const field = body[key];
-
-    if (Array.isArray(field)) {
-      field.forEach((item) => handleFileFields(item));
-    }
-
-    handleFileFields(field);
-  });
-
-  if (Array.isArray(req.tmpUploads)) {
-    req.tmpUploads = [...req.tmpUploads, ...tempUploads];
-  } else {
-    req.tmpUploads = tempUploads;
-  }
-
-  next();
 };
 
 /**

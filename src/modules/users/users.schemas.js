@@ -6,8 +6,7 @@ import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
 } from "#utils/schemas/index.js";
-import { defaultHttpErrorCollection } from "#utils/http/default-http-error-collection.js";
-
+import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 // common schemas start
 
 export const USER_ENTITY_SCHEMA = Type.Object({

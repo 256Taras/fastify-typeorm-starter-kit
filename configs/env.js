@@ -6,7 +6,7 @@ const TypeEnable = Type.Integer({
   minimum: 0,
 });
 
-export const ConfigSchema = Type.Object(
+export const CONFIG_SCHEMA = Type.Object(
   {
     APPLICATION_NAME: Type.String(),
     APPLICATION_URL: Type.String(),
@@ -54,15 +54,17 @@ export const ConfigSchema = Type.Object(
     TYPEORM_PASSWORD: Type.String(),
     TYPEORM_SSL: Type.Boolean(),
     TYPEORM_CACHE: Type.Boolean(),
-    TYPEORM_LOGGING: Type.Union([
-      Type.Literal("all"),
-      Type.Literal("error"),
-      Type.Literal("warn"),
-      Type.Literal("info"),
-      Type.Literal("query"),
-      Type.Literal("schema"),
-      Type.Literal("false"),
-    ]),
+    TYPEORM_LOGGING: Type.Optional(
+      Type.Union([
+        Type.Literal("all"),
+        Type.Literal("error"),
+        Type.Literal("warn"),
+        Type.Literal("info"),
+        Type.Literal("query"),
+        Type.Literal("schema"),
+        Type.Literal("migration"),
+      ]),
+    ),
     TYPEORM_DROP_SCHEMA: Type.Boolean(),
     TYPEORM_SYNCHRONIZE: Type.Boolean(),
     TYPEORM_MIGRATIONS_RUN: Type.Boolean(),
@@ -72,10 +74,10 @@ export const ConfigSchema = Type.Object(
 
 /**
  *
- * @type {import('./env.d').Env}
+ * @type {import('./types.js').Env}
  */
 export const env = envSchema({
-  schema: ConfigSchema,
+  schema: CONFIG_SCHEMA,
   dotenv: {
     path: "configs/.env",
   },

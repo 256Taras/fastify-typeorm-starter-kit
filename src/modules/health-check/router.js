@@ -1,5 +1,6 @@
 import schemas from "#modules/health-check/schemas.js";
-import { ServiceUnavailableException } from "#errors";
+
+import { SERVICE_UNAVAILABLE_EXCEPTION_503 } from "#errors";
 
 //const version = "1.0.0";
 
@@ -64,10 +65,13 @@ export default async (fastify) => {
      */
     schema: schemas.check,
     async handler() {
-      const status = await this.diContainer.cradle.dbConnection
-        .query(`SELECT 1 + 1 as healthcheck`)
-        .then(() => true)
-        .catch(() => false);
+      let status;
+      try {
+        await this.diContainer.cradle.dbConnection.query(`SELECT 1 + 1 as healthcheck`);
+        status = true;
+      } catch (e) {
+        status = false;
+      }
 
       const healthcheck = {
         uptime: process.uptime(),
@@ -75,7 +79,7 @@ export default async (fastify) => {
         timestamp: Date.now(),
       };
 
-      return status ? healthcheck : new ServiceUnavailableException();
+      return JSON.stringify(status ? healthcheck : new SERVICE_UNAVAILABLE_EXCEPTION_503());
     },
   });
 };

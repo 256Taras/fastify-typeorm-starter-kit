@@ -8,7 +8,7 @@ import { fastifyCorsConfig } from "#configs";
 import { getDirName } from "#common/utils/common/index.js";
 // SHARED
 
-const appPlugin = async (fastify, otp) => {
+const httpPlugin = async (fastify, otp) => {
   fastify.register(fastifyAuth);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -35,4 +35,4 @@ const appPlugin = async (fastify, otp) => {
   });
 };
 
-export default appPlugin;
+export default httpPlugin;

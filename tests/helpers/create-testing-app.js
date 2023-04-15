@@ -1,8 +1,8 @@
-// we would like to test whole server instead of appPlugin (server incorporate global error handling, etc)
-// but actually it may be better to register everything to appPlugin, instead of server.
+// we would like to test whole server instead of httpPlugin (server incorporate global error handling, etc)
+// but actually it may be better to register everything to httpPlugin, instead of server.
 
 // @ts-ignore
-import { RestApiServer } from "#common/infra/web-server/rest-api/server.js";
+import { RestApiServer } from "#common/infra/api/http-server/server.js";
 import { logger } from "#services/logger/logger.service.js";
 import * as configs from "#configs";
 import DataSource from "../../infra/database/typeorm.config.js";

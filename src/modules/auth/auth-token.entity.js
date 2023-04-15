@@ -1,6 +1,6 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 import User from "#modules/users/user.entity.js";
-import { COLUMN_TYPES, tables } from "#constants";
+import { tables } from "#constants";
 
 export default class AuthToken extends BaseEntity {
   /**
@@ -29,20 +29,20 @@ export default class AuthToken extends BaseEntity {
       tableName: tables.authToken,
       columns: {
         id: {
-          type: COLUMN_TYPES.uuid,
+          type: "uuid",
           primary: true,
           generated: "uuid",
           nullable: false,
           comment: "Token ID",
         },
         ppid: {
-          type: COLUMN_TYPES.varchar,
+          type: "varchar",
           length: 255,
           nullable: false,
           comment: "PPID",
         },
         userId: {
-          type: COLUMN_TYPES.uuid,
+          type: "uuid",
           nullable: false,
           comment: "User ID",
           name: "user_id",

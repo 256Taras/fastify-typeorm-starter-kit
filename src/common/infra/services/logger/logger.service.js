@@ -29,6 +29,7 @@ const TerminalTransport = loggerConfig.enablePrettyPrint ? PinoPrettyTransport :
 
 export const TerminalOptions = {
   level: loggerConfig.logLevel,
+
   base: {
     serviceContext: {
       service: appConfig.applicationName,

@@ -85,7 +85,8 @@ export const ormConfig = {
   username: env.TYPEORM_USERNAME,
   password: env.TYPEORM_PASSWORD,
   cache: env.TYPEORM_CACHE,
-  logging: env.TYPEORM_LOGGING,
+  // @ts-ignore
+  logging: env.TYPEORM_LOGGING || undefined,
   dropSchema: env.TYPEORM_DROP_SCHEMA,
   synchronize: env.TYPEORM_SYNCHRONIZE,
   migrationsRun: env.TYPEORM_MIGRATIONS_RUN,

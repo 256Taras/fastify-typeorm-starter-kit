@@ -32,12 +32,12 @@
       "#services/*": ["./src/common/infra/services/*"],
       "#errors": ["./src/common/errors/index.js"],
       "#utils/*": ["./src/common/utils/*"],
-      "#v1": ["./src/common/infra/web-server/rest-api/v1/index.js"]
+      "#v1": ["./src/common/infra/api/http-server/v1/index.js"]
     }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.js"
-  ]
-
+  ],
+  "exclude": ["node_modules"],
 }

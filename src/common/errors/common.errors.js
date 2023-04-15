@@ -86,17 +86,6 @@ export class ForbiddenException extends Error {
   }
 }
 
-export class ResourceNotAcceptableException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ResourceNotAcceptableException";
-  }
-
-  static of(message) {
-    return Promise.reject(new ResourceNotAcceptableException(message));
-  }
-}
-
 export class ConflictException extends Error {
   constructor(message) {
     super(message);
@@ -108,28 +97,6 @@ export class ConflictException extends Error {
   }
 }
 
-export class ResourceGoneException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ResourceGoneException";
-  }
-
-  static of(message) {
-    return Promise.reject(new ResourceGoneException(message));
-  }
-}
-
-export class PayloadTooLargeException extends Error {
-  constructor(message) {
-    super(message || "Payload too large");
-    this.name = "PayloadTooLargeException";
-  }
-
-  static of(message) {
-    return Promise.reject(new PayloadTooLargeException(message));
-  }
-}
-
 export class UnprocessableEntityException extends Error {
   constructor(message) {
     super(message);
@@ -138,16 +105,5 @@ export class UnprocessableEntityException extends Error {
 
   static of(message) {
     return Promise.reject(new UnprocessableEntityException(message));
-  }
-}
-
-export class ServiceUnavailableException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ServiceUnavailableException";
-  }
-
-  static of(message) {
-    return Promise.reject(new ServiceUnavailableException(message));
   }
 }

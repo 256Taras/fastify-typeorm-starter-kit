@@ -7,7 +7,7 @@ import {
   mixinTagForSchemas,
 } from "#common/utils/schemas/index.js";
 import { USER_OUTPUT_SCHEMA } from "#modules/users/users.schemas.js";
-import { defaultHttpErrorCollection } from "#src/common/utils/http/default-http-error-collection.js";
+import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 
 // common schemas start
 
@@ -39,8 +39,6 @@ const SIGN_UP_INPUT_SCHEMA = Type.Object(
 
 const authSchemas = {
   signUp: {
-    description: "Given a valid email and a password, it creates an account for an anonymous user.",
-    summary: "Sign up a user by creating an account.",
     body: SIGN_UP_INPUT_SCHEMA,
     response: {
       201: SIGN_IN_UP_OUTPUT_SCHEMA,

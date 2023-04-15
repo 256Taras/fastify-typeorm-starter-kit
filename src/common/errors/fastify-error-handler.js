@@ -4,7 +4,7 @@
  */
 
 /**
- * @typedef {import('#src/@types/../../types').HttpErrorCollection} HttpErrorCollection
+ * @typedef {import('#types/index.js').HttpErrorCollection} HttpErrorCollection
  */
 import { appConfig } from "#configs";
 
@@ -12,16 +12,16 @@ import { logger } from "#services/logger/logger.service.js";
 
 import {
   EndpointNotFoundException,
-  PayloadTooLargeException,
-  ResourceNotAcceptableException,
+  PAYLOAD_TO_LARGE_413,
+  RESOURCE_NOT_ACCEPTABLE_406,
   BAD_REQUEST_400,
-  CSRF_PROTECTION,
   FAILED_ON_SERIALIZATION_VALIDATION_500,
   INTERNAL_SERVER_ERROR_500,
-  TO_MANY_REQUESTS,
-  UNSUPPORTED_MEDIA_TYPE,
-} from "#errors";
-import { defaultHttpErrorCollection } from "#utils/http/default-http-error-collection.js";
+  UNSUPPORTED_MEDIA_TYPE_415,
+  TO_MANY_REQUESTS_429,
+  CSRF_PROTECTION_403,
+} from "#common/errors/index.js";
+import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 
 /**
  * @param {Object} param
@@ -31,11 +31,11 @@ import { defaultHttpErrorCollection } from "#utils/http/default-http-error-colle
 const mapFastifyErrorToHttpErrorResponse = ({ fastifyError, errorCollectionOverride }) => {
   if (!fastifyError) return defaultHttpErrorCollection[INTERNAL_SERVER_ERROR_500.name];
   if (fastifyError.validation) return defaultHttpErrorCollection[BAD_REQUEST_400.name];
-  if (fastifyError.statusCode === 406) return defaultHttpErrorCollection[ResourceNotAcceptableException.name];
-  if (fastifyError.statusCode === 413) return defaultHttpErrorCollection[PayloadTooLargeException.name];
-  if (fastifyError.statusCode === 415) return defaultHttpErrorCollection[UNSUPPORTED_MEDIA_TYPE.name];
-  if (fastifyError.statusCode === 429) return defaultHttpErrorCollection[TO_MANY_REQUESTS.name];
-  if (fastifyError.statusCode === 403) return defaultHttpErrorCollection[CSRF_PROTECTION.name];
+  if (fastifyError.statusCode === 406) return defaultHttpErrorCollection[RESOURCE_NOT_ACCEPTABLE_406.name];
+  if (fastifyError.statusCode === 413) return defaultHttpErrorCollection[PAYLOAD_TO_LARGE_413.name];
+  if (fastifyError.statusCode === 415) return defaultHttpErrorCollection[UNSUPPORTED_MEDIA_TYPE_415.name];
+  if (fastifyError.statusCode === 429) return defaultHttpErrorCollection[TO_MANY_REQUESTS_429.name];
+  if (fastifyError.statusCode === 403) return defaultHttpErrorCollection[CSRF_PROTECTION_403.name];
   // it's our custom error, handle it by name
   if (typeof errorCollectionOverride !== "object")
     return defaultHttpErrorCollection[INTERNAL_SERVER_ERROR_500.name];
@@ -49,10 +49,10 @@ const mapFastifyErrorToHttpErrorResponse = ({ fastifyError, errorCollectionOverr
 /**
  * @param {Object} param
  * @param {import("fastify").FastifyError} param.fastifyError
- * @param {import('#src/@types/../../types').HttpErrorResponseType} [param.httpErrorResponseTemplate]
+ * @param {import('#types/index.js').HttpErrorResponseType} [param.httpErrorResponseTemplate]
  */
 const formatErrorResponse = ({ fastifyError, httpErrorResponseTemplate }) => {
-  if (!fastifyError || !httpErrorResponseTemplate.developerMessage) return httpErrorResponseTemplate;
+  if (!fastifyError || !httpErrorResponseTemplate?.developerMessage) return httpErrorResponseTemplate;
   return {
     ...httpErrorResponseTemplate,
     developerMessage: appConfig.isDeveloperMessageEnabled ? fastifyError.message : undefined,
@@ -80,10 +80,34 @@ const HttpFastifyErrorHandlerFactory =
     const httpErrorResponse = formatErrorResponse({ fastifyError, httpErrorResponseTemplate });
 
     // Send error response
-    reply.status(httpErrorResponse.httpStatusCode).send(httpErrorResponse);
+    reply.status(httpErrorResponse?.statusCode || 500).send(httpErrorResponse);
   };
 
-export const globalHttpFastifyErrorHandler = HttpFastifyErrorHandlerFactory(defaultHttpErrorCollection);
+/**
+ * @param {HttpErrorCollection} [errorCollectionOverride]
+ */
+const WebSocketFastifyErrorHandlerFactory =
+  (errorCollectionOverride) =>
+  /**
+   * @param {import("fastify").FastifyError} fastifyError
+   */
+  async (fastifyError) => {
+    logger.warn(fastifyError);
+    // TODO add mapFastifyErrorToWebSocketErrorResponse
+    const httpErrorResponseTemplate = mapFastifyErrorToHttpErrorResponse({
+      fastifyError,
+      errorCollectionOverride,
+    });
+
+    logger.warn(httpErrorResponseTemplate);
+
+    const errorResponse = formatErrorResponse({ fastifyError, httpErrorResponseTemplate });
+
+    return {
+      ...errorResponse,
+      statusCode: errorResponse?.statusCode || 500,
+    };
+  };
 
 /**
  * @param {import("fastify").FastifyRequest} request
@@ -95,7 +119,10 @@ export const globalHttpFastify404ErrorHandler = async (request, reply) => {
   httpErrorResponse.userMessage = `Endpoint '${request.method} ${request.url}' is not found`;
   httpErrorResponse.developerMessage = `Endpoint '${request.method} ${request.url}' is not found. Please, check is requested URI correct`;
 
-  reply.status(httpErrorResponse.httpStatusCode).send(httpErrorResponse); // Send error response
+  reply.status(httpErrorResponse.statusCode).send(httpErrorResponse); // Send error response
 };
 
-export default HttpFastifyErrorHandlerFactory;
+export const globalHttpFastifyErrorHandler = HttpFastifyErrorHandlerFactory(defaultHttpErrorCollection);
+export const globalWebSocketFastifyErrorHandler = WebSocketFastifyErrorHandlerFactory(defaultHttpErrorCollection);
+export const HttpErrorHandlerFactory = HttpFastifyErrorHandlerFactory;
+export const WebSocketErrorHandlerFactory = WebSocketFastifyErrorHandlerFactory;
