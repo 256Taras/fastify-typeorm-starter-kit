@@ -36,7 +36,7 @@
     "prepare": "husky install",
     "precommit": "npm run lint && npm test",
     "prepush": "npm run lint && npm test",
-    "module": "node ./infra/bin/create-module.js name=test",
+    "module": "node ./infra/bin/create-module.js name=",
     "check": "npx tsc --project tsconfig.json",
     "ci":"yarn prettier:fix & yarn lint:fix && yarn lint && yarn test && yarn check"
   },

@@ -23,6 +23,28 @@ const getModuleNameFromCliArgs = () => {
   return moduleName;
 };
 
+function camelToSnakeCase(camelCaseString) {
+  const snakeCaseString = camelCaseString.replace(/[A-Z]/g, (match) => `_${match.toLowerCase()}`);
+  return snakeCaseString.toUpperCase();
+}
+
+function singularizeWord(word) {
+  if (word.endsWith("ies")) {
+    return word.slice(0, -3) + "y";
+  } else if (word.endsWith("s")) {
+    if (word.endsWith("ss") || word.endsWith("us")) {
+      return word.slice(0, -1);
+    } else if (word.endsWith("ies")) {
+      return word.slice(0, -3) + "y";
+    } else if (word.endsWith("ses")) {
+      return word.slice(0, -2);
+    } else {
+      return word.slice(0, -1);
+    }
+  } else {
+    return word;
+  }
+}
 /**
  *
  * @param {object} param0
@@ -38,16 +60,11 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
   const LowerCaseName = toCamelCase(newModuleName);
   const UpperCaseName = newModuleName[0].toUpperCase() + LowerCaseName.replace(newModuleName[0], "");
   const ModuleName = newModuleName;
+  const SchemaName = camelToSnakeCase(newModuleName);
 
   const templates = {
     model: "model",
-    create: "create",
-    get: "get",
-    getOne: "get-one",
-    update: "update",
-    delete: "delete",
     schemas: "schemas",
-    index: "index",
     router: "router",
   };
 
@@ -55,38 +72,20 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
     TemplateCreator.fillTemplate(await TemplateCreator.getTemplate(fileName), {
       ModuleName,
       LowerCaseName,
+      LowerCaseNameSingle: singularizeWord(LowerCaseName),
       UpperCaseName,
+      UpperCaseNameSingle: singularizeWord(UpperCaseName),
+      SchemaName,
     });
 
   // Main folder structure
   fs.mkdirSync(modulePath);
   // Handler folder
-  fs.mkdirSync(path.join(modulePath, "use-cases"));
-  fs.writeFileSync(
-    path.join(modulePath, `use-cases/create-${ModuleName}.use-case.js`),
-    await fillFile(templates.create),
-  );
-  fs.writeFileSync(
-    path.join(modulePath, `use-cases/get-${ModuleName}.use-case.js`),
-    await fillFile(templates.get),
-  );
-  fs.writeFileSync(
-    path.join(modulePath, `use-cases/get-one-${ModuleName}.use-case.js`),
-    await fillFile(templates.getOne),
-  );
-  fs.writeFileSync(
-    path.join(modulePath, `use-cases/update-${ModuleName}.use-case.js`),
-    await fillFile(templates.update),
-  );
-  fs.writeFileSync(
-    path.join(modulePath, `use-cases/delete-${ModuleName}.handler.js`),
-    await fillFile(templates.delete),
-  );
   // Main folder
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.model.js`), await fillFile(templates.model));
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.schemas.js`), await fillFile(templates.schemas));
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.router.v1.js`), await fillFile(templates.router));
-  fs.writeFileSync(path.join(modulePath, "create-seed.js"), await fillFile(templates.index));
+  // fs.writeFileSync(path.join(modulePath, "create-seed.js"), await fillFile(templates.index));
 
   return { success: true };
 };

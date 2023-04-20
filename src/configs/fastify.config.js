@@ -4,6 +4,7 @@ export const fastifyConfig = {
   genReqId: () => randomUUID(),
   disableRequestLogging: true, // we do it on our own
   logger: false,
+  requestTimeout: 1000,
   ajv: {
     customOptions: {
       removeAdditional: false,

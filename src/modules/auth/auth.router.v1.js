@@ -21,7 +21,6 @@ export default async function authRouterV1(app) {
     usersRepository,
     authTokensRepository,
   } = app.diContainer.cradle;
-
   app.post("/sing-up", {
     schema: authSchemas.signUp,
 
