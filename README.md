@@ -27,58 +27,167 @@ The template is an excellent option for developing MVPs, as it allows for quickl
 
 - The ability to add new components and features to the project without sacrificing stability and flexibility.
 
+## 📚 Prerequisites
+
+We assume that everyone who comes here is **`programmer with intermediate knowledge`** and we also need to understand more before we begin in order to reduce the knowledge gap.
+
+1. Understand [Fastify Fundamental](https://www.fastify.io/docs/latest/), Main Framework. Fast and low overhead web framework, for Node.js
+2. Understand [Express Fundamental](https://expressjs.com/en/starter/installing.html), NodeJs Base Framework. Since the project is based on fastify, which is trying to solve problems specifically express
+3. Understand The YAGNI Principle and KISS Principle for better write the code.
+4. Optional. Understand[Typescript Fundamental](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html), Programming Language. It will help to write us contacts of types
+5. Optional. Understanding [The Twelve Factor Apps](https://12factor.net/). It can help to serve the project.
+6. Optional. Understanding [Docker](https://docs.docker.com/get-started/). It can help to run the project.
+
 ## ⚠️ Requirements
 
-- NodeJS v16+
-- Npm v8+
-- Docker v18+
-- Docker Compose v1.23+
+| Name           | Version  |
+|----------------|----------|
+| Node           | v18.7.x  |
+| Typescript     | v4.9.x   |
+| PostgreSQL     | v15.0.x  |
+| Yarn           | v1.22.x  |
+| NPM            | v8.19.x  |
+| Docker         | v18.10.x |
+| Docker Compose | v1.23.x  |
 
-## 📌 How to start
 
-1. Copy git repository
+## 📌 Getting Started
 
-2. Create `.env` file in `configs` folder. Use `.env.example` as example.
+Before start, we need to install some packages and tools.
+The recommended version is the LTS version for every tool and package.
+
+> Make sure to check that the tools have been installed successfully.
+
+- [NodeJs](https://nodejs.org/en)
+- [Docker](https://docs.docker.com/get-docker/)
+- [Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)
+- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+### Clone Repo
+
+1. Clone the project with git.
+
+  ```bash
+git clone https://github.com/Ezen1programmer/fastify-typeorm-starter-kit
+  ```
+
+### Install Dependencies
+*Optional*: Use `nvm use` command which automatically will setup `node` of specified version in `.nvmrc` file.
+
+2. This project needs some dependencies. Let's go install it.
+
+  ```bash
+yarn install
+  ```
+
+
+### Create environment
+
+3. Create `.env` file in `configs` folder. Use `.env.example` as example.
 `.env.example` has already fully functional settings, so server can be started with it without changes
-4. *Optional*: Use `nvm use` command which automatically will setup `node` of specified version in `.nvmrc` file.
-5. Run this to install the packages  `yarn install`
-6. Run migrations `yarn typeorm:migration:run`
 
-## 🏃 Usage
+  ```bash
+cp .env.example .env
+  ```
+
+
+### Database Migration
+
+4. Run migrations
+
+  ```bash
+yarn typeorm:migration:run
+  ```
+
+## 🏃 Run Project
 
 1. Run infrastructure in docker (db, etc.):
 
-   ```bash
+ ```bash
    yarn docker:infra:up
-   ```
+ ```
 
 2. Run server on local machine without docker:
 
-   ```bash
+ ```bash
    yarn start
-   ```
+ ```
+
+Finally, Cheers 🍻🍻 !!! you passed all steps.
+
+## API Reference
+
+You can check The ApiSpec after running this project. [here](http://localhost:8000/docs/static/index.html)
+
 
 ## 🧪 Testing
 
 1. Run infrastructure in docker (db, etc.):
 
-   ```bash
-   yarn docker:infra:up
-   ```
+  ```bash
+yarn docker:infra:up
+  ```
 
-2. Run tests with command:
+The project provide 3 automation testing `unit testing`, `integration testing`, and `e2e testing`.
 
-   ```bash
-   yarn test
-   ```
+  ```bash
+yarn test
+  ```
+
+For specific test do this
+
+* Unit testing
+
+    ```bash
+    yarn test:unit
+    ```
+
+* Integration testing
+
+    ```bash
+    yarn test:integration
+    ```
+
+* E2E testing
+
+    ```bash
+    yarn test:e2e
+    ```
 
 ## 📜 Scripts
 
-- `start` - run appPlugin, load & validate env
-- `start:dev` - run appPlugin, load & validate env. use pretty print for logs
-- `start:dev:dev` - run appPlugin, load & validate env. use pretty print for logs with reload app supported only from node 18.7
-- `docker:infra:up` - starts infrastructure (db, adminer) using docker-compose
-- `docker:infra:down` - stops docker-compose from "docker:up"
+   - `audit` - runs an npm audit to check for any security vulnerabilities
+   - `start` - starts the application by running the main file index.js
+   - `start:dev` - starts the application in development mode and pipes the logs through the pino-pretty package to make them more readable
+   - `start:dev:watch` - starts the application in development mode and watches for changes in the files using the --watch flag and pipes the logs through pino-pretty
+   - `start:stage` - starts the application in staging mode using pm2 with a custom name- `api-stage"` -- `start:prod` - starts the application in production mode using pm2 with a custom name- `api-prod"` -- `docker:dev:up` - starts the development environment with docker-compose by running the docker-compose.yml and docker-compose.dev.yml files
+   - `docker:dev:down` - stops the development environment with docker-compose by running the docker-compose.yml and docker-compose.dev.yml files
+   - `docker:infra:up` - starts the infrastructure services (e.g. database) with docker-compose by running the docker-compose.yml file
+   - `docker:infra:down` - stops the infrastructure services with docker-compose by running the docker-compose.yml file
+   - `typeorm:migration:create` - creates a new migration file using TypeORM
+   - `typeorm:migration:generate` - generates a new migration file using TypeORM
+   - `typeorm:migration:run` - runs any pending TypeORM migrations
+   - `typeorm:migration:revert` - reverts the last TypeORM migration
+   - `typeorm:seed:create` - creates a new database seed file
+   - `typeorm:seed:run` - runs the database seed file
+   - `test` - runs both unit and integration tests
+   - `test:unit` - runs unit tests using c8 to check for code coverage
+   - `test:integration` - runs integration tests without coverage and with a limit of one job
+   - `stage` - starts the application in staging mode and saves the process list with pm2
+   - `stage:restart` - restarts the application in staging mode using pm2
+   - `stage:delete` - stops and deletes the process in staging mode with pm2
+   - `prod` - starts the application in production mode and saves the process list with pm2
+   - `prod:restart` - restarts the application in production mode using pm2
+   - `prod:delete` - stops and deletes the process in production mode with pm2
+   - `lint` - runs the linter (eslint) on all relevant files
+   - `lint:fix` - runs the linter with the --fix flag to fix any fixable errors
+   - `prettier:fix` - runs prettier to format relevant files
+   - `prepare` - installs husky as a git hook manager
+   - `precommit` - runs linting and testing before committing changes
+   - `prepush` - runs linting and testing before pushing changes
+   - `module` - creates a new module with the given name
+   - `check` - runs TypeScript's type checker (tsc) with the configuration file tsconfig.json
+   - `ci` - runs a series of commands for continuous integration, including formatting, linting, testing, and type checking.
 
 ## 🤌 Development culture
 
@@ -173,6 +282,7 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 
 ## 💡 Features
 
+- [x] production ready
 - [x] automatic loading of modules and plugins
 - [x] validate env:
 - [x] main script: initialize infra for proper server start, start server, add server stop handlers
@@ -182,7 +292,7 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] auto documentation: fastify-swagger. \*Require fastify input & output schemas
 - [x] routers with input validation
 - [x] separate router handler
-- [x] Logger powered by 'pino'
+- [x] logger powered by 'pino'
   - [x] console interface
   - [x] log levels
   - [x] trace ID
@@ -198,6 +308,7 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
   - [x] typeorm
   - [x] postgres
   - [x] separate loggerService for db logging
+  - [ ] cursor pagination
 - [x] local code style support:
   - [x] esLint setup
   - [x] prettier setup
@@ -220,6 +331,7 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] ability to run CPU intensive tasks in the Piscina worker pool
 - [x] covering utilities with .d.ts files
 - [ ] clustering based on child process
+- [x] support Docker installation
 - [ ] utilities for functional programming
    - [x] monads
    - [ ] pattern matching
