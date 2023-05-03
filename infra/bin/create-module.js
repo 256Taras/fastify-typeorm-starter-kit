@@ -102,4 +102,5 @@ const main = async () => {
   await createModuleFolderStructure({ newModuleName: moduleName });
 };
 
-main();
+// eslint-disable-next-line no-console
+main().catch((e) => console.log(e));

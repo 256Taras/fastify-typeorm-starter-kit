@@ -2,7 +2,7 @@
   "name": "fastify-starter-kit",
   "version": "2.0.0",
   "description": "Template for Node.js projects with pre-built fastify setup.",
-  "main": "src/index.js",
+  "main": "./src/index.js",
   "type": "module",
   "scripts": {
     "audit": "npm audit",
@@ -37,7 +37,9 @@
     "precommit": "npm run lint && npm test",
     "prepush": "npm run lint && npm test",
     "module": "node ./infra/bin/create-module.js name=",
-    "check": "npx tsc --project tsconfig.json",
+    "check:types": "npx tsc --project tsconfig.json",
+    "check:env": "node -r ./infra/bin/env/load-and-validate-env.cjs",
+    "check:dep": "npx depcheck",
     "ci": "yarn prettier:fix & yarn lint:fix && yarn lint && yarn test && yarn check"
   },
   "author": {
