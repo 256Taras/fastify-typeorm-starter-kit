@@ -38,7 +38,7 @@
     "prepush": "npm run lint && npm test",
     "module": "node ./infra/bin/create-module.js name=",
     "check": "npx tsc --project tsconfig.json",
-    "ci":"yarn prettier:fix & yarn lint:fix && yarn lint && yarn test && yarn check"
+    "ci": "yarn prettier:fix & yarn lint:fix && yarn lint && yarn test && yarn check"
   },
   "author": {
     "name": "Nazar Voitovych",
@@ -89,16 +89,17 @@
     "@fastify/request-context": "^4.2.0",
     "@fastify/static": "^6.5.0",
     "@fastify/swagger": "^7.6.1",
-    "@fastify/type-provider-typebox": "^2.4.0",
+    "@fastify/type-provider-typebox": "^3.2.0",
     "@fastify/under-pressure": "^8.2.0",
     "@fastify/view": "^7.1.2",
     "@fastify/websocket": "^7.2.0",
     "@serdnam/pino-cloudwatch-transport": "^1.0.4",
-    "@sinclair/typebox": "^0.25.24",
+    "@sinclair/typebox": "^0.28.9",
     "accesscontrol": "^2.2.1",
     "ajv": "^8.12.0",
     "awilix": "^8.0.0",
     "aws-sdk": "^2.1159.0",
+    "dotenv-safe": "^8.2.0",
     "env-schema": "^5.2.0",
     "fastify": "^4.12.0",
     "fastify-piscina": "^4.0.0",
