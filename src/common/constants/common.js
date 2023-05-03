@@ -32,3 +32,5 @@ export const UPLOAD_SERVER_PATH = path.resolve(`public/${UPLOAD_UI_PATH}`);
 export const VIEWS_PATH = path.resolve("src/views");
 
 export const TEMP_STORAGE_PATH = path.resolve("storage/temp");
+
+export const STORAGE_PATH = path.resolve("storage");

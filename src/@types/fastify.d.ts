@@ -9,7 +9,10 @@ declare module "fastify" {
     verifyJwt: FastifyAuthFunction;
     verifyJwtRefreshToken: FastifyAuthFunction;
     verifyApiKey: FastifyAuthFunction;
-
+    parseMultipartFields: (schemas: FastifySchema) => (req: FastifyRequest, rep: FastifyReply) => Promise<void>;
+    removeUploadIfExists: (filePath: string) => Promise<void>;
+    uploadToStorage: (uploadedFile: Record<string, any>, folder: string) => Promise<string>;
+    upload: (uploadedFile: Record<string, any>) => Promise<string>;
     configs: typeof configs;
   }
 }
