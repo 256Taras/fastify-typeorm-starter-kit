@@ -68,6 +68,7 @@ export const CONFIG_SCHEMA = Type.Object(
     TYPEORM_DROP_SCHEMA: Type.Boolean(),
     TYPEORM_SYNCHRONIZE: Type.Boolean(),
     TYPEORM_MIGRATIONS_RUN: Type.Boolean(),
+    TZ: Type.String(),
   },
   { additionalProperties: false },
 );

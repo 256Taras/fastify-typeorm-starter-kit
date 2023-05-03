@@ -13,6 +13,7 @@ export default class {{UpperCaseNameSingle}} extends BaseEntity {
   static get schema() {
     return new EntitySchema({
       name: {{UpperCaseNameSingle}}.name,
+      //TODO add to table
       tableName: tables.{{LowerCaseNameSingle}},
       columns: {
         id: {

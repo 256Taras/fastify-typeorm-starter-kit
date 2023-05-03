@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
 
-import { STATUS_SUCCESS, SWAGGER_TAGS } from "#constants";
+import { SWAGGER_TAGS } from "#constants";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
@@ -52,18 +52,18 @@ const {{LowerCaseName}}Schemas = {
       // add fields for update {{LowerCaseName}} here
     }),
     response: {
-      200: STATUS_SUCCESS,
+      200: {{SchemaName}}_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
-  remove: {
+  delete: {
     security: [{ bearerTokenAuth: [] }],
     params: COMMON_SCHEMAS_V1.id,
     response: {
-      200: STATUS_SUCCESS,
+      200: COMMON_SCHEMAS_V1.status,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
 };
-
-export default mixinTagForSchemas({{LowerCaseName}}Schemas, SWAGGER_TAGS.{{UpperCaseName}});
+//TODO add tags
+export default mixinTagForSchemas({{LowerCaseName}}Schemas, SWAGGER_TAGS.{{LowerCaseNameSingle}});

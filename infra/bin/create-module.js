@@ -38,12 +38,10 @@ function singularizeWord(word) {
       return word.slice(0, -3) + "y";
     } else if (word.endsWith("ses")) {
       return word.slice(0, -2);
-    } else {
-      return word.slice(0, -1);
     }
-  } else {
-    return word;
+    return word.slice(0, -1);
   }
+  return word;
 }
 /**
  *
@@ -71,6 +69,7 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
   const fillFile = async (fileName) =>
     TemplateCreator.fillTemplate(await TemplateCreator.getTemplate(fileName), {
       ModuleName,
+      ModuleNameSingle: singularizeWord(ModuleName),
       LowerCaseName,
       LowerCaseNameSingle: singularizeWord(LowerCaseName),
       UpperCaseName,
@@ -79,11 +78,18 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
     });
 
   // Main folder structure
+  // eslint-disable-next-line no-sync
   fs.mkdirSync(modulePath);
   // Handler folder
   // Main folder
-  fs.writeFileSync(path.join(modulePath, `${ModuleName}.model.js`), await fillFile(templates.model));
+  // eslint-disable-next-line no-sync
+  fs.writeFileSync(
+    path.join(modulePath, `${singularizeWord(ModuleName)}.entity.js`),
+    await fillFile(templates.model),
+  );
+  // eslint-disable-next-line no-sync
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.schemas.js`), await fillFile(templates.schemas));
+  // eslint-disable-next-line no-sync
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.router.v1.js`), await fillFile(templates.router));
   // fs.writeFileSync(path.join(modulePath, "create-seed.js"), await fillFile(templates.index));
 
