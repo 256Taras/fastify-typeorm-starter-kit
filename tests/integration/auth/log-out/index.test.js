@@ -35,12 +35,14 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
     const response = await app.inject({
       method: TESTING_METHOD,
       headers: fixtures.positive.LOG_OUT.in.headers,
+      body: fixtures.positive.LOG_OUT.in.body,
       path: getEndpoint(),
     });
 
-    assert.strictEqual(response.statusCode, 201);
-    // @ts-ignore TODO cookie x-refresh-token exist but empty
-    // assert.doesNotMatch(response.headers["set-cookie"], /^x-refresh-token=/);
+    const data = JSON.parse(response.payload);
+
+    assert.strictEqual(response.statusCode, 200);
+    assert.strictEqual(data.status, true);
   });
 
   it("[401] should be unauthorized", async () => {

@@ -1,9 +1,8 @@
 import { diContainer } from "@fastify/awilix";
 
 import { ROLES_NAMES } from "#constants";
-import { JwtDecodingError } from "#errors";
+import { UnauthorizedException } from "#errors";
 
-import { authConfig } from "#configs";
 import {
   AUTHORIZED_MOCK_USER_ID,
   EMAIL,
@@ -12,13 +11,14 @@ import {
   PPID,
   REFRESH_TOKEN_ID,
 } from "../users/constants.js";
+import { logger } from "#services/logger/logger.service.js";
 
 export const authService = {
   verifyJwt: async ({ headers }) => {
     const token = headers.authorization;
 
     if (!token || (typeof token === "string" && !token.includes("Bearer"))) {
-      throw new JwtDecodingError("Token is missing");
+      throw new UnauthorizedException("Token is missing");
     }
 
     // @ts-ignore
@@ -33,8 +33,12 @@ export const authService = {
     });
   },
   verifyJwtRefreshToken: async (req) => {
-    if (!req.cookies[authConfig.cookieKeys.refreshToken]) {
-      throw new JwtDecodingError("Token is missing");
+    if (!req.body?.refreshToken) {
+      logger.debug({
+        bodi: req,
+        body: 1,
+      });
+      throw new UnauthorizedException("Token is missing");
     }
     diContainer.cradle.userRefreshTokenContext.set({
       ppid: PPID,

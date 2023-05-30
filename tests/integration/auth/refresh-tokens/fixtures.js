@@ -1,5 +1,4 @@
 import { ROLES_NAMES } from "#constants";
-import { authConfig } from "#configs";
 import EncrypterService from "#services/encrypter/encrypter.service.js";
 
 import { fixtureFactory } from "../../../helpers/index.js";
@@ -46,8 +45,8 @@ export const refreshTokensFixtures = fixtureFactory({
   positive: {
     REFRESH_TOKENS: {
       in: {
-        headers: {
-          Cookie: `${authConfig.cookieKeys.refreshToken}=tokenValue`,
+        body: {
+          refreshToken: `tokenValue`,
         },
       },
     },

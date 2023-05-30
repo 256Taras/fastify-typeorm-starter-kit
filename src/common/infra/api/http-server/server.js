@@ -8,9 +8,6 @@ import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody";
 import fastifyView from "@fastify/view";
-// import fastifyUnderPressure from "@fastify/under-pressure"; benchmark plugin
-import fastifyCookie from "@fastify/cookie";
-import fastifyCsrf from "@fastify/csrf-protection";
 import fastifyPiscina from "fastify-piscina";
 import fastifyAutoLoad from "@fastify/autoload";
 import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
@@ -67,14 +64,7 @@ export class RestApiServer {
       matchFilter: (p) => p.endsWith(".plugin.js"),
       options: this.#options,
     });
-    //  adds everything you need to work with cookies
-    fastifyApp.register(fastifyCookie, this.#options.configs.fastifyCookieConfig);
 
-    // When using sessions with cookies, it's always recommended to use CSRF.
-    // `fastify-csrf` will help you better protect your application.
-    // Don't know what CSRF is? Take a look at https://github.com/pillarjs/understanding-csrf.
-    // @ts-ignore
-    fastifyApp.register(fastifyCsrf, this.#options.configs.fastifyCsrfConfig);
     // allows to rewrite via preHandler per route
     // @ts-ignore
     fastifyApp.register(fastifyRateLimit, this.#options.configs.fastifyRateLimitConfig);

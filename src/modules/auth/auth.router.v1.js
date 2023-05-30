@@ -1,17 +1,11 @@
-import { authConfig } from "#configs";
 import { BadRequestException, ResourceAlreadyExistException, ResourceNotFoundException } from "#errors";
 import { ROLES_NAMES, STATUS_SUCCESS } from "#constants";
 
 import authSchemas from "#modules/auth/auth.schemas.js";
 import User from "#modules/users/user.entity.js";
+import { useCase } from "#utils/common/use-case.js";
 
-/**
- * The `authRouterV1` Fastify plugin.
- *
- * @param app The Fastify instance.
- * @returns A promise of void.
- * @type {import('@fastify/type-provider-typebox').FastifyPluginAsyncTypebox }
- */
+/** @type {import("@fastify/type-provider-typebox").FastifyPluginAsyncTypebox } */
 export default async function authRouterV1(app) {
   const {
     encrypterService,
@@ -21,14 +15,11 @@ export default async function authRouterV1(app) {
     usersRepository,
     authTokensRepository,
   } = app.diContainer.cradle;
+
   app.post("/sing-up", {
     schema: authSchemas.signUp,
-
-    async handler(req, rep) {
-      const { firstName, lastName, password } = req.body;
-
-      const email = req.body.email.toLocaleLowerCase();
-
+    onSend: app.httpSuccessCode(201),
+    handler: useCase(async ({ firstName, lastName, email, password }) => {
       logger.debug(`Try sign up user with email: ${email}`);
 
       const maybeUser = await usersRepository.findOneBy({ email });
@@ -48,22 +39,13 @@ export default async function authRouterV1(app) {
 
       const user = await usersRepository.save(newUser);
 
-      const { refreshToken, ...payload } = await tokenService.getTokens(user);
-
-      rep.setCookie(authConfig.cookieKeys.refreshToken, refreshToken, authConfig.refreshTokenCookiesOption);
-
-      rep.code(201);
-
-      return payload;
-    },
+      return tokenService.generateTokens(user);
+    }),
   });
 
   app.post("/sing-in", {
     schema: authSchemas.signIn,
-
-    async handler(req, rep) {
-      const { email, password } = req.body;
-
+    handler: useCase(async ({ email, password }) => {
       const user = await usersRepository.findOneBy({ email });
 
       if (!user) return ResourceNotFoundException.of(`User with email: ${email} not register`);
@@ -72,48 +54,38 @@ export default async function authRouterV1(app) {
 
       if (!isPasswordValid) throw new BadRequestException("Incorrect credentials");
 
-      // @ts-ignore
-      const { refreshToken, ...payload } = await tokenService.getTokens(user);
-
-      rep.setCookie(authConfig.cookieKeys.refreshToken, refreshToken, authConfig.refreshTokenCookiesOption);
-
-      rep.code(201);
-
-      return payload;
-    },
+      return tokenService.generateTokens(user);
+    }),
   });
 
   app.post("/log-out", {
     schema: authSchemas.logOut,
-    //  onRequest: app.csrfProtection,
     preValidation: [app.auth([app.verifyJwtRefreshToken])],
-
-    async handler(_, reply) {
+    handler: useCase(async () => {
       const { id: userId, ppid } = userRefreshTokenContext.get();
 
       const authToken = await authTokensRepository.delete({ ppid, userId });
 
       if (!authToken.affected) throw new BadRequestException(`Access decided`);
 
-      reply.clearCookie(authConfig.cookieKeys.refreshToken);
-
-      reply.code(201);
-
       return STATUS_SUCCESS;
-    },
+    }),
   });
 
   app.put("/refresh-tokens", {
     schema: authSchemas.refreshTokens,
-    // onRequest: app.csrfProtection,
     preValidation: [app.auth([app.verifyJwtRefreshToken])],
-
-    async handler(_, rep) {
+    handler: useCase(async () => {
       logger.debug("Refresh Tokens");
 
       const { id, ppid } = userRefreshTokenContext.get();
 
-      const authToken = await authTokensRepository.delete({ ppid, userId: id });
+      const authToken = await authTokensRepository
+        .createQueryBuilder()
+        .delete()
+        .where("ppid = :ppid", { ppid })
+        .andWhere("userId = :userId", { userId: id })
+        .execute();
 
       if (!authToken.affected) throw new BadRequestException(`Access decided`);
 
@@ -121,11 +93,7 @@ export default async function authRouterV1(app) {
 
       if (!user) throw new BadRequestException(`Access decided`);
 
-      const { refreshToken, ...payload } = await tokenService.getTokens(user);
-
-      rep.setCookie(authConfig.cookieKeys.refreshToken, refreshToken, authConfig.refreshTokenCookiesOption);
-
-      return payload;
-    },
+      return tokenService.generateTokens(user)
+    }),
   });
 }

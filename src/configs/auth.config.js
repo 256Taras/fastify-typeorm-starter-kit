@@ -13,7 +13,5 @@ export const authConfig = {
     maxAge: 60 * 60 * 24 * 7,
   },
   /** Defines the keys used for cookies. */
-  cookieKeys: {
-    refreshToken: "x-refresh-token",
-  },
+  refreshTokenKey: "x-refresh-token",
 };

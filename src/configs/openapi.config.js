@@ -24,10 +24,11 @@ export const openapiConfig = {
           name: "Bearer Token",
           in: "header",
         },
-        cookieAuth: {
+        bearerAuthRefresh: {
           type: "apiKey",
-          in: "cookie",
-          name: authConfig.cookieKeys.refreshToken,
+          name: authConfig.refreshTokenKey,
+          in: "header",
+          description: "Refresh Token for obtaining new Access Token",
         },
       },
     },

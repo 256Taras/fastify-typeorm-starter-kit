@@ -37,11 +37,10 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
 
     const data = JSON.parse(response.payload);
 
-    assert.strictEqual(response.statusCode, 201);
+    assert.strictEqual(response.statusCode, 200);
     assert.strictEqual(typeof data.accessToken, "string");
+    assert.strictEqual(typeof data.refreshToken, "string");
     assert.strictEqual(typeof data.user.id, "string");
-    // @ts-ignore
-    assert.match(response.headers["set-cookie"], /^x-refresh-token=/);
   });
 
   it("[404] should return an exception that a user with such mail does not exist", async () => {

@@ -37,9 +37,8 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
 
     assert.strictEqual(response.statusCode, 201);
     assert.strictEqual(typeof data.accessToken, "string");
+    assert.strictEqual(typeof data.refreshToken, "string");
     assert.strictEqual(typeof data.user.id, "string");
-    // @ts-ignore
-    assert.match(response.headers["set-cookie"], /^x-refresh-token=/);
   });
 
   it("[409] should return an exception that a account with such mail already exists", async () => {
@@ -50,6 +49,10 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
       payload: fixtures.negative.EMAIL_ALREADY_EXIST.in.body,
       path: getEndpoint(),
     });
+
+    console.log({
+
+    })
 
     assert.strictEqual(response.statusCode, 409);
   });

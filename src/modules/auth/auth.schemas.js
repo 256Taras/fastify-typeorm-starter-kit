@@ -9,11 +9,10 @@ import {
 import { USER_OUTPUT_SCHEMA } from "#modules/users/users.schemas.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 
-// common schemas start
-
 const ACCESS_TOKEN_SCHEMA = Type.Object(
   {
     accessToken: Type.String(),
+    refreshToken: Type.String(),
   },
   { additionalProperties: false },
 );
@@ -35,41 +34,41 @@ const SIGN_UP_INPUT_SCHEMA = Type.Object(
   { additionalProperties: false },
 );
 
-// common schemas end
-
 const authSchemas = {
   signUp: {
+    summary: "Create new user and return him a JWT.",
     body: SIGN_UP_INPUT_SCHEMA,
     response: {
-      201: SIGN_IN_UP_OUTPUT_SCHEMA,
+   //   201: SIGN_IN_UP_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
   signIn: {
     summary: "Sign in a user by validating its credentials and return him a JWT.",
-    description: `Given a valid email and a password of an existing user, it returns a JWT.`,
     body: Type.Pick(SIGN_UP_INPUT_SCHEMA, ["email", "password"]),
     response: {
-      201: SIGN_IN_UP_OUTPUT_SCHEMA,
+      200: SIGN_IN_UP_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
   logOut: {
     summary: "Log out authentication user",
-    description: `Given a valid refresh token, and delete from cookie.`,
+    security: [{ bearerAuthRefresh: [] }],
+    body: Type.Pick(ACCESS_TOKEN_SCHEMA, ["refreshToken"]),
     response: {
-      201: COMMON_SCHEMAS_V1.status,
+      200: COMMON_SCHEMAS_V1.status,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
   refreshTokens: {
     summary: "Refresh authentication tokens.",
-    description: `Given a valid refresh token, it returns a access token and set cookie new refresh token.`,
+    security: [{ bearerAuthRefresh: [] }],
     response: {
       200: SIGN_IN_UP_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
 };
+
 
 export default mixinTagForSchemas(authSchemas, SWAGGER_TAGS.auth);

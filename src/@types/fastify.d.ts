@@ -1,5 +1,5 @@
 import { FastifyAuthFunction } from "@fastify/auth";
-import * as Fastify from "fastify";
+import { FastifyRequest, FastifyInstance } from "fastify";
 import * as configs from "../configs/index.js";
 import type AppDataSource from "../../infra/database/typeorm.config.js";
 
@@ -9,9 +9,11 @@ declare module "fastify" {
     verifyJwt: FastifyAuthFunction;
     verifyJwtRefreshToken: FastifyAuthFunction;
     verifyApiKey: FastifyAuthFunction;
+    // eslint-disable-next-line no-use-before-define
     parseMultipartFields: (schemas: FastifySchema) => (req: FastifyRequest, rep: FastifyReply) => Promise<void>;
     removeUploadIfExists: (filePath: string) => Promise<void>;
     uploadToStorage: (uploadedFile: Record<string, any>, folder: string) => Promise<string>;
+    httpSuccessCode: (code: number | 200 | 201) => () => void;
     upload: (uploadedFile: Record<string, any>) => Promise<string>;
     configs: typeof configs;
   }
@@ -19,7 +21,7 @@ declare module "fastify" {
 
 declare module "@fastify/awilix" {
   interface Cradle {
-    app: Fastify.FastifyInstance;
+    app: FastifyInstance;
     dbConnection: typeof AppDataSource;
   }
 }

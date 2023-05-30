@@ -7,8 +7,6 @@ export * from "./fastify-helmet.config.js";
 export * from "./fastify-rate-limit.config.js";
 export * from "./fastify.config.js";
 export * from "./fastify-multipart.config.js";
-export * from "./fastify-cookie.config.js";
-export * from "./fastify-csrf.config.js";
 export * from "./logger.config.js";
 export * from "./openapi.config.js";
 export * from "./aws.config.js";
