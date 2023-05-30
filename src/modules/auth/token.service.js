@@ -43,15 +43,11 @@ export default class TokenService {
       { expiresIn: fastifyJwtConfig.refreshTokenExpirationTime },
     );
 
-    const result = await this.#authTokensRepository
+    await this.#authTokensRepository
       .createQueryBuilder()
       .insert()
       .values({ id: refreshTokenId, userId: user.id, ppid: refreshHash })
-      .returning("*")
       .execute();
-
-    console.log(result);
-    console.log({ id: refreshTokenId, userId: user.id, ppid: refreshHash });
 
     return { refreshToken, accessToken, user };
   }

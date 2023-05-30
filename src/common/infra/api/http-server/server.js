@@ -7,8 +7,6 @@ import fastifyHelmet from "@fastify/helmet";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody";
-import fastifyView from "@fastify/view";
-import fastifyPiscina from "fastify-piscina";
 import fastifyAutoLoad from "@fastify/autoload";
 import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 
@@ -21,7 +19,6 @@ import {
 import sharedHealthCheckRouter from "#modules/health-check/router.js";
 import * as configs from "#configs";
 import appV1Plugin from "./v1/http.plugin.js";
-import wsPlugin from "../ws-server/websocket.plugin.js";
 
 export class RestApiServer {
   /**
@@ -76,23 +73,16 @@ export class RestApiServer {
     fastifyApp.register(fastifyStatic, this.#options.configs.fastifyStaticConfig);
     fastifyApp.register(fastifyMultipart, this.#options.configs.fastifyMultipartConfig);
     fastifyApp.register(fastifyFormBody);
-    fastifyApp.register(fastifyView, this.#options.configs.fastifyViewConfig);
     // This plugin is especially useful if you expect a high load
     // on your application, it measures the process load and returns
     // a 503 if the process is undergoing too much stress.
     // fastifyApp.register(fastifyUnderPressure, fastifyUnderPressureConfig);
-    // node.js worker pool plugin
-    // @ts-ignore
-    fastifyApp.register(fastifyPiscina, {
-      filename: new URL("./worker.js", import.meta.url).href,
-    });
 
     /**
      * WARNING!!! The router must be Promise because the error issued by fastify is not clear
      */
     fastifyApp.register(sharedHealthCheckRouter, { prefix: "/api/health-check" });
     fastifyApp.register(appV1Plugin, { prefix: "/v1/", ...this.#options });
-    fastifyApp.register(wsPlugin);
 
     return fastifyApp;
   }

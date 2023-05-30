@@ -50,10 +50,6 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
       path: getEndpoint(),
     });
 
-    console.log({
-
-    })
-
     assert.strictEqual(response.statusCode, 409);
   });
 });

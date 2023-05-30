@@ -39,7 +39,7 @@ const authSchemas = {
     summary: "Create new user and return him a JWT.",
     body: SIGN_UP_INPUT_SCHEMA,
     response: {
-   //   201: SIGN_IN_UP_OUTPUT_SCHEMA,
+      //   201: SIGN_IN_UP_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
@@ -69,6 +69,5 @@ const authSchemas = {
     },
   },
 };
-
 
 export default mixinTagForSchemas(authSchemas, SWAGGER_TAGS.auth);

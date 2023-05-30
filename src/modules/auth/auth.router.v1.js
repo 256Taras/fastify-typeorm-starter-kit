@@ -93,7 +93,7 @@ export default async function authRouterV1(app) {
 
       if (!user) throw new BadRequestException(`Access decided`);
 
-      return tokenService.generateTokens(user)
+      return tokenService.generateTokens(user);
     }),
   });
 }

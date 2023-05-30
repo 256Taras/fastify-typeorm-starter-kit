@@ -324,7 +324,6 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] rate limiting (https://www.npmjs.com/package/fastify-rate-limit)
   - [x] global rate limit
   - [x] rate limit per route
-- [x] WebSockets adapter with support for scheme validation
 - [ ] request timeouts (implement manually, example: https://github.com/fastify/fastify-http-proxy/issues/74)
 - [x] request-scoped storage support, based on Asynchronous Local Storage to receive data without mutation request
 - [x] templates rendering support
@@ -332,9 +331,6 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] covering utilities with .d.ts files
 - [ ] clustering based on child process
 - [x] support Docker installation
-- [ ] utilities for functional programming
-   - [x] monads
-   - [ ] pattern matching
 
 ## 🙋 FAQ
 

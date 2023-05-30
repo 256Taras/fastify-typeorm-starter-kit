@@ -37,7 +37,6 @@ async function authPlugin(app, opt) {
       // @ts-ignore
       const refreshToken = req.headers[authConfig.refreshTokenKey];
 
-      console.log(req.headers)
       // @ts-ignore
       const data = app.jwt.refreshToken.verify(refreshToken);
       app.diContainer.cradle.userRefreshTokenContext.set(data);
