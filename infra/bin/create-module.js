@@ -64,6 +64,7 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
     model: "model",
     schemas: "schemas",
     router: "router",
+    types: "types",
   };
 
   const fillFile = async (fileName) =>
@@ -91,6 +92,8 @@ const createModuleFolderStructure = async ({ newModuleName }) => {
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.schemas.js`), await fillFile(templates.schemas));
   // eslint-disable-next-line no-sync
   fs.writeFileSync(path.join(modulePath, `${ModuleName}.router.v1.js`), await fillFile(templates.router));
+  // eslint-disable-next-line no-sync
+  fs.writeFileSync(path.join(modulePath, `types.d.ts`), await fillFile(templates.types));
   // fs.writeFileSync(path.join(modulePath, "create-seed.js"), await fillFile(templates.index));
 
   return { success: true };
