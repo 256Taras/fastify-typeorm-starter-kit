@@ -12,7 +12,7 @@ import { COMMON_SCHEMAS_V1 } from "#v1";
 
 const {{SchemaName}}_ENTITY_SCHEMA = Type.Object({
   id: Type.String({ format: "uuid" }),
-  // add fields for {{LowerCaseName}} entity here
+  {{TypeBoxAttributes}}
 });
 
 const {{SchemaName}}_OUTPUT_SCHEMA = {{SchemaName}}_ENTITY_SCHEMA;
