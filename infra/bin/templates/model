@@ -1,26 +1,29 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 
-import { tables } from "#constants";
-
 export default class {{UpperCaseNameSingle}} extends BaseEntity {
-  constructor({ id, createdAt, updatedAt }) {
-    super();
-    this.id = id;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
+
+  /** @type {string} */
+  id;
+
+  {{EntityFields}}
+
+  /** @type {Date} */
+  createdAt;
+
+  /** @type {Date} */
+  updatedAt;
 
   static get schema() {
     return new EntitySchema({
       name: {{UpperCaseNameSingle}}.name,
-      //TODO add to table
-      tableName: tables.{{LowerCaseNameSingle}},
+      tableName: "{{LowerCaseNameSingle}}",
       columns: {
         id: {
           type: "uuid",
           primary: true,
           generated: "uuid",
         },
+      {{EntityAttributes}}
         createdAt: {
           name: "created_at",
           type: "timestamp",
@@ -31,6 +34,10 @@ export default class {{UpperCaseNameSingle}} extends BaseEntity {
           type: "timestamp",
           default: () => "CURRENT_TIMESTAMP",
         },
+      },
+      relations: {
+      // @ts-ignore
+      {{EntityRelations}}
       },
     });
   }

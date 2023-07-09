@@ -36,7 +36,7 @@
     "prepare": "husky install",
     "precommit": "npm run lint && npm test",
     "prepush": "npm run lint && npm test",
-    "module": "node ./infra/bin/create-module.js name=",
+    "module": "node ./infra/bin/create-module.js name=authors fields='name:!string(128), price?:integer, [>Book-many-to-many]'",
     "check:types": "npx tsc --project tsconfig.json",
     "check:env": "node -r ./infra/bin/env/load-and-validate-env.cjs",
     "check:dep": "npx depcheck",
