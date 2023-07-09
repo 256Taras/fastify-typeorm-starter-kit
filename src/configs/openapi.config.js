@@ -27,6 +27,7 @@ export const openapiConfig = {
         bearerAuthRefresh: {
           type: "apiKey",
           name: authConfig.refreshTokenKey,
+          bearerFormat: "JWT",
           in: "header",
           description: "Refresh Token for obtaining new Access Token",
         },

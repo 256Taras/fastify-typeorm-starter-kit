@@ -8,16 +8,19 @@ import {
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 import { COMMON_SCHEMAS_V1 } from "#v1";
 
-// common schemas start
+/** Common schemas start */
 
 const {{SchemaName}}_ENTITY_SCHEMA = Type.Object({
   id: Type.String({ format: "uuid" }),
   {{TypeBoxAttributes}}
+  updatedAt: Type.String({ format: "date-time" }),
+  createdAt: Type.String({ format: "date-time" }),
 });
 
 const {{SchemaName}}_OUTPUT_SCHEMA = {{SchemaName}}_ENTITY_SCHEMA;
+const {{SchemaName}}_INPUT_SCHEMA = Type.Omit({{SchemaName}}_ENTITY_SCHEMA, ["id", "createdAt", "updatedAt"])
 
-// common schemas end
+/** Common schemas end */
 
 const {{LowerCaseName}}Schemas = {
   getOne: {
@@ -38,19 +41,16 @@ const {{LowerCaseName}}Schemas = {
   },
   create: {
     security: [{ bearerTokenAuth: [] }],
-    body: Type.Object({
-      // add fields for create {{LowerCaseName}} here
-    }),
+    body: {{SchemaName}}_INPUT_SCHEMA,
     response: {
-      201: {{SchemaName}}_OUTPUT_SCHEMA,
+      200: {{SchemaName}}_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
   update: {
     security: [{ bearerTokenAuth: [] }],
-    body: Type.Object({
-      // add fields for update {{LowerCaseName}} here
-    }),
+    params: COMMON_SCHEMAS_V1.id,
+    body: {{SchemaName}}_INPUT_SCHEMA,
     response: {
       200: {{SchemaName}}_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
@@ -65,5 +65,6 @@ const {{LowerCaseName}}Schemas = {
     },
   },
 };
+
 //TODO add tags
 export default mixinTagForSchemas({{LowerCaseName}}Schemas, SWAGGER_TAGS.{{LowerCaseNameSingle}});

@@ -24,7 +24,6 @@ export default class TokenService {
 
   /**
    * Generates access and refresh tokens for a user.
-   *
    * @param {IUser} user - The user for whom the tokens are generated.
    * @returns {Promise<{ refreshToken: string, accessToken: string, user: IUser }>} An object containing the refresh token, access token, and user object.
    */

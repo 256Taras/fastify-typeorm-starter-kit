@@ -1,28 +1,33 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 import { tables } from "#constants";
 
-/**
- * @typedef {import('./types.d').IUser} IUser
- */
-
 export default class User extends BaseEntity {
-  /**
-   * Creates a new instance of the User class.
-   * @constructor
-   * @param {import('#types/common/utility-types').PartialBy<IUser, 'deletedAt' | 'updatedAt' | 'createdAt'>} dto
-   */
-  constructor({ id, firstName, lastName, email, password, roles, createdAt, updatedAt, deletedAt }) {
-    super();
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-    this.roles = roles;
-    this.createdAt = createdAt || new Date().toISOString();
-    this.updatedAt = updatedAt || new Date().toISOString();
-    this.deletedAt = deletedAt;
-  }
+  /** @type {string} */
+  id;
+
+  /** @type {string} */
+  firstName;
+
+  /** @type {string} */
+  lastName;
+
+  /** @type {string} */
+  email;
+
+  /** @type {string} */
+  password;
+
+  /** @type {string[]} */
+  roles;
+
+  /** @type {string} */
+  createdAt;
+
+  /** @type {string} */
+  updatedAt;
+
+  /** @type {string | undefined} */
+  deletedAt;
 
   /**
    * Gets the schema for the User class.

@@ -2,7 +2,6 @@ import { BadRequestException, ResourceAlreadyExistException, ResourceNotFoundExc
 import { ROLES_NAMES, STATUS_SUCCESS } from "#constants";
 
 import authSchemas from "#modules/auth/auth.schemas.js";
-import User from "#modules/users/user.entity.js";
 import { useCase } from "#utils/common/use-case.js";
 
 /** @type {import("@fastify/type-provider-typebox").FastifyPluginAsyncTypebox } */
@@ -18,7 +17,6 @@ export default async function authRouterV1(app) {
 
   app.post("/sing-up", {
     schema: authSchemas.signUp,
-    onSend: app.httpSuccessCode(201),
     handler: useCase(async ({ firstName, lastName, email, password }) => {
       logger.debug(`Try sign up user with email: ${email}`);
 
@@ -28,7 +26,7 @@ export default async function authRouterV1(app) {
 
       const hashedPassword = await encrypterService.getHash(password);
 
-      const newUser = new User({
+      const user = usersRepository.create({
         id: encrypterService.uuid(),
         email,
         firstName,
@@ -37,7 +35,10 @@ export default async function authRouterV1(app) {
         roles: [ROLES_NAMES.user],
       });
 
-      const user = await usersRepository.save(newUser);
+      await usersRepository.save(user);
+
+      // @ts-ignore
+      delete user.password;
 
       return tokenService.generateTokens(user);
     }),
@@ -92,6 +93,9 @@ export default async function authRouterV1(app) {
       const user = await usersRepository.findOneBy({ id });
 
       if (!user) throw new BadRequestException(`Access decided`);
+
+      // @ts-ignore
+      delete user.password;
 
       return tokenService.generateTokens(user);
     }),

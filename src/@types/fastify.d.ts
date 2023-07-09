@@ -13,7 +13,6 @@ declare module "fastify" {
     parseMultipartFields: (schemas: FastifySchema) => (req: FastifyRequest, rep: FastifyReply) => Promise<void>;
     removeUploadIfExists: (filePath: string) => Promise<void>;
     uploadToStorage: (uploadedFile: Record<string, any>, folder: string) => Promise<string>;
-    httpSuccessCode: (code: number | 200 | 201) => () => void;
     upload: (uploadedFile: Record<string, any>) => Promise<string>;
     configs: typeof configs;
   }

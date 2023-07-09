@@ -2,7 +2,8 @@ import { logger } from "#services/logger/logger.service.js";
 
 export class DatabaseLoggerService {
   logQuery(query, parameters) {
-    logger.debug({ query, parameters });
+    logger.debug(query);
+    logger.debug(parameters);
   }
   logQueryError(error, query, parameters) {
     logger.error({ error, query, parameters });

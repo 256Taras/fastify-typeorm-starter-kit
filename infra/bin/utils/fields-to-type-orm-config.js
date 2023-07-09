@@ -20,7 +20,6 @@ const getTypeOrmType = (type) => {
 };
 
 export const fieldsToTypeOrmConfig = (fields, moduleName) => {
-  console.log(fields);
   const columns = {};
   const relations = {};
 

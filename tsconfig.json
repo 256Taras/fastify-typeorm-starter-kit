@@ -21,6 +21,7 @@
     "noImplicitReturns": true,
     "resolveJsonModule": true,
     "declaration": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "#tests/*": ["./tests/*"],
       "#src/*": ["./src/*"],

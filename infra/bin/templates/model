@@ -7,10 +7,10 @@ export default class {{UpperCaseNameSingle}} extends BaseEntity {
 
   {{EntityFields}}
 
-  /** @type {Date} */
+  /** @type {string} */
   createdAt;
 
-  /** @type {Date} */
+  /** @type {string} */
   updatedAt;
 
   static get schema() {

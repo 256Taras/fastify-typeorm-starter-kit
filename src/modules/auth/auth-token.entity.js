@@ -3,29 +3,19 @@ import User from "#modules/users/user.entity.js";
 import { tables } from "#constants";
 
 export default class AuthToken extends BaseEntity {
-  /**
-   * Creates a new instance of the AuthToken class.
-   * @constructor
-   * @param {object} params - The parameters to create the AuthToken
-   * @param {string} params.id - The unique identifier of the AuthToken
-   * @param {string} params.ppid - The unique identifier of the user AuthToken.
-   * @param {string} params.userId - The unique identifier of the user.
-   * @param {string} params.createdAt - The date and time the user's AuthToken was created, in ISO format.
-   */
-  constructor({ id, ppid, userId, createdAt }) {
-    super();
-    this.id = id;
-    this.ppid = ppid;
-    this.userId = userId;
-    this.createdAt = createdAt;
-  }
+  /** @type {string} */
+  id;
+  /** @type {string} */
+  ppid;
+  /** @type {string} */
+  userId;
+  /** @type {string} */
+  createdAt;
 
-  /**
-   * @type {import("typeorm").EntitySchema<AuthToken>}
-   */
+  /** @type {import("typeorm").EntitySchema<AuthToken>} */
   static get schema() {
     return new EntitySchema({
-      name: "AuthToken",
+      name: AuthToken.name,
       tableName: tables.authToken,
       columns: {
         id: {

@@ -7,10 +7,13 @@ export const fastifyConfig = {
   requestTimeout: 1000,
   ajv: {
     customOptions: {
+      additionalProperties: false,
       removeAdditional: false,
       useDefaults: true,
       coerceTypes: true,
       strictTypes: true,
+      strictRequired: true,
+      verbose: true,
       // strictRequired: true,
       allErrors: true, // Warning: Enabling this option.js may lead to this security issue https://www.cvedetails.com/cve/CVE-2020-8192/
     },

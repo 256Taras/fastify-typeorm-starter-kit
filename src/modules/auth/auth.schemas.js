@@ -19,9 +19,12 @@ const ACCESS_TOKEN_SCHEMA = Type.Object(
 
 const SIGN_IN_UP_OUTPUT_SCHEMA = Type.Intersect([
   ACCESS_TOKEN_SCHEMA,
-  Type.Object({
-    user: USER_OUTPUT_SCHEMA,
-  }),
+  Type.Object(
+    {
+      user: USER_OUTPUT_SCHEMA,
+    },
+    { additionalProperties: false },
+  ),
 ]);
 
 const SIGN_UP_INPUT_SCHEMA = Type.Object(
@@ -39,7 +42,7 @@ const authSchemas = {
     summary: "Create new user and return him a JWT.",
     body: SIGN_UP_INPUT_SCHEMA,
     response: {
-      //   201: SIGN_IN_UP_OUTPUT_SCHEMA,
+      201: SIGN_IN_UP_OUTPUT_SCHEMA,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),
     },
   },
@@ -54,7 +57,6 @@ const authSchemas = {
   logOut: {
     summary: "Log out authentication user",
     security: [{ bearerAuthRefresh: [] }],
-    body: Type.Pick(ACCESS_TOKEN_SCHEMA, ["refreshToken"]),
     response: {
       200: COMMON_SCHEMAS_V1.status,
       ...convertHttpErrorCollectionToAjvErrors(defaultHttpErrorCollection),

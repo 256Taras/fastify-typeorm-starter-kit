@@ -1,5 +1,5 @@
 import path from "node:path";
-import fs from "node:fs";
+import fs from "node:fs/promises";
 import { TemplateCreator } from "./template-creator.js";
 import { fieldsToTypeOrmConfig } from "./utils/fields-to-type-orm-config.js";
 import { singularizeWord } from "./utils/singularize-word.js";
@@ -24,19 +24,22 @@ const getArgValue = (argName) => {
 const getModuleName = () => getArgValue(CLI_ARG_MODULE_NAME);
 const getFieldsFromCliArgs = () => parseFields(getArgValue(CLI_ARG_FIELDS));
 
-const createFolderStructure = (folderPath) => {
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
+const createFolderStructure = async (folderPath) => {
+  try {
+    await fs.access(folderPath);
+  } catch {
+    await fs.mkdir(folderPath, { recursive: true });
   }
 };
 
-const writeFile = (filePath, content) => {
-  if (fs.existsSync(filePath)) {
+const writeFile = async (filePath, content) => {
+  try {
+    await fs.access(filePath);
     throw new Error(`File '${filePath}' already exists.`);
+  } catch {
+    const formattedContent = prettier.format(content, prettierConfig);
+    await fs.writeFile(filePath, formattedContent);
   }
-  const formattedContent = prettier.format(content, prettierConfig);
-
-  fs.writeFileSync(filePath, formattedContent);
 };
 
 const fillTemplate = async (fileName, values) => {
@@ -46,7 +49,7 @@ const fillTemplate = async (fileName, values) => {
 
 const createFileFromTemplate = async (folderPath, fileName, templateName, values) => {
   const content = await fillTemplate(templateName, values);
-  writeFile(path.join(folderPath, fileName), content);
+  await writeFile(path.join(folderPath, fileName), content);
 };
 
 const createModuleFiles = async (folderPath, moduleName, fields) => {
@@ -57,7 +60,7 @@ const createModuleFiles = async (folderPath, moduleName, fields) => {
   const SchemaName = camelToSnakeCase(moduleName);
 
   const attributes = fieldsToTypeOrmConfig(fields, UpperCaseName);
-  console.log(formatObjectToCode(attributes.columns));
+
   const values = {
     ModuleName: moduleName,
     ModuleNameSingle: singularizeWord(moduleName),
@@ -72,8 +75,6 @@ const createModuleFiles = async (folderPath, moduleName, fields) => {
     TypeBoxAttributes: fieldsToTypeBoxConfig(fields),
   };
 
-  console.log(generateFieldDefinitions(attributes.columns))
-
   await createFileFromTemplate(folderPath, `${singularizeWord(moduleName)}.entity.js`, "model", values);
   await createFileFromTemplate(folderPath, `${moduleName}.schemas.js`, "schemas", values);
   await createFileFromTemplate(folderPath, `${moduleName}.router.v1.js`, "router", values);
@@ -85,8 +86,9 @@ const createModule = async () => {
   const fields = getFieldsFromCliArgs();
   const folderPath = path.join("src", "modules", moduleName.toLowerCase());
 
-  createFolderStructure(folderPath);
+  await createFolderStructure(folderPath);
   await createModuleFiles(folderPath, moduleName, fields);
 };
 
+// eslint-disable-next-line no-console
 createModule().catch((e) => console.error(e));

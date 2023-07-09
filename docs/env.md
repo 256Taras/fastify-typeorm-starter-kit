@@ -14,8 +14,6 @@
 
 `ENABLE_COLORIZED_LOG` - Logs in the console with or without colors. Possible options are: 0 or 1.
 
-`ENABLE_CLOUD_LOGGING` - Enables cloud logging. Possible options are: 0 or 1.
-
 `ENABLE_DB_LOGGING` - Enables logging of database queries. Possible options are: 0 or 1.
 
 `ENABLE_SEEDS` - Enables seed data. Possible options are: 0 or 1.

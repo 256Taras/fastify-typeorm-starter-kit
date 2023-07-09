@@ -1,7 +1,7 @@
 import { STATUS_SUCCESS } from "#constants";
 import { ResourceNotFoundException } from "#errors";
+
 import { createPageOptionsDto, paginateQueryBuilder } from "#utils/common/index.js";
-import {{UpperCaseNameSingle}} from "#modules/{{ModuleName}}/{{ModuleNameSingle}}.entity.js";
 import {{LowerCaseName}}Schemas from "#modules/{{ModuleName}}/{{ModuleName}}.schemas.js";
 
 export default async function {{LowerCaseName}}RouterV1(app) {
@@ -12,7 +12,7 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      const new{{UpperCaseNameSingle}} = new {{UpperCaseNameSingle}}(req.body);
+      const new{{UpperCaseNameSingle}} = {{LowerCaseName}}Repository.create(req.body);
 
       const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.save(new{{UpperCaseNameSingle}});
 
