@@ -1,4 +1,5 @@
 import { Type } from "@sinclair/typebox";
+
 import { convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors } from "#utils/schemas/index.js";
 import { defaultHttpErrorCollection } from "#errors";
 

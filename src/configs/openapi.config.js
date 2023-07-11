@@ -1,4 +1,5 @@
 import { env } from "../../configs/env.js";
+
 import { authConfig } from "./auth.config.js";
 
 export const openapiConfig = {

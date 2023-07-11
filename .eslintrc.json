@@ -1,21 +1,20 @@
 {
+  "root": true,
   "env": {
     "browser": false,
-    "es2022": true,
+    "es2023": true,
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 2022,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "parser": "@typescript-eslint/parser",
   "extends": [
+    "plugin:node/recommended",
     "node",
     "metarhia",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:node/recommended"
+    "prettier"
   ],
   "plugins": [
     "prettier"
@@ -56,7 +55,6 @@
     "node/no-missing-require": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-explicit-any": "off",
     "node/file-extension-in-import": [
       "error",
       "always",
@@ -73,7 +71,14 @@
     "import/prefer-default-export": "off",
     "import/no-namespace": "off",
     "import/default": "off",
-    "import/no-commonjs": "off"
+    "import/no-commonjs": "off",
+    "import/order": ["error", {
+      "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+      "newlines-between": "always"
+    }],
+    "complexity": ["error", 15],
+    "max-params": ["error", 5],
+    "no-nested-ternary": "error"
   },
   "overrides": [
     {
@@ -95,6 +100,23 @@
       ],
       "rules": {
         "no-unused-vars": "off"
+      }
+    },
+    {
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ]
+      },
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+      ],
+      "files": [
+        "*.ts", "*.tsx"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
       }
     }
   ]

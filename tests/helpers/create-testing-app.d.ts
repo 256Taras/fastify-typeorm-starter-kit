@@ -1,5 +1,6 @@
-import { tables } from "#constants";
 import { FastifyInstance } from "fastify";
+
+import { tables } from "#constants";
 
 interface ICreateTestingAppOption {
   configs?: typeof tables;

@@ -1,8 +1,9 @@
 import { after, before, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-import { signInFixtures as fixtures } from "./fixtures.js";
 import { createTestingApp, dbUtils } from "../../../helpers/index.js";
+
+import { signInFixtures as fixtures } from "./fixtures.js";
 
 const TESTING_METHOD = "POST";
 

@@ -1,4 +1,5 @@
 import path from "node:path";
+
 import Fastify from "fastify";
 import fastifyRequestContextPlugin from "@fastify/request-context";
 import fastifySwaggerPlugin from "@fastify/swagger"; // should be added first and registered before any plugin
@@ -8,16 +9,16 @@ import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody";
 import fastifyAutoLoad from "@fastify/autoload";
-import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 
+import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 import { getDirName } from "#common/utils/common/index.js";
 import {
   globalHttpFastify404ErrorHandler,
   globalHttpFastifyErrorHandler,
 } from "#common/errors/fastify-error-handler.js";
-
 import sharedHealthCheckRouter from "#modules/health-check/router.js";
 import * as configs from "#configs";
+
 import appV1Plugin from "./v1/http.plugin.js";
 
 export class RestApiServer {

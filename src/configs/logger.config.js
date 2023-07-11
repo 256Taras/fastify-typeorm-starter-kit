@@ -1,4 +1,5 @@
 import { appConfig } from "#src/configs/app.config.js";
+
 import { env } from "../../configs/env.js";
 
 export const loggerConfig = {

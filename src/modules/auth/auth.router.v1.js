@@ -1,6 +1,5 @@
 import { BadRequestException, ResourceAlreadyExistException, ResourceNotFoundException } from "#errors";
 import { ROLES_NAMES, STATUS_SUCCESS } from "#constants";
-
 import authSchemas from "#modules/auth/auth.schemas.js";
 import { useCase } from "#utils/common/use-case.js";
 

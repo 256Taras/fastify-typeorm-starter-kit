@@ -1,6 +1,5 @@
 import { FastifyRequest } from "fastify";
 import { RouteGenericInterface, RouteHandlerMethod } from "fastify/types/route";
-
 import { FastifySchema } from "fastify/types/schema";
 import {
   FastifyTypeProvider,

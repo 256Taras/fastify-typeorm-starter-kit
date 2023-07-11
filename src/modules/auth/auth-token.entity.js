@@ -1,4 +1,5 @@
 import { BaseEntity, EntitySchema } from "typeorm";
+
 import User from "#modules/users/user.entity.js";
 import { tables } from "#constants";
 

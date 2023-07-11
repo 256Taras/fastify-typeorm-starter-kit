@@ -1,8 +1,8 @@
 import { serverConfig, appConfig } from "#configs";
-
 import { logger } from "#services/logger/logger.service.js";
-import AppDataSource from "../infra/database/typeorm.config.js";
 import RestApi from "#common/infra/api/http-server/server.js";
+
+import AppDataSource from "../infra/database/typeorm.config.js";
 
 // Graceful shutdown
 const gracefulShutdown = async () => {

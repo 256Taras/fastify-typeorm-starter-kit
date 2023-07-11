@@ -1,6 +1,6 @@
-import { Enum } from "#src/common/utils/schemas/enum.js";
 import { Type } from "@sinclair/typebox";
 
+import { Enum } from "#src/common/utils/schemas/enum.js";
 import { ROLES_NAMES, SWAGGER_TAGS } from "#constants";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,

@@ -1,5 +1,4 @@
 import schemas from "#modules/health-check/schemas.js";
-
 import { SERVICE_UNAVAILABLE_EXCEPTION_503 } from "#errors";
 
 //const version = "1.0.0";

@@ -1,15 +1,18 @@
 import path from "node:path";
 import fs from "node:fs/promises";
+
+// eslint-disable-next-line node/no-unpublished-import
+import prettier from "prettier";
+
+import prettierConfig from "../../.prettierrc.cjs";
+
 import { TemplateCreator } from "./template-creator.js";
 import { fieldsToTypeOrmConfig } from "./utils/fields-to-type-orm-config.js";
 import { singularizeWord } from "./utils/singularize-word.js";
 import { camelToSnakeCase } from "./utils/camel-to-snake-case.js";
 import { formatObjectToCode } from "./utils/format-object-to-code.js";
-import { fieldsToTypeBoxConfig } from "./utils/fields-to-type-box-config.js";
 import { parseFields } from "./utils/parse-fields.js";
-// eslint-disable-next-line node/no-unpublished-import
-import prettier from "prettier";
-import prettierConfig from "../../.prettierrc.cjs";
+import { fieldsToTypeBoxConfig } from "./utils/fields-to-type-box-config.js";
 import { generateFieldDefinitions } from "./utils/generateFieldDefinitions.js";
 
 const CLI_ARG_MODULE_NAME = "name";

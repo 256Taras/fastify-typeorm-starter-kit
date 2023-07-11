@@ -83,11 +83,11 @@ yarn install
 
 ### Create environment
 
-3. Create `.env` file in `configs` folder. Use `.env.example` as example.
-`.env.example` has already fully functional settings, so server can be started with it without changes
+3. Create `.environment` file in `configs` folder. Use `.environment.example` as example.
+`.environment.example` has already fully functional settings, so server can be started with it without changes
 
   ```bash
-cp .env.example .env
+cp .environment.example .environment
   ```
 
 
@@ -284,10 +284,10 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 
 - [x] production ready
 - [x] automatic loading of modules and plugins
-- [x] validate env:
+- [x] validate environment:
 - [x] main script: initialize infra for proper server start, start server, add server stop handlers
 - [x] graceful shutdown
-- [x] configs: separate folder, split by files, setup using process env
+- [x] configs: separate folder, split by files, setup using process environment
 - [x] fastify application server
 - [x] auto documentation: fastify-swagger. \*Require fastify input & output schemas
 - [x] routers with input validation

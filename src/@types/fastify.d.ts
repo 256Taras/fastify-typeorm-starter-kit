@@ -1,10 +1,10 @@
 import { FastifyAuthFunction } from "@fastify/auth";
 import { FastifyRequest, FastifyInstance } from "fastify";
+
 import * as configs from "../configs/index.js";
 import type AppDataSource from "../../infra/database/typeorm.config.js";
 
 declare module "fastify" {
-  // @ts-ignore
   interface FastifyInstance {
     verifyJwt: FastifyAuthFunction;
     verifyJwtRefreshToken: FastifyAuthFunction;

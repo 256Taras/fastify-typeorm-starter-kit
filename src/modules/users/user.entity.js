@@ -1,4 +1,5 @@
 import { BaseEntity, EntitySchema } from "typeorm";
+
 import { tables } from "#constants";
 
 export default class User extends BaseEntity {

@@ -7,9 +7,7 @@
  * @typedef {import('#types/index.js').HttpErrorCollection} HttpErrorCollection
  */
 import { appConfig } from "#configs";
-
 import { logger } from "#services/logger/logger.service.js";
-
 import {
   EndpointNotFoundException,
   PAYLOAD_TO_LARGE_413,
