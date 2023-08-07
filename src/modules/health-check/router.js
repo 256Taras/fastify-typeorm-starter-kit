@@ -1,5 +1,9 @@
+import os from "node:os";
+import { exec } from "node:child_process";
+import { performance } from "node:perf_hooks";
+import { executionAsyncId } from "node:async_hooks";
+
 import schemas from "#modules/health-check/schemas.js";
-import { SERVICE_UNAVAILABLE_EXCEPTION_503 } from "#errors";
 
 //const version = "1.0.0";
 
@@ -9,6 +13,57 @@ import { SERVICE_UNAVAILABLE_EXCEPTION_503 } from "#errors";
 // inside this plugin and its children will have the prefix
 // as part of the path.
 export const autoPrefix = "/_app";
+
+const checkEventLoopLag = () =>
+  new Promise((resolve) => {
+    const start = performance.now();
+    setImmediate(() => {
+      const lag = performance.now() - start;
+      resolve(lag);
+    });
+  });
+
+const checkDiskSpace = async () =>
+  new Promise((resolve, reject) => {
+    if (os.platform() === "win32") {
+      exec("wmic logicaldisk get size,freespace,caption", (error, stdout) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        const lines = stdout.trim().split("\n");
+        const disks = lines.slice(1).map((line) => {
+          const [caption, freeSpace, size] = line.trim().split(/\s+/);
+          return {
+            filesystem: caption,
+            size: parseInt(size, 10),
+            free: parseInt(freeSpace, 10),
+          };
+        });
+        resolve(disks);
+      });
+    } else {
+      exec("df -kP", (error, stdout) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        const lines = stdout.trim().split("\n");
+        const disks = lines.slice(1).map((line) => {
+          const parts = line.split(/\s+/);
+          return {
+            filesystem: parts[0],
+            size: parseInt(parts[1], 10) * 1024,
+            free: parseInt(parts[3], 10) * 1024,
+            mount: parts[5],
+          };
+        });
+        resolve(disks);
+      });
+    }
+  });
 
 /**
  * Fastify tries not to impose you any design decision, but we highly
@@ -36,7 +91,6 @@ export const autoPrefix = "/_app";
  */
 
 /**
- *
  * @type {import("fastify").FastifyPluginAsync}
  */
 export default async (fastify) => {
@@ -48,37 +102,68 @@ export default async (fastify) => {
    *    I prefer the "full" declaration as I like to be explicit.
    *    @see https://www.fastify.io/docs/latest/Reference/Routes/
    */
-  fastify.get("/", {
-    /**
-     *      Fastify does an extensive use of JSON schemas.
-     *      It uses them for validating external input
-     *      (thanks to https://github.com/ajv-validator/ajv)
-     *      or improving the serialization speed of responses
-     *      (thanks to https://github.com/fastify/fast-json-stringify).
-     *      Since writing plain JSON schema is rather boring
-     *      and error prone, we have created `fluent-json-schema`,
-     *      a nice library to help you maintaining JSON schemas.
-     *      Another reason to write your route definition with
-     *      the schema configured, is that you will get automatic
-     *      documentation with https://github.com/fastify/fastify-swagger
-     */
-    schema: schemas.check,
+  fastify.get(
+    "/healthcheck/basic",
+    {
+      /**
+       *      Fastify does an extensive use of JSON schemas.
+       *      It uses them for validating external input
+       *      (thanks to https://github.com/ajv-validator/ajv)
+       *      or improving the serialization speed of responses
+       *      (thanks to https://github.com/fastify/fast-json-stringify).
+       *      Since writing plain JSON schema is rather boring
+       *      and error prone, we have created `fluent-json-schema`,
+       *      a nice library to help you maintaining JSON schemas.
+       *      Another reason to write your route definition with
+       *      the schema configured, is that you will get automatic
+       *      documentation with https://github.com/fastify/fastify-swagger
+       */
+      schema: schemas.basic,
+    },
+    async () => ({
+      uptime: process.uptime(),
+      memoryUsage: process.memoryUsage(),
+      timestamp: Date.now(),
+    }),
+  );
+
+  fastify.get("/healthcheck/extended", {
+    schema: schemas.extended,
     async handler() {
-      let status;
+      let dbStatus;
       try {
         await this.diContainer.cradle.dbConnection.query(`SELECT 1 + 1 as healthcheck`);
-        status = true;
+        dbStatus = true;
       } catch (e) {
-        status = false;
+        dbStatus = false;
       }
 
-      const healthcheck = {
-        uptime: process.uptime(),
-        status,
-        timestamp: Date.now(),
+      const eventLoopLag = await checkEventLoopLag();
+      const diskSpace = await checkDiskSpace();
+
+      const activeRequests = {
+        currentAsyncId: executionAsyncId(),
       };
 
-      return JSON.stringify(status ? healthcheck : new SERVICE_UNAVAILABLE_EXCEPTION_503());
+      return {
+        uptime: process.uptime(),
+        memoryUsage: process.memoryUsage(),
+        osLoad: os.loadavg(),
+        eventLoopLag,
+        database: {
+          status: dbStatus ? "connected" : "disconnected",
+        },
+        versions: {
+          node: process.version,
+          fastify: fastify.version,
+          application: process.env.VERSION,
+        },
+        diskSpace,
+        environment: process.env.NODE_ENV || "development",
+        pid: process.pid,
+        activeRequests,
+        timestamp: Date.now(),
+      };
     },
   });
 };
