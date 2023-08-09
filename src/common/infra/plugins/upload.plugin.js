@@ -139,7 +139,9 @@ async function uploadPlugin(app, option) {
         return { ...stack, [key]: parseValue(value) };
       }, {});
 
-      validateSchema(req, parsedFields, schema, "body");
+      if (schema) {
+        validateSchema(req, parsedFields, schema, "body");
+      }
 
       req.body = { ...(req?.body || {}), ...parsedFields };
     };

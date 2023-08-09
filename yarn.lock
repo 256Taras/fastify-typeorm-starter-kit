@@ -507,10 +507,10 @@
     fastify-plugin "^4.0.0"
     steed "^1.1.3"
 
-"@fastify/multipart@^7.3.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@fastify/multipart/-/multipart-7.7.0.tgz#491024539beedc33fe68b50c7b104002933077f8"
-  integrity sha512-lE5v6+MVbLYmPL8yUHrvyezEOLQbZulEPL8itwGqPbNxL2pWdAN1HWEZ7f3VdwyR6wmQdOcpfZ0zdCU4BbWKzw==
+"@fastify/multipart@^7.7.3":
+  version "7.7.3"
+  resolved "https://registry.yarnpkg.com/@fastify/multipart/-/multipart-7.7.3.tgz#3d00f0701367c956a6f59e8c7da4025f9624c0f1"
+  integrity sha512-MG4Gd9FNEXc8qx0OgqoXM10EGO/dN/0iVQ8SrpFMU3d6F6KUfcqD2ZyoQhkm9LWrbiMgdHv5a43x78lASdn5GA==
   dependencies:
     "@fastify/busboy" "^1.0.0"
     "@fastify/deepmerge" "^1.0.0"
