@@ -4,16 +4,16 @@ services:
   # PostgreSQL database container
   db:
     # Name of the container
-    container_name: postgres
+    container_name: postgresql
     # PostgreSQL image and version to use
-    image: postgres:15.1-alpine
+    image: postgres:14.1-alpine
     # Restart policy for the container
     restart: always
     # Environment variables to pass to the container
     environment:
       # The image will only initialize the database if the data directory is empty
-      POSTGRES_USER: oonhvxbf
-      POSTGRES_DB: oonhvxbf
+      POSTGRES_USER: oonhvxbq
+      POSTGRES_DB: oonhvxbq
       POSTGRES_PASSWORD: WNDWxbMlQEQLCqkQQybNREkQyOJMZ5eD
     # Port mapping for the container
     ports:

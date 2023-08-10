@@ -1,5 +1,7 @@
 import { Type } from "@sinclair/typebox";
+
 import { ROLES_NAMES, LIMIT, OFFSET } from "#constants";
+import { Enum } from "#utils/schemas/enum.js";
 
 const createdAt = Type.Object({ createdAt: Type.String({ format: "date-time" }) });
 const updatedAt = Type.Object({ updatedAt: Type.String({ format: "date-time" }) });
@@ -53,13 +55,24 @@ export const COMMON_SCHEMAS_V1 = {
     },
     { additionalProperties: false },
   ),
+  orderBy: Type.Optional(
+    Type.Object({
+      by: Type.String({
+        description: "The field to order by.",
+      }),
+      type: Enum(["ASC", "DESC"], {
+        description: "The order direction.",
+        default: "ASC",
+      }),
+    }),
+  ),
   paginationQuery: Type.Object({
     page: Type.Integer({
       description: "Current page. Default is 1.",
       minimum: 1,
       default: 1,
     }),
-    limit: Type.Integer({
+    take: Type.Integer({
       description: `Batch size, the number of documents to be fetched in a single go. Default is ${LIMIT}.`,
       minimum: 1,
       maximum: 100,
@@ -68,8 +81,14 @@ export const COMMON_SCHEMAS_V1 = {
   }),
   pagination: (data) =>
     Type.Object({
-      total: Type.Number(),
-      page: Type.Number(),
+      meta: Type.Object({
+        itemCount: Type.Number(),
+        pageCount: Type.Number(),
+        page: Type.Number(),
+        take: Type.Number(),
+        hasPreviousPage: Type.Boolean(),
+        hasNextPage: Type.Boolean(),
+      }),
       data: Type.Array(data),
     }),
 };

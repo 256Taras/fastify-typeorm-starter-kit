@@ -1,6 +1,8 @@
-import { pagination } from "#utils";
-import {{LowerCaseName}}Schemas from "#modules/{{ModuleName}}/{{ModuleName}}.schemas.js";
+import { STATUS_SUCCESS } from "#constants";
 import { ResourceNotFoundException } from "#errors";
+
+import { createPageOptionsDto, paginateQueryBuilder } from "#utils/common/index.js";
+import {{LowerCaseName}}Schemas from "#modules/{{ModuleName}}/{{ModuleName}}.schemas.js";
 
 export default async function {{LowerCaseName}}RouterV1(app) {
   const { {{LowerCaseName}}Repository } = app.diContainer.cradle;
@@ -10,7 +12,10 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.create(req.body);
+      const new{{UpperCaseNameSingle}} = {{LowerCaseName}}Repository.create(req.body);
+
+      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.save(new{{UpperCaseNameSingle}});
+
       return {{LowerCaseNameSingle}};
     },
   });
@@ -20,12 +25,13 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      const { skip, limit } = pagination(req);
-      const {{LowerCaseName}}List = await {{LowerCaseName}}Repository.findAndCount({
-        skip,
-        take: limit,
-      });
-      return {{LowerCaseName}}List;
+      const pageOptionsDto = createPageOptionsDto(req.query);
+
+      const queryBuilder = {{LowerCaseName}}Repository
+        .createQueryBuilder("{{LowerCaseNameSingle}}")
+        .orderBy("{{LowerCaseNameSingle}}.createdAt", pageOptionsDto.order);
+
+      return paginateQueryBuilder(queryBuilder, pageOptionsDto);
     },
   });
 
@@ -34,10 +40,14 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOne(req.params.id);
+      const { id } = req.params;
+
+      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOneBy({ id });
+
       if (!{{LowerCaseNameSingle}}) {
-        throw new ResourceNotFoundException("{{UpperCaseName}} not found");
+        throw new ResourceNotFoundException(`{{UpperCaseNameSingle}} with id:${id} not found`);
       }
+
       return {{LowerCaseNameSingle}};
     },
   });
@@ -47,12 +57,18 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      let {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOne(req.params.id);
+      const { id } = req.params;
+
+      let {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOneBy({ id });
+
       if (!{{LowerCaseNameSingle}}) {
-        throw new ResourceNotFoundException("{{LowerCaseNameSingle}} not found");
+        throw new ResourceNotFoundException(`{{UpperCaseNameSingle}} with id:${id} not found`);
       }
+
       {{LowerCaseNameSingle}} = {{LowerCaseName}}Repository.merge({{LowerCaseNameSingle}}, req.body);
+
       {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.save({{LowerCaseNameSingle}});
+
       return {{LowerCaseNameSingle}};
     },
   });
@@ -62,12 +78,17 @@ export default async function {{LowerCaseName}}RouterV1(app) {
     preValidation: [app.auth([app.verifyJwt])],
 
     async handler(req) {
-      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOne(req.params.id);
+      const { id } = req.params;
+
+      const {{LowerCaseNameSingle}} = await {{LowerCaseName}}Repository.findOneBy({ id });
+
       if (!{{LowerCaseNameSingle}}) {
-        throw new ResourceNotFoundException("{{UpperCaseName}} not found");
+        throw new ResourceNotFoundException(`{{UpperCaseNameSingle}} with id:${id} not found`);
       }
+
       await {{LowerCaseName}}Repository.delete({{LowerCaseNameSingle}});
-      return {{LowerCaseNameSingle}};
+
+      return STATUS_SUCCESS;
     },
   });
 }

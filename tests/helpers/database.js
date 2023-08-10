@@ -1,7 +1,7 @@
 import { logger } from "#services/logger/logger.service.js";
 import { tables } from "#constants";
-import DataSource from "../../infra/database/typeorm.config.js";
 
+import DataSource from "../../infra/database/typeorm.config.js";
 import { env } from "../../configs/env.js";
 
 /**

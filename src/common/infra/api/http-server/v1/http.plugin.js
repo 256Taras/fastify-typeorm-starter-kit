@@ -24,10 +24,10 @@ const httpPlugin = async (fastify, otp) => {
   //   First of all, we require all the plugins that we'll need in our application.
 
   fastify.register(fastifyAutoLoad, {
-    dir: path.join(__dirname, "../../../../../", "modules"),
+    dir: path.join(__dirname, "..", "..", "..", "..", "..", "modules"),
     maxDepth: 2,
     matchFilter: (p) => p.endsWith(".router.v1.js"),
-    ignorePattern: /.ts/,
+    ignorePattern: /d.ts/,
     options: {
       ...otp,
       prefix: null,

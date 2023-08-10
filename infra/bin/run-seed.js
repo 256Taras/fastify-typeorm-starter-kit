@@ -16,6 +16,7 @@ const seedsDirectory = path.join(process.cwd(), `infra/database/seeds/${env.NODE
  * @constant
  * @type {string[]}
  */
+// eslint-disable-next-line no-sync
 const seedFiles = fs.readdirSync(seedsDirectory);
 
 /**

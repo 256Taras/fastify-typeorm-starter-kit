@@ -1,4 +1,5 @@
 import path from "node:path";
+
 import Fastify from "fastify";
 import fastifyRequestContextPlugin from "@fastify/request-context";
 import fastifySwaggerPlugin from "@fastify/swagger"; // should be added first and registered before any plugin
@@ -7,24 +8,18 @@ import fastifyHelmet from "@fastify/helmet";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody";
-import fastifyView from "@fastify/view";
-// import fastifyUnderPressure from "@fastify/under-pressure"; benchmark plugin
-import fastifyCookie from "@fastify/cookie";
-import fastifyCsrf from "@fastify/csrf-protection";
-import fastifyPiscina from "fastify-piscina";
 import fastifyAutoLoad from "@fastify/autoload";
-import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 
+import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 import { getDirName } from "#common/utils/common/index.js";
 import {
   globalHttpFastify404ErrorHandler,
   globalHttpFastifyErrorHandler,
 } from "#common/errors/fastify-error-handler.js";
-
 import sharedHealthCheckRouter from "#modules/health-check/router.js";
 import * as configs from "#configs";
+
 import appV1Plugin from "./v1/http.plugin.js";
-import wsPlugin from "../ws-server/websocket.plugin.js";
 
 export class RestApiServer {
   /**
@@ -67,14 +62,7 @@ export class RestApiServer {
       matchFilter: (p) => p.endsWith(".plugin.js"),
       options: this.#options,
     });
-    //  adds everything you need to work with cookies
-    fastifyApp.register(fastifyCookie, this.#options.configs.fastifyCookieConfig);
 
-    // When using sessions with cookies, it's always recommended to use CSRF.
-    // `fastify-csrf` will help you better protect your application.
-    // Don't know what CSRF is? Take a look at https://github.com/pillarjs/understanding-csrf.
-    // @ts-ignore
-    fastifyApp.register(fastifyCsrf, this.#options.configs.fastifyCsrfConfig);
     // allows to rewrite via preHandler per route
     // @ts-ignore
     fastifyApp.register(fastifyRateLimit, this.#options.configs.fastifyRateLimitConfig);
@@ -86,23 +74,16 @@ export class RestApiServer {
     fastifyApp.register(fastifyStatic, this.#options.configs.fastifyStaticConfig);
     fastifyApp.register(fastifyMultipart, this.#options.configs.fastifyMultipartConfig);
     fastifyApp.register(fastifyFormBody);
-    fastifyApp.register(fastifyView, this.#options.configs.fastifyViewConfig);
     // This plugin is especially useful if you expect a high load
     // on your application, it measures the process load and returns
     // a 503 if the process is undergoing too much stress.
     // fastifyApp.register(fastifyUnderPressure, fastifyUnderPressureConfig);
-    // node.js worker pool plugin
-    // @ts-ignore
-    fastifyApp.register(fastifyPiscina, {
-      filename: new URL("./worker.js", import.meta.url).href,
-    });
 
     /**
      * WARNING!!! The router must be Promise because the error issued by fastify is not clear
      */
     fastifyApp.register(sharedHealthCheckRouter, { prefix: "/api/health-check" });
     fastifyApp.register(appV1Plugin, { prefix: "/v1/", ...this.#options });
-    fastifyApp.register(wsPlugin);
 
     return fastifyApp;
   }

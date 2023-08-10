@@ -14,8 +14,6 @@
 
 `ENABLE_COLORIZED_LOG` - Logs in the console with or without colors. Possible options are: 0 or 1.
 
-`ENABLE_CLOUD_LOGGING` - Enables cloud logging. Possible options are: 0 or 1.
-
 `ENABLE_DB_LOGGING` - Enables logging of database queries. Possible options are: 0 or 1.
 
 `ENABLE_SEEDS` - Enables seed data. Possible options are: 0 or 1.
@@ -64,4 +62,30 @@
 
 `TYPEORM_CACHE` - Whether caching is enabled. Possible options are: true or false.
 
-`TYPEORM_LOGGING`
+`TYPEORM_LOGGING` -  is a configuration parameter for the TypeORM library, which specifies the level of logging that should be enabled for database queries and schema synchronization.
+
+`AWS_CLIENT_ID` - AWS client ID
+
+`AWS_CLIENT_SECRETE` - AWS client secret
+
+`AWS_REGION` - AWS region
+
+`AWS_CLOUDWATCH_REGION` - AWS CloudWatch region
+
+`AWS_CLOUDWATCH_ACCESS_KEY_ID` - AWS CloudWatch access key ID
+
+`AWS_CLOUDWATCH_SECRET_ACCESS_KEY` - AWS CloudWatch secret access key
+
+`AWS_SDK_LOAD_CONFIG` - AWS SDK load config
+
+`COOKIE_SECRET` - Secret key used for encrypting cookies
+
+`JWT_REFRESH_TOKEN_EXPIRATION_TIME` - Expiration time for JWT refresh token
+
+`JWT_REFRESH_TOKEN_SECRET` - Secret key used for JWT refresh token encryption
+
+`JWT_ACCESS_TOKEN_EXPIRATION_TIME` - Expiration time for JWT access token
+
+`JWT_ACCESS_TOKEN_SECRET` - Secret key used for JWT access token encryption
+
+`ENABLE_CRON` - Enables/disables the cron job feature. Possible options are 0 or 1

@@ -1,9 +1,10 @@
 import { after, before, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-import { refreshTokensFixtures as fixtures } from "./fixtures.js";
 import { createTestingApp, dbUtils } from "../../../helpers/index.js";
 import { authService } from "../../mocks/auth/auth.service.js";
+
+import { refreshTokensFixtures as fixtures } from "./fixtures.js";
 
 const TESTING_METHOD = "PUT";
 
@@ -34,7 +35,7 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
   it("[200] should refresh token for a user", async () => {
     const response = await app.inject({
       method: TESTING_METHOD,
-      headers: fixtures.positive.REFRESH_TOKENS.in.headers,
+      body: fixtures.positive.REFRESH_TOKENS.in.body,
       path: getEndpoint(),
     });
 
@@ -42,9 +43,8 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
 
     assert.strictEqual(response.statusCode, 200);
     assert.strictEqual(typeof data.accessToken, "string");
+    assert.strictEqual(typeof data.refreshToken, "string");
     assert.strictEqual(typeof data.user.id, "string");
-    // @ts-ignore
-    assert.match(response.headers["set-cookie"], /^x-refresh-token=/);
   });
 
   it("[401] should be unauthorized", async () => {

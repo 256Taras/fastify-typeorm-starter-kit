@@ -1,5 +1,6 @@
-import { request } from "undici";
 import * as querystring from "node:querystring";
+
+import { request } from "undici";
 
 import { HttpRequestError } from "#services/http/http-request.error.js";
 import { UndiciResponse } from "#services/http/undici-response.js";

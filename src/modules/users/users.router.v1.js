@@ -4,9 +4,7 @@ import { omit } from "#utils/objects/omit.js";
 
 import usersSchemas from "./users.schemas.js";
 
-/**
- * @type {import('@fastify/type-provider-typebox').FastifyPluginAsyncTypebox }
- */
+/** @type {import('@fastify/type-provider-typebox').FastifyPluginAsyncTypebox } */
 export default async function usersRouterV1(app) {
   const { userContext, usersRepository } = app.diContainer.cradle;
 

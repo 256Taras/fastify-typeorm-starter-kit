@@ -1,4 +1,5 @@
 import { env } from "../../configs/env.js";
+
 import { authConfig } from "./auth.config.js";
 
 export const openapiConfig = {
@@ -24,10 +25,12 @@ export const openapiConfig = {
           name: "Bearer Token",
           in: "header",
         },
-        cookieAuth: {
+        bearerAuthRefresh: {
           type: "apiKey",
-          in: "cookie",
-          name: authConfig.cookieKeys.refreshToken,
+          name: authConfig.refreshTokenKey,
+          bearerFormat: "JWT",
+          in: "header",
+          description: "Refresh Token for obtaining new Access Token",
         },
       },
     },

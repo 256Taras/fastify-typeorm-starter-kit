@@ -5,6 +5,7 @@
 import { RestApiServer } from "#common/infra/api/http-server/server.js";
 import { logger } from "#services/logger/logger.service.js";
 import * as configs from "#configs";
+
 import DataSource from "../../infra/database/typeorm.config.js";
 
 /**

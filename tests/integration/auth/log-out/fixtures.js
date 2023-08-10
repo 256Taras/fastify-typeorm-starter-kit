@@ -1,9 +1,7 @@
 import { ROLES_NAMES } from "#constants";
-import { authConfig } from "#configs";
 import EncrypterService from "#services/encrypter/encrypter.service.js";
 
 import { fixtureFactory } from "../../../helpers/index.js";
-
 import {
   FIRSTNAME,
   LASTNAME,
@@ -13,6 +11,7 @@ import {
   INVALID_MOCK_AUTH_HEADER,
   PPID,
   REFRESH_TOKEN_ID,
+  VALID_MOCK_AUTH_TOKEN,
 } from "../../mocks/users/constants.js";
 
 export const logOutFixtures = fixtureFactory({
@@ -24,6 +23,7 @@ export const logOutFixtures = fixtureFactory({
           {
             id: AUTHORIZED_MOCK_USER_ID,
             email: EMAIL,
+            // @ts-ignore
             password: await new EncrypterService().getHash(PASSWORD),
             firstName: FIRSTNAME,
             lastName: LASTNAME,
@@ -46,8 +46,11 @@ export const logOutFixtures = fixtureFactory({
   positive: {
     LOG_OUT: {
       in: {
+        body: {
+          refreshToken: `tokenValue`,
+        },
         headers: {
-          Cookie: `${authConfig.cookieKeys.refreshToken}=tokenValue`,
+          authorization: VALID_MOCK_AUTH_TOKEN,
         },
       },
     },

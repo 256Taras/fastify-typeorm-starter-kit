@@ -2,10 +2,12 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import { fileURLToPath } from "node:url";
+
 import { DataSource } from "typeorm";
 
-import { env } from "../../configs/env.js";
 import { DatabaseLoggerService } from "#services/logger/database-logger.service.js";
+
+import { env } from "../../configs/env.js";
 
 // Get the directory name of the current module
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -99,4 +101,5 @@ export const ormConfig = {
     entitiesDir: "src/**/*.js",
   },
 };
+
 export default new DataSource(ormConfig);

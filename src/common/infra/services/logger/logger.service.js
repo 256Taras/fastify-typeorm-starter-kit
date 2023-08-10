@@ -1,19 +1,7 @@
 import Pino from "pino";
 import { requestContext } from "@fastify/request-context";
 
-import { loggerConfig, appConfig, awsConfig } from "#configs";
-
-const AwsCloudWatchTransport = Pino.transport({
-  target: "@serdnam/pino-cloudwatch-transport",
-  options: {
-    logGroupName: `${appConfig.env}-${appConfig.applicationName}`,
-    logStreamName: `${new Date().getTime()}`,
-    awsRegion: awsConfig.cloudWatch.region,
-    awsAccessKeyId: awsConfig.cloudWatch.credentials.accessKeyId,
-    awsSecretAccessKey: awsConfig.cloudWatch.credentials.secretAccessKey,
-    interval: 1000, // ms, this is the default
-  },
-});
+import { loggerConfig, appConfig } from "#configs";
 
 const PinoPrettyTransport = {
   target: "pino-pretty",
@@ -43,13 +31,11 @@ export const TerminalOptions = {
   transport: TerminalTransport,
 };
 
-export const LoggerTransport = loggerConfig.enableCloudLogging ? AwsCloudWatchTransport : AwsCloudWatchTransport;
-
 /**
  * @typedef {'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal'} LOG_LEVEL
  */
 
-const loggerService = Pino(loggerConfig.enableCloudLogging ? AwsCloudWatchTransport : TerminalOptions);
+const loggerService = Pino(TerminalOptions);
 
 export class LoggerService {
   contextName = "context";

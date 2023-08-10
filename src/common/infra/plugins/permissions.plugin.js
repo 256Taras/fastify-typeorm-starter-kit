@@ -2,7 +2,6 @@ import fp from "fastify-plugin";
 import { AccessControl } from "accesscontrol";
 
 import { ForbiddenException } from "#errors";
-
 import { permissionsConfig } from "#configs";
 import { userContext } from "#utils/common/user.context.js";
 

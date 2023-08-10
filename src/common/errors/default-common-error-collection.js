@@ -9,7 +9,6 @@ import {
   BadCredentialsException,
   EndpointNotFoundException,
 } from "#common/errors/common.errors.js";
-
 import { InvalidApiKeyError, JwtDecodingError } from "#common/errors/auth.errors.js";
 
 export const defaultCommonErrorCollection = {

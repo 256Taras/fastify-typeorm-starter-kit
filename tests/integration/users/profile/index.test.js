@@ -1,10 +1,10 @@
 import { after, before, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-import { profileFixtures as fixtures } from "./fixtures.js";
-
 import { authService } from "../../mocks/auth/auth.service.js";
 import { createTestingApp, dbUtils } from "../../../helpers/index.js";
+
+import { profileFixtures as fixtures } from "./fixtures.js";
 
 const TESTING_METHOD = "GET";
 

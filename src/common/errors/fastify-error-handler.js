@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * API layer errors/exceptions
  * Implement Fastify HTTP errors mapping
@@ -6,10 +7,10 @@
 /**
  * @typedef {import('#types/index.js').HttpErrorCollection} HttpErrorCollection
  */
+import { requestContext } from "@fastify/request-context";
+
 import { appConfig } from "#configs";
-
 import { logger } from "#services/logger/logger.service.js";
-
 import {
   EndpointNotFoundException,
   PAYLOAD_TO_LARGE_413,
@@ -46,14 +47,75 @@ const mapFastifyErrorToHttpErrorResponse = ({ fastifyError, errorCollectionOverr
   return mappedError;
 };
 
+function mapAjvErrorToUserFriendly(err) {
+  if (err.code !== "FST_ERR_VALIDATION" || !err.validation || err.validation.length === 0) {
+    return undefined;
+  }
+
+  const userFriendlyMessages = {
+    required: (field) => `The field '${field}' is required.`,
+    maxLength: (field, limit) => `The field '${field}' should be no longer than ${limit} characters.`,
+    minLength: (field, limit) => `The field '${field}' should be at least ${limit} characters.`,
+    format: (field, format) => {
+      switch (format) {
+        case "date":
+          return `The field '${field}' should be in the correct date format.`;
+        case "email":
+          return `The field '${field}' should be in the correct email format.`;
+        case "phone":
+          return `The field '${field}' should be in the correct phone format.`;
+        default:
+          return null; // Return null for system formats like UUID
+      }
+    },
+    pattern: (field) => `The field '${field}' does not match the specified pattern.`,
+    type: (field, type) => `The field '${field}' should be of type '${type}'.`,
+  };
+
+  const errors = err.validation.map((validationError) => {
+    let userMessage = null;
+
+    if (validationError.keyword === "errorMessage") {
+      userMessage = validationError.message;
+    } else if (userFriendlyMessages[validationError.keyword]) {
+      userMessage = userFriendlyMessages[validationError.keyword](
+        validationError.params.missingProperty || validationError.instancePath.replace(/^\//, ""),
+        validationError.params.limit || validationError.params.format || validationError.params.type,
+      );
+    }
+
+    if (userMessage) {
+      return {
+        type: "userMessage",
+        message: userMessage,
+        location: err.validationContext,
+      };
+    }
+
+    // For unhandled user-friendly messages or system-level messages
+    return {
+      type: "developerMessage",
+      message: validationError.message,
+      location: err.validationContext,
+    };
+  });
+
+  // eslint-disable-next-line consistent-return
+  return errors;
+}
+
 /**
  * @param {Object} param
  * @param {import("fastify").FastifyError} param.fastifyError
  * @param {import('#types/index.js').HttpErrorResponseType} [param.httpErrorResponseTemplate]
  */
 const formatErrorResponse = ({ fastifyError, httpErrorResponseTemplate }) => {
+  const errorDetails = mapAjvErrorToUserFriendly(fastifyError);
+
   if (!fastifyError || !httpErrorResponseTemplate?.developerMessage) return httpErrorResponseTemplate;
   return {
+    traceId: requestContext.get("traceId"),
+    errorDetails,
     ...httpErrorResponseTemplate,
     developerMessage: appConfig.isDeveloperMessageEnabled ? fastifyError.message : undefined,
   };

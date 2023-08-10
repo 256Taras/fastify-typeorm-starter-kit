@@ -1,8 +1,9 @@
 import { after, before, beforeEach, describe, it } from "node:test";
 import assert from "node:assert/strict";
 
-import { signUpFixtures as fixtures } from "./fixtures.js";
 import { createTestingApp, dbUtils } from "../../../helpers/index.js";
+
+import { signUpFixtures as fixtures } from "./fixtures.js";
 
 const TESTING_METHOD = "POST";
 
@@ -37,9 +38,8 @@ describe(`${TESTING_METHOD}-${getEndpoint()}`, () => {
 
     assert.strictEqual(response.statusCode, 201);
     assert.strictEqual(typeof data.accessToken, "string");
+    assert.strictEqual(typeof data.refreshToken, "string");
     assert.strictEqual(typeof data.user.id, "string");
-    // @ts-ignore
-    assert.match(response.headers["set-cookie"], /^x-refresh-token=/);
   });
 
   it("[409] should return an exception that a account with such mail already exists", async () => {

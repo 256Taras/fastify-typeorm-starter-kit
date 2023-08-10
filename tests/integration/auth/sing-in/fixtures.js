@@ -1,7 +1,7 @@
 import { ROLES_NAMES } from "#constants";
 import EncrypterService from "#services/encrypter/encrypter.service.js";
-import { fixtureFactory } from "../../../helpers/index.js";
 
+import { fixtureFactory } from "../../../helpers/index.js";
 import { FIRSTNAME, LASTNAME, PASSWORD, EMAIL, AUTHORIZED_MOCK_USER_ID } from "../../mocks/users/constants.js";
 
 const COMMON_BODY = {
@@ -18,6 +18,7 @@ export const signInFixtures = fixtureFactory({
           {
             id: AUTHORIZED_MOCK_USER_ID,
             email: EMAIL,
+            // @ts-ignore
             password: await new EncrypterService().getHash(PASSWORD),
             firstName: FIRSTNAME,
             lastName: LASTNAME,

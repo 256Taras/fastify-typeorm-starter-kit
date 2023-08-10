@@ -1,8 +1,24 @@
+"use strict";
+
 module.exports = {
-  useTabs: false, // Indent lines with tabs instead of spaces.
+  /**
+   * Include parentheses around a sole arrow function parameter.
+   * Valid options:
+   * "always" - Always include parens. Example: (x) => x
+   * "avoid" - Omit parens when possible. Example: x => x
+   */
+  arrowParens: "always",
+  /**
+   * Print spaces between brackets in object literals.
+   * Valid options:
+   * true - Example: { foo: bar }.
+   * false - Example: {foo: bar}.
+   */
+  bracketSpacing: true,
+  endOfLine: "lf",
+  parser: "typescript",
   printWidth: 115, // Specify the length of line that the printer will wrap on.
-  tabWidth: 2, // Specify the number of spaces per indentation-level.
-  singleQuote: false, // Use single quotes instead of double quotes.
+
   /**
    * Change when properties in objects are quoted.
    * Valid options:
@@ -10,28 +26,7 @@ module.exports = {
    * "consistent" - If at least one property in an object requires quotes, quote all properties.
    * "preserve" - Respect the input use of quotes in object properties.
    */
-  quoteProps: 'preserve',
-  /**
-   * Print trailing commas wherever possible.
-   * Valid options:
-   *   - "none" - no trailing commas
-   *   - "es5" - trailing commas where valid in ES5 (objects, arrays, etc)
-   *   - "all" - trailing commas wherever possible (function arguments)
-   */
-  trailingComma: 'all',
-  /**
-   * Do not print spaces between brackets.
-   * If true, puts the > of a multi-line jsx element at the end of the last line instead of being
-   * alone on the next line
-   */
-  // "jsxBracketSameLine": false,
-  /**
-   * Specify which parse to use.
-   * Valid options:
-   *   - "flow"
-   *   - "babylon"
-   */
-  // "parser": "babylon",
+  quoteProps: "preserve",
   /**
    * Do not print semicolons, except at the beginning of lines which may need them.
    * Valid options:
@@ -40,18 +35,29 @@ module.exports = {
    */
   semi: true,
   /**
-   * Print spaces between brackets in object literals.
-   * Valid options:
-   * true - Example: { foo: bar }.
-   * false - Example: {foo: bar}.
+   * Do not print spaces between brackets.
+   * If true, puts the > of a multi-line jsx element at the end of the last line instead of being
+   * alone on the next line
    */
-  bracketSpacing: true,
+  // "jsxBracketSameLine": false,
+
   /**
-   * Include parentheses around a sole arrow function parameter.
+   * Specify which parse to use.
    * Valid options:
-   * "always" - Always include parens. Example: (x) => x
-   * "avoid" - Omit parens when possible. Example: x => x
+   *   - "flow"
+   *   - "babylon"
    */
-  arrowParens: 'always',
-  endOfLine: 'lf',
+  // "parser": "babylon",
+  singleQuote: false, // Use single quotes instead of double quotes.
+  tabWidth: 2, // Specify the number of spaces per indentation-level.
+
+  /**
+   * Print trailing commas wherever possible.
+   * Valid options:
+   *   - "none" - no trailing commas
+   *   - "es5" - trailing commas where valid in ES5 (objects, arrays, etc)
+   *   - "all" - trailing commas wherever possible (function arguments)
+   */
+  trailingComma: "all",
+  useTabs: false, // Indent lines with tabs instead of spaces.
 };

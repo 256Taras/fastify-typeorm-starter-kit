@@ -1,31 +1,18 @@
-## 🚀  Description
+# ⬢ Node.js Application Development Starter Kit ⬢
 
-Template for developing applications based on a modular MVC structure using the latest Node.js features.
-This template is ideal for initial development, given that its purpose is to create MVPs. However,
-considering the possibility of further project expansion, it can also be used for an easy transition to N-layered or clean architecture in the future.
-With this approach, the project can be easily extended as needed, ensuring its stability and flexibility in the future.
+The Starter Kit offers tools and features tailored for efficient application development using Node.js. It aims to streamline the process, especially for MVPs and scalable applications.
 
-The template provides the ability to quickly start developing Node.js applications using Fastify and TypeORM.
-Fastify is a fast and efficient web framework for Node.js, and TypeORM is an ORM for Node.js that allows for easy database integration.
+## 🗝️ Key Features & Benefits:
 
-The main idea of the template is to help developers create scalable web applications on Node.js using the latest Node.js features without using Babel or TypeScript.
-The template is a simplified alternative to the Nest.js framework, yet it maintains simplicity and ease of use, providing the following benefits:
-
-- Less infrastructure dependency: Fastify allows for quickly creating small, efficient HTTP servers, which are a lighter option compared to other frameworks like Express or Nest.js.
-
-- Simplicity: Fastify offers a simple yet powerful system of middleware and plugins, making it easy to use and extend.
-
-- High performance: Fastify offers speed compared to other frameworks and supports asynchronous requests.
-
-- Low complexity: Code that uses Fastify is simple and understandable, making it easier for developers to understand and extend.
-
-The template is an excellent option for developing MVPs, as it allows for quickly and efficiently creating web applications. It includes a set of components that help developers create the product in the shortest possible time, such as:
-
-- Well-structured and organized code, simplifying the development and support process.
-
-- Ready-made components that can be easily changed and configured to meet the project's needs.
-
-- The ability to add new components and features to the project without sacrificing stability and flexibility.
+- **Modular MVC Structure**: Organized pattern for application development.
+- **Latest Node.js Capabilities**: Utilize contemporary Node.js features without relying on Babel or TypeScript.
+- **Fastify Integration**: Fast and efficient HTTP servers with asynchronous support.
+- **TypeORM Database Integration**: Simplified database connectivity and operations.
+- **Architectural Flexibility**: Suitable for MVPs, with easy adaptability for future architectural shifts.
+- **Alternative to Nest.js**: Offers core functionalities without additional complexities.
+- **Optimized Infrastructure**: Prioritizes efficiency and performance.
+- **Clear Code Base**: Organized structure for easier navigation and modification.
+- **Adaptable Components**: Components designed for customization based on project requirements.
 
 ## 📚 Prerequisites
 
@@ -83,11 +70,11 @@ yarn install
 
 ### Create environment
 
-3. Create `.env` file in `configs` folder. Use `.env.example` as example.
-`.env.example` has already fully functional settings, so server can be started with it without changes
+3. Create `.environment` file in `configs` folder. Use `.environment.example` as example.
+`.environment.example` has already fully functional settings, so server can be started with it without changes
 
   ```bash
-cp .env.example .env
+cp .environment.example .environment
   ```
 
 
@@ -284,10 +271,10 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 
 - [x] production ready
 - [x] automatic loading of modules and plugins
-- [x] validate env:
+- [x] validate environment:
 - [x] main script: initialize infra for proper server start, start server, add server stop handlers
 - [x] graceful shutdown
-- [x] configs: separate folder, split by files, setup using process env
+- [x] configs: separate folder, split by files, setup using process environment
 - [x] fastify application server
 - [x] auto documentation: fastify-swagger. \*Require fastify input & output schemas
 - [x] routers with input validation
@@ -324,7 +311,6 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] rate limiting (https://www.npmjs.com/package/fastify-rate-limit)
   - [x] global rate limit
   - [x] rate limit per route
-- [x] WebSockets adapter with support for scheme validation
 - [ ] request timeouts (implement manually, example: https://github.com/fastify/fastify-http-proxy/issues/74)
 - [x] request-scoped storage support, based on Asynchronous Local Storage to receive data without mutation request
 - [x] templates rendering support
@@ -332,9 +318,6 @@ The <type> and <summary> fields are mandatory, the (<scope>) field is optional.
 - [x] covering utilities with .d.ts files
 - [ ] clustering based on child process
 - [x] support Docker installation
-- [ ] utilities for functional programming
-   - [x] monads
-   - [ ] pattern matching
 
 ## 🙋 FAQ
 

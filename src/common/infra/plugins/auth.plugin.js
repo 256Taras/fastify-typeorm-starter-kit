@@ -2,7 +2,7 @@ import fastifyJwt from "@fastify/jwt";
 import fp from "fastify-plugin";
 
 import { authConfig, fastifyJwtConfig as jwtConfig } from "#configs";
-import { BadCredentialsException } from "#errors";
+import { UnauthorizedException } from "#errors";
 import { logger } from "#services/logger/logger.service.js";
 
 /**
@@ -13,34 +13,39 @@ async function authPlugin(app, opt) {
   /**
    * Middleware to verify JWT access tokens.
    * @param {import('fastify').FastifyRequest} req - The Fastify request
-   * @throws {BadCredentialsException} If the access token is invalid or expired
+   * @throws {UnauthorizedException} If the access token is invalid or expired
    */
   const verifyJwt = async ({ headers }) => {
     try {
       const accessToken = headers.authorization;
+      if (!accessToken) {
+        throw new UnauthorizedException("Access denied");
+      }
       // @ts-ignore
-      const user = app.jwt.accessToken.verify(accessToken);
+      const user = app.jwt.accessToken.verify(accessToken?.split(" ")[1]);
       app.diContainer.cradle.userContext.set(user);
     } catch (e) {
-      logger.debug(e, `verifyJwt error`);
-      throw new BadCredentialsException("Access denied");
+      logger.debug(e);
+      throw new UnauthorizedException("Access denied");
     }
   };
 
   /**
    * Middleware to verify JWT refresh tokens.
    * @param {import('fastify').FastifyRequest} req - The Fastify request
-   * @throws {BadCredentialsException} If the refresh token is invalid or expired
+   * @throws {UnauthorizedException} If the refresh token is invalid or expired
    */
   const verifyJwtRefreshToken = async (req) => {
     try {
-      const refreshToken = req.cookies[authConfig.cookieKeys.refreshToken];
+      // @ts-ignore
+      const refreshToken = req.headers[authConfig.refreshTokenKey];
+
       // @ts-ignore
       const data = app.jwt.refreshToken.verify(refreshToken);
       app.diContainer.cradle.userRefreshTokenContext.set(data);
     } catch (e) {
       logger.debug(e, "verifyJwtRefreshToken error");
-      throw new BadCredentialsException("Access denied");
+      throw new UnauthorizedException("Access denied");
     }
   };
 

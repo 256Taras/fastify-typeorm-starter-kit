@@ -21,6 +21,7 @@
     "noImplicitReturns": true,
     "resolveJsonModule": true,
     "declaration": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "#tests/*": ["./tests/*"],
       "#src/*": ["./src/*"],
@@ -36,8 +37,16 @@
     }
   },
   "include": [
+    "tests/utils/**/*.js",
     "src/**/*.ts",
-    "src/**/*.js"
+    "src/**/*.cjs",
+    "src/**/*.js",
+    "tests/**/*.js",
+    "tests/**/*.cjs",
+    "tests/**/*.ts",
+    "infra/**/*.js",
+    "infra/**/*.cjs",
+    "infra/**/*.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

@@ -1,5 +1,6 @@
-import { Dispatcher } from "undici";
 import { Readable } from "stream";
+
+import { Dispatcher } from "undici";
 
 export declare interface IHttpRequestOptions {
   basePath?: string;
