@@ -21,6 +21,9 @@ export const TOKENS = {
 export const SWAGGER_TAGS = {
   users: ["users"],
   auth: ["auth"],
+  income: ["income"],
+  mall: ["mall"],
+  store: ["store"],
 };
 
 export const IMAGE_MIMETYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg+xml"];

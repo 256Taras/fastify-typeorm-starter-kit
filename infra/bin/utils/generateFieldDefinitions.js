@@ -1,12 +1,12 @@
 export const generateFieldDefinitions = (columns) => {
   const typeOrmTypeToJSDocType = {
-    "varchar": "string",
-    "int": "number",
-    "float": "number",
-    "json": "Object",
-    "boolean": "boolean",
-    "uuid": "string",
-    "date": "Date",
+    varchar: "string",
+    int: "number",
+    float: "number",
+    json: "Object",
+    boolean: "boolean",
+    uuid: "string",
+    date: "Date",
   };
 
   return Object.entries(columns)

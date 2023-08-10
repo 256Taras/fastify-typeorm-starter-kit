@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 
+import ajvErrors from "ajv-errors";
 import { ajvFilePlugin } from "@fastify/multipart";
 export const fastifyConfig = {
   genReqId: () => randomUUID(),
@@ -18,7 +19,7 @@ export const fastifyConfig = {
       // strictRequired: true,
       allErrors: true, // Warning: Enabling this option.js may lead to this security issue https://www.cvedetails.com/cve/CVE-2020-8192/
     },
-    plugins: [ajvFilePlugin],
+    plugins: [ajvFilePlugin, ajvErrors],
     // plugins: [require("ajv-errors")], // to optionally enable custom error for each constraint
     // localize error is also possible via ajv-i18n:
   },

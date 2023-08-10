@@ -87,11 +87,11 @@ export default async function authRouterV1(app) {
         .andWhere("userId = :userId", { userId: id })
         .execute();
 
-      if (!authToken.affected) throw new BadRequestException(`Access decided`);
+      if (!authToken.affected) throw new ResourceNotFoundException(`Token expire or not found`);
 
       const user = await usersRepository.findOneBy({ id });
 
-      if (!user) throw new BadRequestException(`Access decided`);
+      if (!user) throw new ResourceNotFoundException(`User not found`);
 
       // @ts-ignore
       delete user.password;

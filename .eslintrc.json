@@ -78,7 +78,8 @@
     }],
     "complexity": ["error", 15],
     "max-params": ["error", 5],
-    "no-nested-ternary": "error"
+    "no-nested-ternary": "error",
+    "quote-props": ["error", "as-needed"]
   },
   "overrides": [
     {

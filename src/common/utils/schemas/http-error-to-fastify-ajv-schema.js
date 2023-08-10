@@ -14,6 +14,31 @@ export const convertHttpErrorToFastifyAjvSchemaError = (httpFastifyError) => ({
       statusCode: { enum: [httpFastifyError.statusCode] },
       userMessage: { enum: [httpFastifyError.userMessage] },
       developerMessage: { type: "string" },
+      ...(httpFastifyError.statusCode === 400
+        ? {
+            errorDetails: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  type: {
+                    type: "string",
+                    enum: ["userMessage", "developerMessage"],
+                  },
+                  message: {
+                    type: "string",
+                  },
+                  location: {
+                    type: "string",
+                    enum: ["body", "query", "params"],
+                  },
+                },
+                required: ["type", "message", "location"],
+              },
+            },
+          }
+        : {}),
+      traceId: { type: "string" },
     },
   },
 });

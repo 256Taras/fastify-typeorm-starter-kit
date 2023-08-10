@@ -18,8 +18,11 @@ async function authPlugin(app, opt) {
   const verifyJwt = async ({ headers }) => {
     try {
       const accessToken = headers.authorization;
+      if (!accessToken) {
+        throw new UnauthorizedException("Access denied");
+      }
       // @ts-ignore
-      const user = app.jwt.accessToken.verify(accessToken.split(" ")[1]);
+      const user = app.jwt.accessToken.verify(accessToken?.split(" ")[1]);
       app.diContainer.cradle.userContext.set(user);
     } catch (e) {
       logger.debug(e);

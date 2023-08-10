@@ -101,4 +101,5 @@ export const ormConfig = {
     entitiesDir: "src/**/*.js",
   },
 };
+
 export default new DataSource(ormConfig);
