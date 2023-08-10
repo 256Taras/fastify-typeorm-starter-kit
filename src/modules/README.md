@@ -55,7 +55,7 @@ The script also runs Prettier on the generated files to ensure they follow your 
 
 The script simplifies the process of adding new modules to your application, ensuring that each module follows the same structure and conventions.
 
-## Generating Relationships
+## 🔗 Generating Relationships
 
 The generator can also create relationships between entities. To specify a relationship, use the following syntax:
 
