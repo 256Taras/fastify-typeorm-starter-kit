@@ -12,16 +12,78 @@ import { defaultHttpErrorCollection } from "#common/errors/default-http-error-co
 export const USER_ENTITY_SCHEMA = Type.Object(
   {
     id: Type.String({ format: "uuid" }),
-    email: Type.String({ format: "email" }),
-    firstName: Type.String({ minLength: 2, maxLength: 25 }),
-    lastName: Type.String({ minLength: 2, maxLength: 25 }),
-    roles: Type.Array(Enum(ROLES_NAMES)),
-    password: Type.String({ minLength: 6, maxLength: 100 }),
-    updatedAt: Type.String({ format: "date-time" }),
-    createdAt: Type.String({ format: "date-time" }),
-    deletedAt: Type.Optional(Type.String({ format: "date-time" })),
+    email: Type.String({
+      format: "email",
+      errorMessage: {
+        format: "Email must be valid",
+      },
+    }),
+    firstName: Type.String({
+      minLength: 2,
+      maxLength: 25,
+      errorMessage: {
+        minLength: "First name must be at least 2 characters long",
+        maxLength: "First name must not exceed 25 characters",
+        required: "First name is required",
+      },
+    }),
+    lastName: Type.String({
+      minLength: 2,
+      maxLength: 25,
+      errorMessage: {
+        minLength: "Last name must be at least 2 characters long",
+        maxLength: "Last name must not exceed 25 characters",
+        required: "Last name is required",
+      },
+    }),
+    roles: Type.Array(
+      Enum(ROLES_NAMES, {
+        errorMessage: "Invalid role value",
+      }),
+    ),
+    password: Type.String({
+      minLength: 6,
+      maxLength: 100,
+      errorMessage: {
+        minLength: "Password must be at least 6 characters long",
+        maxLength: "Password must not exceed 100 characters",
+        required: "Password is required",
+      },
+    }),
+    updatedAt: Type.String({
+      format: "date-time",
+      errorMessage: {
+        format: "Invalid date-time format for updatedAt",
+      },
+    }),
+    createdAt: Type.String({
+      format: "date-time",
+      errorMessage: {
+        format: "Invalid date-time format for createdAt",
+      },
+    }),
+    deletedAt: Type.Optional(
+      Type.String({
+        format: "date-time",
+        errorMessage: {
+          format: "Invalid date-time format for deletedAt",
+        },
+      }),
+    ),
   },
-  { additionalProperties: false },
+  {
+    additionalProperties: false,
+    errorMessage: {
+      required: {
+        email: "Email is required",
+        password: "Password is required",
+        firstName: "First name is required",
+        lastName: "Last name is required",
+        roles: "Role are required",
+        createdAt: "createdAt is required",
+      },
+    },
+  },
 );
 
 export const USER_OUTPUT_SCHEMA = Type.Omit(USER_ENTITY_SCHEMA, ["deletedAt", "password"]);

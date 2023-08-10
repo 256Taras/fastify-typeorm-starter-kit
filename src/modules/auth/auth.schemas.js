@@ -6,7 +6,7 @@ import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
 } from "#common/utils/schemas/index.js";
-import { USER_OUTPUT_SCHEMA } from "#modules/users/users.schemas.js";
+import { USER_ENTITY_SCHEMA, USER_OUTPUT_SCHEMA } from "#modules/users/users.schemas.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 import { BadRequestException, ConflictException, ResourceNotFoundException, UnauthorizedException } from "#errors";
 import { pick } from "#utils/objects/index.js";
@@ -29,52 +29,7 @@ const SIGN_IN_UP_OUTPUT_SCHEMA = Type.Intersect([
   ),
 ]);
 
-const SIGN_UP_INPUT_SCHEMA = Type.Object(
-  {
-    email: Type.String({
-      format: "email",
-      errorMessage: {
-        format: "Email must be valid",
-      },
-    }),
-    password: Type.String({
-      minLength: 8,
-      maxLength: 30,
-      errorMessage: {
-        minLength: "Password must be at least 8 characters long",
-        maxLength: "Password must not exceed 30 characters",
-        required: "Password is required",
-      },
-    }),
-    firstName: Type.String({
-      minLength: 2,
-      maxLength: 20,
-      errorMessage: {
-        minLength: "First name must be at least 2 characters long",
-        maxLength: "First name must not exceed 20 characters",
-      },
-    }),
-    lastName: Type.String({
-      minLength: 2,
-      maxLength: 20,
-      errorMessage: {
-        minLength: "Last name must be at least 2 characters long",
-        maxLength: "Last name must not exceed 20 characters",
-      },
-    }),
-  },
-  {
-    additionalProperties: false,
-    errorMessage: {
-      required: {
-        email: "Email is required",
-        password: "Password is required",
-        firstName: "First name is required",
-        lastName: "Last name is required",
-      },
-    },
-  },
-);
+const SIGN_UP_INPUT_SCHEMA = Type.Pick(USER_ENTITY_SCHEMA, ["email", "password", "firstName", "lastName"]);
 
 const authSchemas = {
   signUp: {
