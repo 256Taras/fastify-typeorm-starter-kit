@@ -1,11 +1,19 @@
+export function generateEntityCode({
+  UpperCaseNameSingle,
+  EntityFields,
+  LowerCaseNameSingle,
+  EntityAttributes,
+  EntityRelations,
+}) {
+  return `
 import { BaseEntity, EntitySchema } from "typeorm";
 
-export default class {{UpperCaseNameSingle}} extends BaseEntity {
+export default class ${UpperCaseNameSingle} extends BaseEntity {
 
   /** @type {string} */
   id;
 
-  {{EntityFields}}
+  ${EntityFields}
 
   /** @type {string} */
   createdAt;
@@ -15,15 +23,15 @@ export default class {{UpperCaseNameSingle}} extends BaseEntity {
 
   static get schema() {
     return new EntitySchema({
-      name: {{UpperCaseNameSingle}}.name,
-      tableName: "{{LowerCaseNameSingle}}",
+      name: ${UpperCaseNameSingle}.name,
+      tableName: "${LowerCaseNameSingle}",
       columns: {
         id: {
           type: "uuid",
           primary: true,
           generated: "uuid",
         },
-      {{EntityAttributes}}
+        ${EntityAttributes}
         createdAt: {
           name: "created_at",
           type: "timestamp",
@@ -36,9 +44,11 @@ export default class {{UpperCaseNameSingle}} extends BaseEntity {
         },
       },
       relations: {
-      // @ts-ignore
-      {{EntityRelations}}
+        // @ts-ignore
+        ${EntityRelations}
       },
     });
   }
+}
+`;
 }

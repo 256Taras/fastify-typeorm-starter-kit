@@ -24,7 +24,6 @@ export const USER_ENTITY_SCHEMA = Type.Object(
       errorMessage: {
         minLength: "First name must be at least 2 characters long",
         maxLength: "First name must not exceed 25 characters",
-        required: "First name is required",
       },
     }),
     lastName: Type.String({
@@ -33,7 +32,6 @@ export const USER_ENTITY_SCHEMA = Type.Object(
       errorMessage: {
         minLength: "Last name must be at least 2 characters long",
         maxLength: "Last name must not exceed 25 characters",
-        required: "Last name is required",
       },
     }),
     roles: Type.Array(
@@ -47,7 +45,6 @@ export const USER_ENTITY_SCHEMA = Type.Object(
       errorMessage: {
         minLength: "Password must be at least 6 characters long",
         maxLength: "Password must not exceed 100 characters",
-        required: "Password is required",
       },
     }),
     updatedAt: Type.String({

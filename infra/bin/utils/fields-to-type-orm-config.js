@@ -63,6 +63,7 @@ export const fieldsToTypeOrmConfig = (fields, moduleName) => {
       };
 
       if (columnName !== name) {
+        // @ts-ignore
         column.name = columnName;
       }
 

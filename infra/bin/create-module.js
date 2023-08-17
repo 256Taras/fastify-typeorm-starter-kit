@@ -1,12 +1,12 @@
 import path from "node:path";
 import fs from "node:fs/promises";
+import * as readline from "node:readline";
 
 // eslint-disable-next-line node/no-unpublished-import
 import prettier from "prettier";
 
 import prettierConfig from "../../.prettierrc.cjs";
 
-import { TemplateCreator } from "./template-creator.js";
 import { fieldsToTypeOrmConfig } from "./utils/fields-to-type-orm-config.js";
 import { singularizeWord } from "./utils/singularize-word.js";
 import { camelToSnakeCase } from "./utils/camel-to-snake-case.js";
@@ -14,6 +14,10 @@ import { formatObjectToCode } from "./utils/format-object-to-code.js";
 import { parseFields } from "./utils/parse-fields.js";
 import { fieldsToTypeBoxConfig } from "./utils/fields-to-type-box-config.js";
 import { generateFieldDefinitions } from "./utils/generateFieldDefinitions.js";
+import { generateRouterCode } from "./templates/router.js";
+import { generateEntityCode } from "./templates/entity.js";
+import { generateSchemasFunction } from "./templates/schemas.js";
+import { generateTypesCode } from "./templates/types.js";
 
 const CLI_ARG_MODULE_NAME = "name";
 const CLI_ARG_FIELDS = "fields";
@@ -45,17 +49,11 @@ const writeFile = async (filePath, content) => {
   }
 };
 
-const fillTemplate = async (fileName, values) => {
-  const templateContent = await TemplateCreator.getTemplate(fileName);
-  return TemplateCreator.fillTemplate(templateContent, values);
-};
-
-const createFileFromTemplate = async (folderPath, fileName, templateName, values) => {
-  const content = await fillTemplate(templateName, values);
+const createFileFromTemplate = async (folderPath, fileName, content) => {
   await writeFile(path.join(folderPath, fileName), content);
 };
 
-const createModuleFiles = async (folderPath, moduleName, fields) => {
+const createModuleFiles = async (folderPath, moduleName, fields, isAuthorization) => {
   const toCamelCase = (srt) =>
     srt.toLowerCase().replace(/([_-][a-z])/g, (g) => g.toUpperCase().replace("-", "").replace("_", ""));
   const LowerCaseName = toCamelCase(moduleName);
@@ -65,6 +63,7 @@ const createModuleFiles = async (folderPath, moduleName, fields) => {
   const attributes = fieldsToTypeOrmConfig(fields, UpperCaseName);
 
   const values = {
+    isAuthorization,
     ModuleName: moduleName,
     ModuleNameSingle: singularizeWord(moduleName),
     LowerCaseName,
@@ -75,22 +74,54 @@ const createModuleFiles = async (folderPath, moduleName, fields) => {
     EntityFields: generateFieldDefinitions(attributes.columns),
     EntityAttributes: formatObjectToCode(attributes.columns),
     EntityRelations: Object.keys(attributes.relations).length ? formatObjectToCode(attributes.relations) : "",
-    TypeBoxAttributes: fieldsToTypeBoxConfig(fields),
+    TypeBoxAttributes: fieldsToTypeBoxConfig(fields).entries,
+    TypeBoxRequireMessage: fieldsToTypeBoxConfig(fields).errorMessages,
   };
 
-  await createFileFromTemplate(folderPath, `${singularizeWord(moduleName)}.entity.js`, "model", values);
-  await createFileFromTemplate(folderPath, `${moduleName}.schemas.js`, "schemas", values);
-  await createFileFromTemplate(folderPath, `${moduleName}.router.v1.js`, "router", values);
-  await createFileFromTemplate(folderPath, `types.d.ts`, "types", values);
+  await createFileFromTemplate(folderPath, `${singularizeWord(moduleName)}.entity.js`, generateEntityCode(values));
+  await createFileFromTemplate(folderPath, `${moduleName}.schemas.js`, generateSchemasFunction(values));
+  await createFileFromTemplate(folderPath, `${moduleName}.router.v1.js`, generateRouterCode(values));
+  await createFileFromTemplate(folderPath, `types.d.ts`, generateTypesCode(values));
+};
+
+const cyan = "\x1b[36m";
+const reset = "\x1b[0m";
+
+const askQuestion = (query) => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise((resolve) =>
+    rl.question(cyan + query + reset, (answer) => {
+      rl.close();
+      resolve(answer);
+    }),
+  );
 };
 
 const createModule = async () => {
+  let isAuthorization = true;
+  // let isTests = true;
+
+  const needAuth = await askQuestion("Do you need authorization? (Y/n):");
+  if (needAuth.toLowerCase() === "n") {
+    isAuthorization = false;
+  }
+
+  // const needTests = await askQuestion("Do you need tests? (y/N):");
+  // TODO: test generator
+  // if (needTests.toLowerCase() === "n") {
+  //   isTests = false;
+  // }
+
   const moduleName = getModuleName();
   const fields = getFieldsFromCliArgs();
   const folderPath = path.join("src", "modules", moduleName.toLowerCase());
 
   await createFolderStructure(folderPath);
-  await createModuleFiles(folderPath, moduleName, fields);
+  await createModuleFiles(folderPath, moduleName, fields, isAuthorization);
 };
 
 // eslint-disable-next-line no-console
