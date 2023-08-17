@@ -1,6 +1,5 @@
 import { Type } from "@sinclair/typebox";
 
-import { SWAGGER_TAGS } from "#constants";
 import { COMMON_SCHEMAS_V1 } from "#v1";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
@@ -70,4 +69,4 @@ const authSchemas = {
   },
 };
 
-export default mixinTagForSchemas(authSchemas, SWAGGER_TAGS.auth);
+export default mixinTagForSchemas(authSchemas, ["auth"]);

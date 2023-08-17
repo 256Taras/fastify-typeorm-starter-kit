@@ -1,13 +1,12 @@
 import { Type } from "@sinclair/typebox";
 
 import { Enum } from "#src/common/utils/schemas/enum.js";
-import { ROLES_NAMES, SWAGGER_TAGS } from "#constants";
+import { ROLES_NAMES } from "#constants";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
 } from "#utils/schemas/index.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
-// common schemas start
 
 export const USER_ENTITY_SCHEMA = Type.Object(
   {
@@ -98,4 +97,4 @@ const usersSchemas = {
   },
 };
 
-export default mixinTagForSchemas(usersSchemas, SWAGGER_TAGS.auth);
+export default mixinTagForSchemas(usersSchemas, ["users"]);

@@ -3,13 +3,11 @@ export function generateSchemasFunction({
   LowerCaseName,
   TypeBoxAttributes,
   TypeBoxRequireMessage,
-  LowerCaseNameSingle,
   isAuthorization,
 }) {
   return `
 import { Type } from "@sinclair/typebox";
 
-import { SWAGGER_TAGS } from "#constants";
 import { BadRequestException, ResourceNotFoundException } from "#errors";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
@@ -81,6 +79,6 @@ const ${LowerCaseName}Schemas = {
 };
 
 //TODO add tags
-export default mixinTagForSchemas(${LowerCaseName}Schemas, SWAGGER_TAGS.${LowerCaseNameSingle});
+export default mixinTagForSchemas(${LowerCaseName}Schemas, ['${LowerCaseName}']);
 `;
 }

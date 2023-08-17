@@ -36,7 +36,6 @@ const getTypeBoxType = (type, size, name) => {
   }
 };
 
-
 export const fieldsToTypeBoxConfig = (fields) => {
   const entries = [];
   const errorMessages = {
