@@ -2,6 +2,8 @@ const getTypeOrmType = (type) => {
   switch (type) {
     case "string":
       return "varchar";
+    case "text":
+      return "varchar";
     case "integer":
       return "int";
     case "float":

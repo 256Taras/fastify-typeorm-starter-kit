@@ -4,6 +4,14 @@ export class BAD_REQUEST_400 extends Error {
     this.name = "BAD_REQUEST_400";
   }
 }
+
+export class INVALID_JSON_SYNTAX_400 extends Error {
+  constructor(message) {
+    super(message || "Invalid JSON syntax");
+    this.name = "INVALID_JSON_SYNTAX_400";
+  }
+}
+
 export class INTERNAL_SERVER_ERROR_500 extends Error {
   constructor(message) {
     super(message);

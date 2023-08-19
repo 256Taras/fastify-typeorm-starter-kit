@@ -28,6 +28,9 @@ export const convertHttpErrorToFastifyAjvSchemaError = (httpFastifyError) => ({
                   message: {
                     type: "string",
                   },
+                  field: {
+                    type: "string",
+                  },
                   location: {
                     type: "string",
                     enum: ["body", "query", "params"],

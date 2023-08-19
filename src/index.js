@@ -18,7 +18,11 @@ const gracefulShutdown = async () => {
 
   // stop all infrastructure: servers, db connections, storage connections (if exists), etc
   await RestApi.stop();
-  await AppDataSource.destroy();
+  try {
+    await AppDataSource.destroy();
+  } catch (e) {
+    logger.error(e);
+  }
 
   logger.info(`[${appConfig.applicationName}] Server successfully stopped.`);
   clearTimeout(timeout); // remove force shutdown handler

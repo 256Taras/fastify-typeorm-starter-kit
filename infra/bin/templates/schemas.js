@@ -1,10 +1,4 @@
-export function generateSchemasFunction({
-  SchemaName,
-  LowerCaseName,
-  TypeBoxAttributes,
-  TypeBoxRequireMessage,
-  isAuthorization,
-}) {
+export function generateSchemasFunction({ SchemaName, LowerCaseName, TypeBoxAttributes, isAuthorization }) {
   return `
 import { Type } from "@sinclair/typebox";
 
@@ -26,7 +20,6 @@ const ${SchemaName}_ENTITY_SCHEMA = Type.Object({
   createdAt: Type.String({ format: "date-time" }),
 }, {
 additionalProperties: false,
-${TypeBoxRequireMessage ? `errorMessage: ${TypeBoxRequireMessage},` : ""}
 });
 
 const ${SchemaName}_OUTPUT_SCHEMA = ${SchemaName}_ENTITY_SCHEMA;

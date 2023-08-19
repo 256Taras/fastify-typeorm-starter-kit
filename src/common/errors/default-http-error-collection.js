@@ -2,6 +2,7 @@ import {
   BAD_REQUEST_400,
   FAILED_ON_SERIALIZATION_VALIDATION_500,
   INTERNAL_SERVER_ERROR_500,
+  INVALID_JSON_SYNTAX_400,
   PAYLOAD_TO_LARGE_413,
   RESOURCE_NOT_ACCEPTABLE_406,
   SERVER_TIMEOUT_408,
@@ -19,18 +20,24 @@ export const defaultHttpErrorCollection = {
     userMessage: "Bad request",
     developerMessage: "Bad request",
   },
-  [SERVER_TIMEOUT_408.name]: {
-    code: 4008000,
-    statusCode: 408,
-    userMessage: "Server timeout",
-    developerMessage:
-      "The server did not receive a complete request message within the time that it was prepared to wait.",
+  [INVALID_JSON_SYNTAX_400.name]: {
+    code: 400001,
+    statusCode: 400,
+    userMessage: "Bad request",
+    developerMessage: "The JSON sent in the request has an invalid syntax.",
   },
   [RESOURCE_NOT_ACCEPTABLE_406.name]: {
     code: 406000,
     statusCode: 406,
     userMessage: "Not acceptable",
     developerMessage: "Not acceptable",
+  },
+  [SERVER_TIMEOUT_408.name]: {
+    code: 4008000,
+    statusCode: 408,
+    userMessage: "Server timeout",
+    developerMessage:
+      "The server did not receive a complete request message within the time that it was prepared to wait.",
   },
   [PAYLOAD_TO_LARGE_413.name]: {
     code: 413000,
