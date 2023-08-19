@@ -3,7 +3,7 @@ const CUSTOM_ERROR_CODE_LENGTH = 6;
 const DELIMITER_CODE_LENGTH = 3;
 
 /**
- * @param {import('../../../@types').HttpErrorResponseType} httpFastifyError
+ * @param {import('../../errors/types/http-error-response.interface').IHttpErrorResponse} httpFastifyError
  */
 export const convertHttpErrorToFastifyAjvSchemaError = (httpFastifyError) => ({
   [`${httpFastifyError.statusCode}`]: {
@@ -63,7 +63,7 @@ const sortFastifyAjvSchemaErrorByFullCodeAsc = (a, b) => {
 
 /**
  *
- * @param {import('../../../@types').HttpErrorCollection} httpErrorCollection
+ * @param {import('../../errors/types/http-error-collection.interface').THttpErrorCollection} httpErrorCollection
  */
 export const convertHttpErrorCollectionToFastifyAjvSchemaErrorList = (httpErrorCollection) => {
   const list = [
@@ -74,7 +74,7 @@ export const convertHttpErrorCollectionToFastifyAjvSchemaErrorList = (httpErrorC
 
 /**
  *
- * @param {import('../../../@types').HttpErrorCollection} httpErrorCollection
+ * @param {import('../../errors/types/http-error-collection.interface').THttpErrorCollection} httpErrorCollection
  */
 export const convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection = (httpErrorCollection) => {
   const list = convertHttpErrorCollectionToFastifyAjvSchemaErrorList(httpErrorCollection);

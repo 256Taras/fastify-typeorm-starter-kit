@@ -1,10 +1,3 @@
-export class ConnectionNotFoundException extends Error {
-  constructor(conName) {
-    super(`${conName} not found! Please make sure you are passing correct connection name!`);
-    this.name = "ConnectionNotFound";
-  }
-}
-
 export class UnknownDbError extends Error {
   constructor(message) {
     super(message);

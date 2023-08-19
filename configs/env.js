@@ -13,6 +13,7 @@ export const CONFIG_SCHEMA = Type.Object(
     ENV_NAME: Type.String(), // add enum
     NODE_ENV: Type.String(), // add enum
     APPLICATION_DOMAIN: Type.String(),
+    REQUEST_TIMEOUT: Type.Integer(),
     LOG_LEVEL: Type.Union(["trace", "debug", "info", "warn", "error", "fatal"].map((i) => Type.Literal(i))),
     ENABLE_PRETTY_LOG: TypeEnable,
     ENABLE_COLORIZED_LOG: TypeEnable,

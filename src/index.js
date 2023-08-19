@@ -65,9 +65,12 @@ const initStopHandlers = () => {
 
 const initInfrastructure = async () => {
   logger.info(`Initializing infrastructure...`);
-  await AppDataSource.initialize().catch((error) => {
+  try {
+    await AppDataSource.initialize();
+  } catch (error) {
     logger.error(error);
-  });
+  }
+
   logger.info(`Initializing infrastructure finished.`);
   logger.info(`See the documentation on ${`${appConfig.applicationUrl}/docs `}`);
   if (appConfig.env === "development") {
@@ -87,13 +90,17 @@ const main = async () => {
   await RestApi.start({ ip: serverConfig.ip, port: serverConfig.port });
 };
 
-process.on("exit", (code) => logger.info(`[${appConfig.applicationName}] Exit with code: ${code}.`));
+process.on("exit", (code) =>
+  // eslint-disable-next-line no-console
+  console.info(`\x1b[38;5;43m[${appConfig.applicationName}] Exit with code: ${code}.\x1b[0m`),
+);
 
 try {
   await main();
 } catch (err) {
   // eslint-disable-next-line no-console
   console.error(err);
+
   // eslint-disable-next-line no-process-exit
   process.exit(1);
 }

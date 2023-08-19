@@ -41,7 +41,7 @@ app.post("/avatar", {
       // Some validation Logic
       if (!req.body.avatar) {
         await app.removeUploadIfExists(req.body.avatar.path);
-        throw new BadCredentialsException("No avatar provided!");
+        throw new BadRequestException("No avatar provided!");
       }
 
       // Custom Logic (e.g., update database with new avatar path)

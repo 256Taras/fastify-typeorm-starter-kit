@@ -31,28 +31,6 @@ export class ResourceAlreadyExistException extends Error {
   }
 }
 
-export class BadCredentialsException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "BadCredentialsException";
-  }
-
-  static of(message) {
-    return Promise.reject(new BadCredentialsException(message));
-  }
-}
-
-export class InvalidArgumentException extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "InvalidArgumentException";
-  }
-
-  static of(message) {
-    return Promise.reject(new InvalidArgumentException(message));
-  }
-}
-
 export class BadRequestException extends Error {
   constructor(message) {
     super(message);

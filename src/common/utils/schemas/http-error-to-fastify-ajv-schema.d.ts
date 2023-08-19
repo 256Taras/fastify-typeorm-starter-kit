@@ -1,6 +1,7 @@
-export function convertHttpErrorToFastifyAjvSchemaError(
-  httpFastifyError: import("../../../@types").HttpErrorResponseType,
-): {
+import { IHttpErrorResponse } from "#common/errors/types/http-error-response.interface";
+import { THttpErrorCollection } from "#common/errors/types/http-error-collection.interface";
+
+export declare function convertHttpErrorToFastifyAjvSchemaError(httpFastifyError: IHttpErrorResponse): {
   [x: string]: {
     type: string;
     required: string[];
@@ -20,9 +21,7 @@ export function convertHttpErrorToFastifyAjvSchemaError(
     };
   };
 };
-export function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(
-  httpErrorCollection: import("../../../@types").HttpErrorCollection,
-): {
+export declare function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(httpErrorCollection: THttpErrorCollection): {
   [x: string]: {
     type: string;
     required: string[];
@@ -42,8 +41,8 @@ export function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(
     };
   };
 }[];
-export function convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection(
-  httpErrorCollection: import("../../../@types").HttpErrorCollection,
+export declare function convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection(
+  httpErrorCollection: THttpErrorCollection,
 ): {
   [x: string]: {
     type: string;

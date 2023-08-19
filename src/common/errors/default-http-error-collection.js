@@ -1,10 +1,10 @@
 import {
   BAD_REQUEST_400,
-  CSRF_PROTECTION_403,
   FAILED_ON_SERIALIZATION_VALIDATION_500,
   INTERNAL_SERVER_ERROR_500,
   PAYLOAD_TO_LARGE_413,
   RESOURCE_NOT_ACCEPTABLE_406,
+  SERVER_TIMEOUT_408,
   SERVICE_UNAVAILABLE_EXCEPTION_503,
   TO_MANY_REQUESTS_429,
   UNSUPPORTED_MEDIA_TYPE_415,
@@ -19,11 +19,12 @@ export const defaultHttpErrorCollection = {
     userMessage: "Bad request",
     developerMessage: "Bad request",
   },
-  [CSRF_PROTECTION_403.name]: {
-    code: 4003001,
-    statusCode: 403,
-    userMessage: "Your session has timed out, you need to log in",
-    developerMessage: "Csrf protection",
+  [SERVER_TIMEOUT_408.name]: {
+    code: 4008000,
+    statusCode: 408,
+    userMessage: "Server timeout",
+    developerMessage:
+      "The server did not receive a complete request message within the time that it was prepared to wait.",
   },
   [RESOURCE_NOT_ACCEPTABLE_406.name]: {
     code: 406000,
@@ -31,7 +32,6 @@ export const defaultHttpErrorCollection = {
     userMessage: "Not acceptable",
     developerMessage: "Not acceptable",
   },
-
   [PAYLOAD_TO_LARGE_413.name]: {
     code: 413000,
     statusCode: 413,

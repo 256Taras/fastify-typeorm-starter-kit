@@ -6,10 +6,8 @@ import {
   ResourceAlreadyExistException,
   ConflictException,
   UnprocessableEntityException,
-  BadCredentialsException,
   EndpointNotFoundException,
 } from "#common/errors/common.errors.js";
-import { InvalidApiKeyError, JwtDecodingError } from "#common/errors/auth.errors.js";
 
 export const defaultCommonErrorCollection = {
   [BadRequestException.name]: {
@@ -24,29 +22,11 @@ export const defaultCommonErrorCollection = {
     userMessage: "Unauthorized",
     developerMessage: "JWT is not valid",
   },
-  [JwtDecodingError.name]: {
-    code: 401002,
-    statusCode: 401,
-    userMessage: "Unauthorized",
-    developerMessage: "JWT is not valid",
-  },
-  [InvalidApiKeyError.name]: {
-    code: 401003,
-    statusCode: 401,
-    userMessage: "Unauthorized",
-    developerMessage: "Api key is not valid",
-  },
   [ForbiddenException.name]: {
     code: 4003000,
     statusCode: 403,
     userMessage: "You do not have permission to access this resource",
     developerMessage: "Unable to access for this user",
-  },
-  [BadCredentialsException.name]: {
-    code: 4003001,
-    statusCode: 403,
-    userMessage: "You do not have permission to access this resource",
-    developerMessage: "Access denied",
   },
   [ResourceNotFoundException.name]: {
     code: 404000,

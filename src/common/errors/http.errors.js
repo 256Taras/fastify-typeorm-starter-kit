@@ -4,18 +4,6 @@ export class BAD_REQUEST_400 extends Error {
     this.name = "BAD_REQUEST_400";
   }
 }
-export class NOT_FOUND_404 extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "NOT_FOUND_404";
-  }
-}
-export class NOT_ACCEPTABLE_406 extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "NOT_ACCEPTABLE_406";
-  }
-}
 export class INTERNAL_SERVER_ERROR_500 extends Error {
   constructor(message) {
     super(message);
@@ -44,13 +32,6 @@ export class TO_MANY_REQUESTS_429 extends Error {
   }
 }
 
-export class CSRF_PROTECTION_403 extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "CSRF_PROTECTION_403";
-  }
-}
-
 export class PAYLOAD_TO_LARGE_413 extends Error {
   constructor(message) {
     super(message || "Payload too large");
@@ -69,5 +50,12 @@ export class SERVICE_UNAVAILABLE_EXCEPTION_503 extends Error {
   constructor(message) {
     super(message);
     this.name = "SERVICE_UNAVAILABLE_EXCEPTION_503";
+  }
+}
+
+export class SERVER_TIMEOUT_408 extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "SERVER_TIMEOUT_408";
   }
 }

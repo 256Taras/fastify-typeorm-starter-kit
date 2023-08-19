@@ -26,6 +26,7 @@ export const profileFixtures = fixtureFactory({
           {
             id: AUTHORIZED_MOCK_USER_ID,
             email: EMAIL,
+            // @ts-ignore
             password: await new EncrypterService().getHash(PASSWORD),
             firstName: FIRSTNAME,
             lastName: LASTNAME,

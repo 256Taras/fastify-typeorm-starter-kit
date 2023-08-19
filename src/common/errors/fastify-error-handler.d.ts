@@ -15,10 +15,6 @@ export declare const globalHttpFastifyErrorHandler: (
   request: FastifyRequest,
   reply: FastifyReply,
 ) => Promise<void>;
-export declare const globalWebSocketFastifyErrorHandler: (fastifyError: any) => Promise<any>;
 export declare const HttpErrorHandlerFactory: (
   errorCollectionOverride: Array<IHttpErrorResponse>,
 ) => (fastifyError: any, request: FastifyRequest, reply: FastifyReply) => Promise<void>;
-export declare const WebSocketErrorHandlerFactory: (
-  errorCollectionOverride: Array<IHttpErrorResponse>,
-) => (fastifyError: any) => Promise<Array<object>>;
