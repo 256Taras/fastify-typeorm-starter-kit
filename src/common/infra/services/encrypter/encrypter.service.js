@@ -21,7 +21,7 @@ export default class EncrypterService {
    */
   getHash(password, saltRounds) {
     return new Promise((resolve, reject) => {
-      const salt = crypto.randomBytes(saltRounds || this.saltRounds).toString("hex");
+      const salt = crypto.randomBytes(saltRounds ?? this.saltRounds).toString("hex");
       crypto.scrypt(password, salt, this.keyLength, (err, derivedKey) => {
         if (err) reject(err);
         resolve(`${salt}:${derivedKey.toString("hex")}`);

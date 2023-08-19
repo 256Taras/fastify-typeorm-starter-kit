@@ -13,7 +13,7 @@ function defaultSchemaErrorFormatter(errors, dataVar) {
 
   for (let i = 0; i !== errors.length; i += 1) {
     const e = errors[i];
-    text += `${dataVar + (e.instancePath || "")} ${e.message}${separator}`;
+    text += `${dataVar + (e.instancePath ?? "")} ${e.message}${separator}`;
   }
   return new Error(text.slice(0, -separator.length));
 }

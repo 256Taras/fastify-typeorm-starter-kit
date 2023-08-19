@@ -30,7 +30,7 @@ async function diContainerPlugin(app, otp) {
       lifetime: awilix.Lifetime.SINGLETON,
     }),
     // @ts-ignore
-    configs: awilix.asValue(otp.configs || nconf),
+    configs: awilix.asValue(otp.configs ?? nconf),
     logger: awilix.asValue(logger),
     userContext: awilix.asValue(userContext),
     userRefreshTokenContext: awilix.asValue(userRefreshTokenContext),

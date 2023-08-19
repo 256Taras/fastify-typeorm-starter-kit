@@ -80,8 +80,8 @@ function mapAjvErrorToUserFriendly(err) {
       userMessage = validationError.message;
     } else if (userFriendlyMessages[validationError.keyword]) {
       userMessage = userFriendlyMessages[validationError.keyword](
-        validationError.params.missingProperty || validationError.instancePath.replace(/^\//, ""),
-        validationError.params.limit || validationError.params.format || validationError.params.type,
+        validationError.params.missingProperty ?? validationError.instancePath.replace(/^\//, ""),
+        validationError.params.limit ?? (validationError.params.format || validationError.params.type),
       );
     }
 
@@ -144,7 +144,7 @@ const HttpFastifyErrorHandlerFactory =
     const httpErrorResponse = formatErrorResponse({ fastifyError, httpErrorResponseTemplate });
 
     // Send error response
-    reply.status(httpErrorResponse?.statusCode || 500).send(httpErrorResponse);
+    reply.status(httpErrorResponse?.statusCode ?? 500).send(httpErrorResponse);
   };
 
 /**

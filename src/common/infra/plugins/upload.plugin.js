@@ -125,7 +125,7 @@ async function uploadPlugin(app, option) {
       const pluckValue = (field) => (field.value !== undefined ? field.value : field);
       const parseValue = (value) => (value === "null" ? null : value);
 
-      const parsedFields = Object.keys(req.body || {}).reduce((stack, key) => {
+      const parsedFields = Object.keys(req.body ?? {}).reduce((stack, key) => {
         let value;
         // @ts-ignore
         const field = req.body[key];
@@ -146,13 +146,13 @@ async function uploadPlugin(app, option) {
       req.body = { ...(req?.body || {}), ...parsedFields };
     };
   // @ts-ignore
-  app.decorate("parseMultipartFields", option?.parseMultipartFields || parseMultipartFields);
+  app.decorate("parseMultipartFields", option?.parseMultipartFields ?? parseMultipartFields);
   // @ts-ignore
-  app.decorate("removeUploadIfExists", option?.removeUploadIfExists || removeUploadIfExists);
+  app.decorate("removeUploadIfExists", option?.removeUploadIfExists ?? removeUploadIfExists);
   // @ts-ignore
-  app.decorate("uploadToStorage", option?.uploadToStorage || uploadToStorage);
+  app.decorate("uploadToStorage", option?.uploadToStorage ?? uploadToStorage);
   // @ts-ignore
-  app.decorate("upload", option?.upload || upload);
+  app.decorate("upload", option?.upload ?? upload);
 }
 
 export default fp(uploadPlugin);

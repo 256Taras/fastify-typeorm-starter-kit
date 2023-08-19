@@ -63,9 +63,9 @@ async function authPlugin(app, opt) {
 
   // Decorate the app instance with the verifyJwt and verifyJwtRefreshToken functions.
   // @ts-ignore
-  app.decorate("verifyJwt", opt?.infra?.authService.verifyJwt || verifyJwt);
+  app.decorate("verifyJwt", opt?.infra?.authService.verifyJwt ?? verifyJwt);
   // @ts-ignore
-  app.decorate("verifyJwtRefreshToken", opt?.infra?.authService.verifyJwtRefreshToken || verifyJwtRefreshToken);
+  app.decorate("verifyJwtRefreshToken", opt?.infra?.authService.verifyJwtRefreshToken ?? verifyJwtRefreshToken);
 }
 
 export default fp(authPlugin);

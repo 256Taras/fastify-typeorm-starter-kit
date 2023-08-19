@@ -97,6 +97,6 @@ export class LoggerService {
 
 const Logger = new LoggerService();
 
-export const logger = requestContext.get("logger") || Logger;
+export const logger = requestContext.get("logger") ?? Logger;
 
 export default Logger;

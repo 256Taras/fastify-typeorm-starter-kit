@@ -28,6 +28,7 @@ async function requestTimeoutPlugin(app, options) {
       const timeoutId = setTimeout(() => {
         controller.abort();
         done(new SERVER_TIMEOUT_408());
+        // @ts-ignore
       }, reply.context.config.timeout ?? options.configs.serverConfig.requestTimeout);
 
       requestContext.set(TIMEOUT_KEY, timeoutId);
@@ -57,12 +58,14 @@ async function requestTimeoutPlugin(app, options) {
       cleanupResources();
       done(null, payload);
     } catch (error) {
+      // @ts-ignore
       done(error);
     }
   });
 
   app.addHook("onError", (req, reply, error, done) => {
     cleanupResources();
+    // @ts-ignore
     done(error);
   });
 }

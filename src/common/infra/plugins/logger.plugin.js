@@ -49,9 +49,9 @@ class RequestLoggerPlugin {
           ips: request.ips,
           hostname: request.hostname,
           protocol: request.protocol,
-          authorization: !!request.headers.authorization || null,
+          authorization: !!request.headers.authorization ?? null,
           contentType: request.headers["content-type"],
-          userAgent: request.headers["user-agent"] || null,
+          userAgent: request.headers["user-agent"] ?? null,
         },
         msg: "Incoming request",
       });
