@@ -5,67 +5,63 @@ import { authConfig, fastifyJwtConfig as jwtConfig } from "#configs";
 import { UnauthorizedException } from "#errors";
 import { logger } from "#services/logger/logger.service.js";
 
+const ACCESS_DENIED_MESSAGE = "Access denied";
+
 /**
- * Plugin to handle JWT authentication and authorization.
+ * A Fastify plugin to handle JWT authentication and authorization.
  * @type {import('fastify').FastifyPluginAsync} app
  */
-async function authPlugin(app, opt) {
+async function authPlugin(app, options) {
+  app.register(fastifyJwt, { secret: jwtConfig.accessTokenSecret, namespace: "accessToken" });
+  app.register(fastifyJwt, { secret: jwtConfig.refreshTokenSecret, namespace: "refreshToken" });
+
+  // @ts-ignore
+  app.decorate("verifyJwt", options?.infra?.authService.verifyJwt ?? defaultVerifyJwt);
+  // @ts-ignore
+  app.decorate("verifyJwtRefreshToken", options?.infra?.authService.verifyJwtRefreshToken ?? defaultVerifyJwtRefreshToken);
+
   /**
-   * Middleware to verify JWT access tokens.
-   * @param {import('fastify').FastifyRequest} req - The Fastify request
-   * @throws {UnauthorizedException} If the access token is invalid or expired
+   * Default middleware to verify JWT access tokens.
+   * @this {import('fastify').FastifyInstance} request - The Fastify instance
+   * @param {import('fastify').FastifyRequest} request - The Fastify request
    */
-  const verifyJwt = async ({ headers }) => {
+  async function defaultVerifyJwt(request) {
+    const { headers } = request;
+
     try {
-      const accessToken = headers.authorization;
+      const accessToken = headers.authorization?.split(" ")[1];
       if (!accessToken) {
-        throw new UnauthorizedException("Access denied");
+        throw new UnauthorizedException(ACCESS_DENIED_MESSAGE);
       }
+
       // @ts-ignore
-      const user = app.jwt.accessToken.verify(accessToken?.split(" ")[1]);
+      const user = app.jwt.accessToken.verify(accessToken);
       app.diContainer.cradle.userContext.set(user);
-    } catch (e) {
-      logger.debug(e);
-      throw new UnauthorizedException("Access denied");
+    } catch (error) {
+      logger.debug(error, "Error during access token verification");
+      throw new UnauthorizedException(ACCESS_DENIED_MESSAGE);
     }
-  };
+  }
 
   /**
-   * Middleware to verify JWT refresh tokens.
-   * @param {import('fastify').FastifyRequest} req - The Fastify request
-   * @throws {UnauthorizedException} If the refresh token is invalid or expired
+   * Default middleware to verify JWT refresh tokens.
+   * @this {import('fastify').FastifyInstance} request - The Fastify instance
+   * @param {import('fastify').FastifyRequest} request - The Fastify request
    */
-  const verifyJwtRefreshToken = async (req) => {
+  async function defaultVerifyJwtRefreshToken(request) {
     try {
-      // @ts-ignore
-      const refreshToken = req.headers[authConfig.refreshTokenKey];
-
+      const refreshToken = request.headers[authConfig.refreshTokenKey];
       // @ts-ignore
       const data = app.jwt.refreshToken.verify(refreshToken);
       app.diContainer.cradle.userRefreshTokenContext.set(data);
-    } catch (e) {
-      logger.debug(e, "verifyJwtRefreshToken error");
-      throw new UnauthorizedException("Access denied");
+    } catch (error) {
+      logger.debug(error, "Error during refresh token verification");
+      throw new UnauthorizedException(ACCESS_DENIED_MESSAGE);
     }
-  };
+  }
 
-  // Register the fastify-jwt plugin for access tokens.
-  app.register(fastifyJwt, {
-    secret: jwtConfig.accessTokenSecret,
-    namespace: "accessToken",
-  });
-
-  // Register the fastify-jwt plugin for refresh tokens.
-  app.register(fastifyJwt, {
-    secret: jwtConfig.refreshTokenSecret,
-    namespace: "refreshToken",
-  });
-
-  // Decorate the app instance with the verifyJwt and verifyJwtRefreshToken functions.
-  // @ts-ignore
-  app.decorate("verifyJwt", opt?.infra?.authService.verifyJwt ?? verifyJwt);
-  // @ts-ignore
-  app.decorate("verifyJwtRefreshToken", opt?.infra?.authService.verifyJwtRefreshToken ?? verifyJwtRefreshToken);
 }
+
+
 
 export default fp(authPlugin);

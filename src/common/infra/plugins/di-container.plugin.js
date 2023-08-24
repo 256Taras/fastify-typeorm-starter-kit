@@ -11,21 +11,19 @@ import AppDataSource from "../../../../infra/database/typeorm.config.js";
 
 const basePath = "../../../";
 
-export const toCamelCase = (srt) =>
-  srt.toLowerCase().replace(/([_-][a-z])/g, (g) => g.toUpperCase().replace("-", "").replace("_", ""));
 
 /**
  * A Fastify plugin that creates a dependency injection container using Awilix.
- * @type {import('fastify').FastifyPluginAsync} app
+ *
+ * @param {import('fastify').FastifyInstance} app - The Fastify application instance.
+ * @param {object} otp - Additional plugin options.
+ * @returns {Promise<void>}
  */
 async function diContainerPlugin(app, otp) {
   const __dirname = getDirName(import.meta.url);
-  /**
-   * @common
-   */
+
+  // Common dependency registrations
   diContainer.register({
-    // Internal system
-    // @ts-ignore
     app: awilix.asFunction(() => otp.app ?? app, {
       lifetime: awilix.Lifetime.SINGLETON,
     }),
@@ -37,7 +35,41 @@ async function diContainerPlugin(app, otp) {
     dbConnection: awilix.asValue(AppDataSource),
   });
 
-  await diContainer.loadModules(
+  // Load and register entity repositories
+  await loadEntityRepositories(__dirname);
+
+  // Load and register services, repositories
+  await loadServicesAndRepositories(__dirname);
+
+  // Load and register use-cases
+  await loadUseCases(__dirname);
+
+  // Register Awilix plugin with Fastify
+  await app.register(fastifyAwilixPlugin, {
+    disposeOnClose: true,
+    disposeOnResponse: false,
+  });
+}
+
+
+/**
+ * Convert a string to camelCase.
+ *
+ * @param {string} srt - The input string.
+ * @returns {string} - The string in camelCase format.
+ */
+export const toCamelCase = (srt) =>
+  srt.toLowerCase().replace(/([_-][a-z])/g, (g) => g.toUpperCase().replace("-", "").replace("_", ""));
+
+
+/**
+ * Load and register entity repositories into the container.
+ *
+ * @param {string} __dirname - The directory name.
+ * @returns {Promise<import("awilix").AwilixContainer>}
+ */
+async function loadEntityRepositories(__dirname) {
+  return diContainer.loadModules(
     [`${basePath}modules/**/**.entity.js`, `${basePath}common/infra/models/**.entity.js`],
     {
       cwd: __dirname,
@@ -51,10 +83,18 @@ async function diContainerPlugin(app, otp) {
         const modelName = toCamelCase(splat[0]);
         return `${modelName}sRepository`;
       },
-    },
+    }
   );
+}
 
-  await diContainer.loadModules(
+/**
+ * Load and register services and repositories into the container.
+ *
+ * @param {string} __dirname - The directory name.
+ * @returns {Promise<import("awilix").AwilixContainer>}
+ */
+async function loadServicesAndRepositories(__dirname) {
+  return diContainer.loadModules(
     [
       `${basePath}common/infra/services/**/**.service.js`,
       `${basePath}modules/**/**.service.js`,
@@ -62,18 +102,25 @@ async function diContainerPlugin(app, otp) {
     ],
     {
       cwd: __dirname,
-      // @ts-ignore
-      lifetime: awilix.Lifetime.SINGLETON,
       resolverOptions: {
+        lifetime: awilix.Lifetime.SINGLETON,
         register: awilix.asClass,
         injectionMode: awilix.InjectionMode.PROXY,
       },
       formatName: "camelCase",
       esModules: true,
-    },
+    }
   );
+}
 
-  await diContainer.loadModules([`${basePath}modules/**/**.use-case.js`], {
+/**
+ * Load and register use-cases into the container.
+ *
+ * @param {string} __dirname - The directory name.
+ * @returns {Promise<import("awilix").AwilixContainer>}
+ */
+async function loadUseCases(__dirname) {
+  return diContainer.loadModules([`${basePath}modules/**/**.use-case.js`], {
     cwd: __dirname,
     resolverOptions: {
       register(useCase, opts) {
@@ -84,11 +131,7 @@ async function diContainerPlugin(app, otp) {
     formatName: "camelCase",
     esModules: true,
   });
-
-  await app.register(fastifyAwilixPlugin, {
-    disposeOnClose: true,
-    disposeOnResponse: false,
-  });
 }
+
 
 export default fp(diContainerPlugin, { name: "container" });

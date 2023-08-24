@@ -8,18 +8,22 @@ import { TOKENS } from "#constants";
 
 export const userContext = {
   get() {
+    // @ts-ignore
     return requestContext.get(TOKENS.userJwtData);
   },
   set(value) {
+    // @ts-ignore
     requestContext.set(TOKENS.userJwtData, value);
   },
 };
 
 export const userRefreshTokenContext = {
   get() {
+    // @ts-ignore
     return requestContext.get(TOKENS.userCredentials);
   },
   set(value) {
+    // @ts-ignore
     requestContext.set(TOKENS.userCredentials, value);
   },
 };

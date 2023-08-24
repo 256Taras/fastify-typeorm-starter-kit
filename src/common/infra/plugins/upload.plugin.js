@@ -9,17 +9,21 @@ import { STORAGE_PATH, TEMP_STORAGE_PATH, UPLOAD_SERVER_PATH, UPLOAD_UI_PATH } f
 import { appConfig } from "#configs";
 import { logger } from "#services/logger/logger.service.js";
 
-export const toUiPath = (filePath) => `${UPLOAD_UI_PATH}/${filePath}`;
-
-export const toServerPath = (filePath) => `${UPLOAD_SERVER_PATH}/${filePath}`;
-
-export const toUrl = (filePath) => (filePath ? `${appConfig.applicationUrl}/${toUiPath(filePath)}` : null);
 
 /**
- * A Fastify plugin that creates a dependency injection container using Awilix.
- * @type {import('fastify').FastifyPluginAsync} app
- */
+* A Fastify plugin that creates a dependency injection container using Awilix.
+* @type {import('fastify').FastifyPluginAsync} app
+*/
 async function uploadPlugin(app, option) {
+  // @ts-ignore
+  app.decorate("parseMultipartFields", option?.parseMultipartFields ?? parseMultipartFields);
+  // @ts-ignore
+  app.decorate("removeUploadIfExists", option?.removeUploadIfExists ?? removeUploadIfExists);
+  // @ts-ignore
+  app.decorate("uploadToStorage", option?.uploadToStorage ?? uploadToStorage);
+  // @ts-ignore
+  app.decorate("upload", option?.upload ?? upload);
+
   /**
    * Removes an uploaded file from the server if it exists.
    *
@@ -28,19 +32,18 @@ async function uploadPlugin(app, option) {
    * @param {string} filePath - The path to the uploaded file.
    * @throws {Error} - If the file failed to be removed.
    */
-  const removeUploadIfExists = async (filePath) => {
+  async function removeUploadIfExists(filePath) {
     const serverPath = toServerPath(filePath);
-
     try {
-      // if exist
-      await fs.access(serverPath);
-      // remove
-      await fs.unlink(serverPath);
+      await fs.access(serverPath); // check if file exists
+      await fs.unlink(serverPath); // remove file
     } catch (err) {
       logger.error(err);
       throw new Error("Failed to remove upload");
     }
-  };
+  }
+
+
   /**
    * Uploads a file to the server storage.
    *
@@ -51,26 +54,23 @@ async function uploadPlugin(app, option) {
    * @returns {Promise<string>}} - The new file path.
    * @throws {Error} - If the file failed to be uploaded.
    */
-  const uploadToStorage = async (uploadedFile, folder) => {
+  async function uploadToStorage(uploadedFile, folder) {
     const path = `${STORAGE_PATH}/${folder}`;
-
     try {
       const newPath = uploadedFile.path.replace(TEMP_STORAGE_PATH, path.replace(/\/$/, ""));
-
       try {
         await fs.access(path, fs.constants.F_OK);
       } catch (err) {
         await fs.mkdir(path, { recursive: true });
       }
-
       await fs.rename(uploadedFile.path, newPath);
-
       return newPath.replace(`${UPLOAD_SERVER_PATH}/`, "");
     } catch (e) {
       logger.error(e);
       throw new Error("Upload error");
     }
-  };
+  }
+
 
   /**
    * Uploads a file to the server
@@ -81,38 +81,33 @@ async function uploadPlugin(app, option) {
    * @returns {Promise<string>}} - The new file path.
    * @throws {Error} - If the file failed to be uploaded.
    */
-  const upload = async (uploadedFile) => {
+  async function upload(uploadedFile) {
     const path = `${UPLOAD_SERVER_PATH}/`;
-
     try {
       const newPath = uploadedFile.path.replace(TEMP_STORAGE_PATH, path.replace(/\/$/, ""));
-
       try {
         await fs.access(path, fs.constants.F_OK);
       } catch (err) {
         await fs.mkdir(path, { recursive: true });
       }
-
       await fs.rename(uploadedFile.path, newPath);
-
       return newPath.replace(`${UPLOAD_SERVER_PATH}/`, "");
     } catch (e) {
       logger.error(e);
       throw new Error("Upload error");
     }
-  };
+  }
 
   /**
    * Pre-handler for parsing multipart request body to extract values.
    * Parses multipart request body and mutates the request object with the parsed fields.
    */
-  const parseMultipartFields =
-    (schema) =>
+  function parseMultipartFields (schema) {
     /**
      * @param {import('fastify').FastifyRequest} req - The request object
      * @returns {Promise<void>}
      */
-    async (req) => {
+    return async (req) => {
       // @ts-ignore
       if (!req.headers?.["content-type"].includes("multipart/form-data")) {
         throw new UNSUPPORTED_MEDIA_TYPE_415("Multipart/form-data content type is accepted");
@@ -145,14 +140,20 @@ async function uploadPlugin(app, option) {
 
       req.body = { ...(req?.body || {}), ...parsedFields };
     };
-  // @ts-ignore
-  app.decorate("parseMultipartFields", option?.parseMultipartFields ?? parseMultipartFields);
-  // @ts-ignore
-  app.decorate("removeUploadIfExists", option?.removeUploadIfExists ?? removeUploadIfExists);
-  // @ts-ignore
-  app.decorate("uploadToStorage", option?.uploadToStorage ?? uploadToStorage);
-  // @ts-ignore
-  app.decorate("upload", option?.upload ?? upload);
+  }
+
+}
+
+export function toUiPath(filePath) {
+  return `${UPLOAD_UI_PATH}/${filePath}`;
+}
+
+export function toServerPath(filePath) {
+  return `${UPLOAD_SERVER_PATH}/${filePath}`;
+}
+
+export function toUrl(filePath) {
+  return filePath ? `${appConfig.applicationUrl}/${toUiPath(filePath)}` : null;
 }
 
 export default fp(uploadPlugin);

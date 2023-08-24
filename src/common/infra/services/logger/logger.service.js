@@ -97,6 +97,7 @@ export class LoggerService {
 
 const Logger = new LoggerService();
 
+// @ts-ignore
 export const logger = requestContext.get("logger") ?? Logger;
 
 export default Logger;

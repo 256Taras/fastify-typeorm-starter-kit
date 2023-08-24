@@ -4,37 +4,35 @@ import { requestContext } from "@fastify/request-context";
 import defaultLogger from "#common/infra/services/logger/logger.service.js";
 import { appConfig, loggerConfig } from "#configs";
 
-class RequestLoggerPlugin {
-  static of = (app) => Promise.resolve(new RequestLoggerPlugin(app));
+/**
+ * @param {import('fastify').FastifyInstance} app
+ */
+async function requestLoggerPlugin(app) {
+  app.addHook("onRequest", setTraceIdFastifyHook);
+  app.addHook("onRequest", requestLogger);
+  app.addHook("onResponse", responseLogger);
 
-  constructor(app) {
-    app.addHook("onRequest", this.#setTraceIdFastifyHook);
-    app.addHook("onRequest", this.#requestLogger);
-    app.addHook("onResponse", this.#responseLogger);
+  /**
+   * @param {import('fastify').FastifyRequest} request
+   * @param {import('fastify').FastifyReply} reply
+   * @param {import('fastify').DoneFuncWithErrOrRes} done
+   */
+  function setTraceIdFastifyHook(request, reply, done) {
+    const requestId = request.id;
+    const childLogger = defaultLogger.child({ traceId: requestId });
+    // @ts-ignore
+    requestContext.set("logger", childLogger);
+    // @ts-ignore
+    requestContext.set("traceId", requestId);
+    done();
   }
 
   /**
-   *
    * @param {import('fastify').FastifyRequest} request
    * @param {import('fastify').FastifyReply} reply
    * @param {import('fastify').DoneFuncWithErrOrRes} done
    */
-  #setTraceIdFastifyHook = (request, reply, done) => {
-    // request.id -- fastify automatically use 'request-id' header as request id
-    const requestId = request.id;
-    const childLogger = defaultLogger.child({ traceId: requestId });
-    requestContext.set("logger", childLogger);
-    requestContext.set("traceId", requestId);
-    done();
-  };
-
-  /**
-   *
-   * @param {import('fastify').FastifyRequest} request
-   * @param {import('fastify').FastifyReply} reply
-   * @param {import('fastify').DoneFuncWithErrOrRes} done
-   */
-  #requestLogger = (request, reply, done) => {
+  function requestLogger(request, reply, done) {
     if (loggerConfig.enableRequestLogging) {
       defaultLogger.info({
         requestId: request.id,
@@ -43,8 +41,6 @@ class RequestLoggerPlugin {
           url: request.url,
           query: request.query,
           params: request.params,
-          // @ts-ignore
-          body: appConfig.env !== "production" ? reply.raw?.body : undefined,
           ip: request.ip,
           ips: request.ips,
           hostname: request.hostname,
@@ -56,17 +52,15 @@ class RequestLoggerPlugin {
         msg: "Incoming request",
       });
     }
-
     done();
-  };
+  }
 
   /**
-   *
    * @param {import('fastify').FastifyRequest} request
    * @param {import('fastify').FastifyReply} reply
    * @param {import('fastify').DoneFuncWithErrOrRes} done
    */
-  #responseLogger = (request, reply, done) => {
+  function responseLogger(request, reply, done) {
     if (loggerConfig.enableRequestLogging) {
       defaultLogger.info({
         requestId: request.id,
@@ -83,14 +77,16 @@ class RequestLoggerPlugin {
           statusCode: reply.raw.statusCode,
           responseTime: reply.getResponseTime(),
           contentType: request.headers["content-type"],
-          authorization: !!request.headers.authorization || null,
-          userAgent: request.headers["user-agent"] || null,
+          authorization: !!request.headers.authorization ?? null,
+          userAgent: request.headers["user-agent"] ?? null,
         },
         msg: "Request completed",
       });
     }
     done();
-  };
+  }
+
 }
 
-export default fp(RequestLoggerPlugin.of);
+
+export default fp(requestLoggerPlugin);

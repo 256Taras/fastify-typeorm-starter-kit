@@ -37,8 +37,13 @@ const seedFiles = fs.readdirSync(seedsDirectory);
       await seedFile(connection);
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error(`Error seeding database: ${err.message}`);
+    if (err instanceof Error) {
+      // eslint-disable-next-line no-console
+      console.error(`Error seeding database: ${err.message}`);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(`Error seeding database: ${err}`);
+    }
   } finally {
     if (connection) {
       await connection.destroy();
