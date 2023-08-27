@@ -34,7 +34,7 @@ If the field should be optional, append a ? to the field name. If the field shou
 For example:
 
 ```shell
-    node infra/bin/create-module.js name=User fields='firstName:string, lastName:string, email:string!, password:string!, bio?:text'
+    node infra/bin/create-module.js name=Users fields='firstName:string, lastName:string, email:string!, password:string!, bio?:text'
 ```
 
 This will generate a User module with fields firstName, lastName, email, password, and an optional bio, where email and password are unique.
@@ -64,7 +64,15 @@ The generator can also create relationships between entities. To specify a relat
 For example:
 
 ```shell
-node infra/bin/create-module.js name=User fields="firstName:string, lastName:string, age?:integer, email!:string, password:string, roles:[>Role-many-to-many]"
+node infra/bin/create-module.js name=User fields="[>Role-many-to-many], firstName:string, lastName:string, age?:integer, email!:string, password:string"
+```
+
+```shell
+node infra/bin/create-module.js name=OrderItems fields="[Order-many-to-one], [Product-many-to-one], quantity:number, price:float"
+```
+
+```shell
+node infra/bin/create-module.js name=Orders fields="[User-one-to-many], status:string, total:integer"
 ```
 
 This will generate a User module with a many-to-many relationship to the Role module. The > sign indicates that the User entity is the owner of the relationship.

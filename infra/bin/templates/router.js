@@ -1,9 +1,19 @@
-export function generateRouterCode({ UpperCaseNameSingle, LowerCaseName, ModuleName, isAuthorization }) {
+import { camelToHyphenCase } from "../utils/camel-to-hyphen-case.js";
+
+export function generateRouterCode({
+  UpperCaseNameSingle,
+  LowerCaseNameSingle,
+  LowerCaseName,
+  ModuleName,
+  isAuthorization,
+}) {
   return `
 import { STATUS_SUCCESS } from "#constants";
 import { ResourceNotFoundException } from "#errors";
 import { createPageOptionsDto, paginateQueryBuilder } from "#utils/common/index.js";
-import ${LowerCaseName}Schemas from "#modules/${ModuleName}/${ModuleName}.schemas.js";
+import ${LowerCaseName}Schemas from "#modules/${camelToHyphenCase(ModuleName)}/${camelToHyphenCase(
+    ModuleName,
+  )}.schemas.js";
 
 /** @type {import('@fastify/type-provider-typebox').FastifyPluginAsyncTypebox } */
 export default async function ${LowerCaseName}RouterV1(app) {
@@ -18,9 +28,9 @@ export default async function ${LowerCaseName}RouterV1(app) {
     async handler({ body: dto }) {
       const new${UpperCaseNameSingle} = ${LowerCaseName}Repository.create(dto);
 
-      const ${LowerCaseName} = await ${LowerCaseName}Repository.save(new${UpperCaseNameSingle});
+      const ${LowerCaseNameSingle} = await ${LowerCaseName}Repository.save(new${UpperCaseNameSingle});
 
-      return ${LowerCaseName};
+      return ${LowerCaseNameSingle};
     },
   });
 
@@ -43,13 +53,13 @@ export default async function ${LowerCaseName}RouterV1(app) {
 
     async handler({ params: { id } }) {
 
-      const ${LowerCaseName} = await ${LowerCaseName}Repository.findOneBy({ id });
+      const ${LowerCaseNameSingle} = await ${LowerCaseName}Repository.findOneBy({ id });
 
-      if (!${LowerCaseName}) {
+      if (!${LowerCaseNameSingle}) {
         throw new ResourceNotFoundException(${"`"}${UpperCaseNameSingle} with id: ${"${id}"} not found${"`"});
       }
 
-      return ${LowerCaseName};
+      return ${LowerCaseNameSingle};
     },
   });
 
@@ -57,17 +67,17 @@ export default async function ${LowerCaseName}RouterV1(app) {
     schema: ${LowerCaseName}Schemas.update,
 
     async handler({ body: dto, params: { id } }) {
-      let ${LowerCaseName} = await ${LowerCaseName}Repository.findOneBy({ id });
+      let ${LowerCaseNameSingle} = await ${LowerCaseName}Repository.findOneBy({ id });
 
-      if (!${LowerCaseName}) {
+      if (!${LowerCaseNameSingle}) {
         throw new ResourceNotFoundException(${"`"}${UpperCaseNameSingle} with id: ${"${id}"} not found${"`"});
       }
 
-      ${LowerCaseName} = ${LowerCaseName}Repository.merge(${LowerCaseName}, dto);
+      ${LowerCaseNameSingle} = ${LowerCaseName}Repository.merge(${LowerCaseNameSingle}, dto);
 
-      ${LowerCaseName} = await ${LowerCaseName}Repository.save(${LowerCaseName});
+      ${LowerCaseNameSingle} = await ${LowerCaseName}Repository.save(${LowerCaseNameSingle});
 
-      return ${LowerCaseName};
+      return ${LowerCaseNameSingle};
     },
   });
 

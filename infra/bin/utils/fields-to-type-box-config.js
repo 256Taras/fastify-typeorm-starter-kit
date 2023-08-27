@@ -11,9 +11,11 @@ const getTypeBoxType = (type, size, name) => {
       }
       return `Type.String()`;
     case "integer":
-      return `Type.Integer({ errorMessage: "Field ${name} must be an integer" })`;
+      return `Type.Integer()`;
     case "float":
-      return `Type.Number({ errorMessage: "Field ${name} must be a number" })`;
+      return `Type.Number()`;
+    case "number":
+      return `Type.Number()`;
     case "json":
       return `Type.String()`;
     case "boolean":

@@ -1,3 +1,6 @@
+import { camelToSnakeCase } from "./camel-to-snake-case.js";
+import { singularizeWord } from "./singularize-word.js";
+
 const getTypeOrmType = (type) => {
   switch (type) {
     case "string":
@@ -5,6 +8,8 @@ const getTypeOrmType = (type) => {
     case "text":
       return "varchar";
     case "integer":
+      return "int";
+    case "number":
       return "int";
     case "float":
       return "float";
@@ -27,24 +32,29 @@ export const fieldsToTypeOrmConfig = (fields, moduleName) => {
 
   fields.forEach((field) => {
     const { name, type, size, optional, unique, relatedEntity, relationType, ownerOfRelationship } = field;
+
     if (relatedEntity && relationType) {
-      const relationName = relatedEntity.toLowerCase();
-      relations[relationName + (relationType !== "one-to-many" ? "s" : "")] = {
+      const relationName = camelToSnakeCase(relatedEntity.charAt(0).toLowerCase() + relatedEntity.slice(1));
+
+      const module = camelToSnakeCase(singularizeWord(moduleName.charAt(0).toLowerCase() + moduleName.slice(1)));
+
+      relations[
+        singularizeWord(relatedEntity.charAt(0).toLowerCase() + relatedEntity.slice(1)) +
+          (relationType !== "one-to-many" ? "s" : "")
+      ] = {
         type: relationType,
         target: relatedEntity,
-        ...(!ownerOfRelationship ? { inverseSide: moduleName.toLowerCase() } : {}),
-        ...(relationType === "many-to-one" ? { joinColumn: { name: `${relationName}_id` } } : {}),
+        ...(!ownerOfRelationship ? { inverseSide: module } : {}),
+        ...(relationType === "many-to-one" ? { joinColumn: { name: `${module}_id` } } : {}),
         ...(relationType === "many-to-many" && ownerOfRelationship
           ? {
               joinTable: {
-                name: `mtm_${moduleName.toLowerCase()}_${relatedEntity.toLowerCase()}`,
+                name: `mtm_${module}_${relationName}`,
                 joinColumn: {
-                  name: `${relationName}_id`,
-                  referencedColumnName: "id",
+                  name: `${module}_id`,
                 },
                 inverseJoinColumn: {
-                  name: `${relatedEntity.toLowerCase()}_id`,
-                  referencedColumnName: "id",
+                  name: `${relationName}_id`,
                 },
               },
             }

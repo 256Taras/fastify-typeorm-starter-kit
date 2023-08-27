@@ -15,7 +15,7 @@
     "docker:dev:down": "docker-compose -f ./infra/docker/docker-compose.yml -f ./infra/docker/docker-compose.dev.yml down",
     "docker:infra:up": "docker-compose -f ./infra/docker/docker-compose.yml up",
     "docker:infra:down": "docker-compose -f ./infra/docker/docker-compose.yml down",
-    "typeorm:migration:create": "typeorm migration:create --outputJs infra/database/migrations/test",
+    "typeorm:migration:create": "typeorm migration:create --outputJs infra/database/migrations/",
     "typeorm:migration:generate": "typeorm migration:generate --outputJs -d infra/database/typeorm.config.js infra/database/migrations/",
     "typeorm:migration:run": "typeorm migration:run --dataSource ./infra/database/typeorm.config.js",
     "typeorm:migration:revert": "typeorm migration:revert --dataSource ./infra/database/typeorm.config.js",

@@ -18,6 +18,7 @@ import { generateRouterCode } from "./templates/router.js";
 import { generateEntityCode } from "./templates/entity.js";
 import { generateSchemasFunction } from "./templates/schemas.js";
 import { generateTypesCode } from "./templates/types.js";
+import { camelToHyphenCase } from "./utils/camel-to-hyphen-case.js";
 
 const CLI_ARG_MODULE_NAME = "name";
 const CLI_ARG_FIELDS = "fields";
@@ -54,11 +55,9 @@ const createFileFromTemplate = async (folderPath, fileName, content) => {
 };
 
 const createModuleFiles = async (folderPath, moduleName, fields, isAuthorization) => {
-  const toCamelCase = (srt) =>
-    srt.toLowerCase().replace(/([_-][a-z])/g, (g) => g.toUpperCase().replace("-", "").replace("_", ""));
-  const LowerCaseName = toCamelCase(moduleName);
+  const LowerCaseName = moduleName;
   const UpperCaseName = moduleName[0].toUpperCase() + LowerCaseName.replace(moduleName[0], "");
-  const SchemaName = camelToSnakeCase(moduleName);
+  const SchemaName = camelToSnakeCase(moduleName).toUpperCase();
 
   const attributes = fieldsToTypeOrmConfig(fields, UpperCaseName);
 
@@ -78,9 +77,21 @@ const createModuleFiles = async (folderPath, moduleName, fields, isAuthorization
     TypeBoxRequireMessage: fieldsToTypeBoxConfig(fields).errorMessages,
   };
 
-  await createFileFromTemplate(folderPath, `${singularizeWord(moduleName)}.entity.js`, generateEntityCode(values));
-  await createFileFromTemplate(folderPath, `${moduleName}.schemas.js`, generateSchemasFunction(values));
-  await createFileFromTemplate(folderPath, `${moduleName}.router.v1.js`, generateRouterCode(values));
+  await createFileFromTemplate(
+    folderPath,
+    `${singularizeWord(camelToHyphenCase(moduleName))}.entity.js`,
+    generateEntityCode(values),
+  );
+  await createFileFromTemplate(
+    folderPath,
+    `${camelToHyphenCase(moduleName)}.schemas.js`,
+    generateSchemasFunction(values),
+  );
+  await createFileFromTemplate(
+    folderPath,
+    `${camelToHyphenCase(moduleName)}.router.v1.js`,
+    generateRouterCode(values),
+  );
   await createFileFromTemplate(folderPath, `types.d.ts`, generateTypesCode(values));
 };
 
@@ -116,9 +127,9 @@ const createModule = async () => {
   //   isTests = false;
   // }
 
-  const moduleName = getModuleName();
+  const moduleName = getModuleName().charAt(0).toLowerCase() + getModuleName().slice(1);
   const fields = getFieldsFromCliArgs();
-  const folderPath = path.join("src", "modules", moduleName.toLowerCase());
+  const folderPath = path.join("src", "modules", camelToHyphenCase(moduleName));
 
   await createFolderStructure(folderPath);
   await createModuleFiles(folderPath, moduleName, fields, isAuthorization);
