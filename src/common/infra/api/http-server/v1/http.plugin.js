@@ -1,6 +1,5 @@
 import path from "node:path";
 
-import fastifyAuth from "@fastify/auth";
 import fastifyCors from "@fastify/cors";
 import fastifyAutoLoad from "@fastify/autoload";
 
@@ -9,8 +8,6 @@ import { FASTIFY_CORS_CONFIG } from "#src/configs/index.js";
 // SHARED
 
 const httpPlugin = async (fastify, otp) => {
-  fastify.register(fastifyAuth);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   fastify.register(fastifyCors, FASTIFY_CORS_CONFIG);
 

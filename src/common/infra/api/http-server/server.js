@@ -1,15 +1,19 @@
+//@ts-nocheck
 import path from "node:path";
 
+// Import necessary Fastify core and plugins.
 import Fastify from "fastify";
 import fastifyRequestContextPlugin from "@fastify/request-context";
-import fastifySwaggerPlugin from "@fastify/swagger"; // should be added first and registered before any plugin
+import fastifySwaggerPlugin from "@fastify/swagger";
 import fastifyRateLimit from "@fastify/rate-limit";
 import fastifyHelmet from "@fastify/helmet";
 import fastifyStatic from "@fastify/static";
 import fastifyMultipart from "@fastify/multipart";
 import fastifyFormBody from "@fastify/formbody";
 import fastifyAutoLoad from "@fastify/autoload";
+import fastifyAuth from "@fastify/auth";
 
+// Import custom modules and configurations.
 import defaultLogger, { logger } from "#common/infra/services/logger/logger.service.js";
 import { getDirName } from "#common/utils/common/index.js";
 import {
@@ -22,40 +26,41 @@ import * as configs from "#src/configs/index.js";
 import appV1Plugin from "./v1/http.plugin.js";
 
 export class RestApiServer {
-  /**
-   * @type {import('fastify/types/instance').FastifyInstance}
-   */
-  // @ts-ignore
+  /** @type {import('fastify/types/instance').FastifyInstance} */
   #fastify;
 
-  /**
-   * @type {import('fastify').FastifyPluginOptions}
-   */
+  /** @type {import('fastify').FastifyPluginOptions} */
+  #configs;
+
+  /** @type {import('#src/configs/index.js')} */
   #options;
 
   constructor(options = {}) {
+    this.#configs = options.configs;
     this.#options = options;
   }
 
   buildServerApp() {
-    const fastifyApp = Fastify(this.#options.configs.FASTIFY_CONFIG);
-    // @ts-ignore
-    fastifyApp.register(fastifySwaggerPlugin, this.#options.configs.OPENAPI_CONFIG);
+    const fastifyApp = Fastify(this.#configs.FASTIFY_CONFIG);
 
+    // Error handlers to handle 404 and other HTTP errors.
+    fastifyApp.setErrorHandler(globalHttpFastifyErrorHandler);
+    fastifyApp.setNotFoundHandler(globalHttpFastify404ErrorHandler);
+
+    // Authentication plugin. Provides support for various authentication methods.
+    fastifyApp.register(fastifyAuth);
+
+    // Swagger plugin for API documentation.
+    fastifyApp.register(fastifySwaggerPlugin, this.#configs.OPENAPI_CONFIG);
+
+    // RequestContext plugin provides context storage across async operations during request/response lifecycle.
     fastifyApp.register(fastifyRequestContextPlugin, {
       defaultStoreValues: {
         logger: defaultLogger,
       },
     });
 
-    // Enable custom error response
-    // @ts-ignore
-    fastifyApp.setErrorHandler(globalHttpFastifyErrorHandler);
-    // @ts-ignore
-
-    fastifyApp.setNotFoundHandler(globalHttpFastify404ErrorHandler);
-
-    // Load custom plugins
+    // Autoload plugin to load custom plugins from a directory.
     fastifyApp.register(fastifyAutoLoad, {
       dir: path.join(getDirName(import.meta.url), "./../../", "plugins"),
       maxDepth: 1,
@@ -63,25 +68,22 @@ export class RestApiServer {
       options: this.#options,
     });
 
-    // allows to rewrite via preHandler per route
-    // @ts-ignore
-    fastifyApp.register(fastifyRateLimit, this.#options.configs.FASTIFY_RATE_LIMIT_CONFIG);
-    // `fastify-helmet` helps you secure your application
-    // with important security headers. It's not a silver bullet™,
-    // but security is an orchestration of multiple tools that work
-    // together to reduce the attack surface of your application.
-    fastifyApp.register(fastifyHelmet, this.#options.configs.FASTIFY_HELMET_CONFIG);
-    fastifyApp.register(fastifyStatic, this.#options.configs.FASTIFY_STATIC_CONFIG);
-    fastifyApp.register(fastifyMultipart, this.#options.configs.FASTIFY_MULTIPART_CONFIG);
-    fastifyApp.register(fastifyFormBody);
-    // This plugin is especially useful if you expect a high load
-    // on your application, it measures the process load and returns
-    // a 503 if the process is undergoing too much stress.
-    // fastifyApp.register(fastifyUnderPressure, fastifyUnderPressureConfig);
+    // RateLimit plugin for limiting request rates.
+    fastifyApp.register(fastifyRateLimit, this.#configs.FASTIFY_RATE_LIMIT_CONFIG);
 
-    /**
-     * WARNING!!! The router must be Promise because the error issued by fastify is not clear
-     */
+    // Helmet plugin for securing the app with important HTTP headers.
+    fastifyApp.register(fastifyHelmet, this.#configs.FASTIFY_HELMET_CONFIG);
+
+    // Static plugin for serving static files.
+    fastifyApp.register(fastifyStatic, this.#configs.FASTIFY_STATIC_CONFIG);
+
+    // Multipart plugin for handling multipart form data (e.g., file uploads).
+    fastifyApp.register(fastifyMultipart, this.#configs.FASTIFY_MULTIPART_CONFIG);
+
+    // FormBody plugin for parsing form bodies into JS objects.
+    fastifyApp.register(fastifyFormBody);
+
+    // Registering routers.
     fastifyApp.register(sharedHealthCheckRouter, { prefix: "/api/health-check" });
     fastifyApp.register(appV1Plugin, { prefix: "/v1/", ...this.#options });
 
@@ -89,6 +91,7 @@ export class RestApiServer {
   }
 
   async stop() {
+    // Gracefully stop the Fastify server.
     try {
       await this.#fastify.close();
     } catch (err) {
@@ -98,23 +101,24 @@ export class RestApiServer {
 
   /**
    *
-   * @param {object} param0
-   * @param {string} param0.ip
-   * @param {number} param0.port
+   * @param {object} param
+   * @param {string} param.ip
+   * @param {number} param.port
    */
   async start({ ip, port }) {
     const fastifyServer = await this.buildServerApp();
 
     await fastifyServer.listen({ port, host: ip });
+
+    // Upon server readiness, print the route table and/or plugin tree for debugging purposes.
     fastifyServer.ready(() => {
-      if (this.#options.configs.APP_CONFIG.isDebug) {
+      if (this.#configs.APP_CONFIG.isDebug) {
         logger.debug(fastifyServer.printRoutes({ commonPrefix: true }));
+        // Optional: Print the plugin tree.
+        // logger.debug(fastifyServer.printPlugins());
       }
-      // you can check the plugin tree and their loading time
-      // logger.debug(fastifyServer.printPlugins());
     });
 
-    // @ts-ignore
     if (!this.#fastify) this.#fastify = fastifyServer;
   }
 }
