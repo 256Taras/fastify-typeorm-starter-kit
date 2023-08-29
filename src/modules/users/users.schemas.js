@@ -6,7 +6,7 @@ import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
 } from "#common/utils/schemas/index.js";
-import { ROLES_NAMES } from "#common/constants/index.js";
+import { ROLES_NAMES } from "#common/constants.js";
 
 export const USER_ENTITY_SCHEMA = Type.Object(
   {

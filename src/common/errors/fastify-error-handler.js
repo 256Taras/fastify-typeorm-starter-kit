@@ -21,7 +21,7 @@ import {
   INVALID_JSON_SYNTAX_400,
 } from "#common/errors/index.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
-import { appConfig } from "#src/configs/index.js";
+import { APP_CONFIG } from "#src/configs/index.js";
 import { logger } from "#common/infra/services/logger/logger.service.js";
 
 /**
@@ -124,7 +124,7 @@ const formatErrorResponse = ({ fastifyError, httpErrorResponseTemplate }) => {
     traceId: requestContext.get("traceId"),
     errorDetails,
     ...httpErrorResponseTemplate,
-    developerMessage: appConfig.isDeveloperMessageEnabled ? httpErrorResponseTemplate.developerMessage : undefined,
+    developerMessage: APP_CONFIG.isDeveloperMessageEnabled ? httpErrorResponseTemplate.developerMessage : undefined,
   };
 };
 

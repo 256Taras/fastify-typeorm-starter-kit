@@ -1,5 +1,5 @@
 /** @typedef {import('../users/types.js').IUser} IUser */
-import { fastifyJwtConfig } from "#src/configs/index.js";
+import { FASTIFY_JWT_CONFIG } from "#src/configs/index.js";
 
 /** @typedef {import('@fastify/awilix').Cradle} Deps */
 
@@ -34,12 +34,12 @@ export default class TokenService {
 
     const accessToken = this.#jwtService.accessToken.sign(
       { id: user.id, refreshTokenId },
-      { expiresIn: fastifyJwtConfig.refreshTokenExpirationTime },
+      { expiresIn: FASTIFY_JWT_CONFIG.refreshTokenExpirationTime },
     );
 
     const refreshToken = this.#jwtService.refreshToken.sign(
       { id: user.id, ppid: refreshHash, refreshTokenId },
-      { expiresIn: fastifyJwtConfig.refreshTokenExpirationTime },
+      { expiresIn: FASTIFY_JWT_CONFIG.refreshTokenExpirationTime },
     );
 
     await this.#authTokensRepository

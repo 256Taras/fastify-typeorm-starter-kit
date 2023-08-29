@@ -141,41 +141,6 @@ For specific test do this
     yarn test:e2e
     ```
 
-## 📜 Scripts
-
-   - `audit` - runs an npm audit to check for any security vulnerabilities
-   - `start` - starts the application by running the main file index.js
-   - `start:dev` - starts the application in development mode and pipes the logs through the pino-pretty package to make them more readable
-   - `start:dev:watch` - starts the application in development mode and watches for changes in the files using the --watch flag and pipes the logs through pino-pretty
-   - `start:stage` - starts the application in staging mode using pm2 with a custom name- `api-stage"` -- `start:prod` - starts the application in production mode using pm2 with a custom name- `api-prod"` -- `docker:dev:up` - starts the development environment with docker-compose by running the docker-compose.yml and docker-compose.dev.yml files
-   - `docker:dev:down` - stops the development environment with docker-compose by running the docker-compose.yml and docker-compose.dev.yml files
-   - `docker:infra:up` - starts the infrastructure services (e.g. database) with docker-compose by running the docker-compose.yml file
-   - `docker:infra:down` - stops the infrastructure services with docker-compose by running the docker-compose.yml file
-   - `typeorm:migration:create` - creates a new migration file using TypeORM
-   - `typeorm:migration:generate` - generates a new migration file using TypeORM
-   - `typeorm:migration:run` - runs any pending TypeORM migrations
-   - `typeorm:migration:revert` - reverts the last TypeORM migration
-   - `typeorm:seed:create` - creates a new database seed file
-   - `typeorm:seed:run` - runs the database seed file
-   - `test` - runs both unit and integration tests
-   - `test:unit` - runs unit tests using c8 to check for code coverage
-   - `test:integration` - runs integration tests without coverage and with a limit of one job
-   - `stage` - starts the application in staging mode and saves the process list with pm2
-   - `stage:restart` - restarts the application in staging mode using pm2
-   - `stage:delete` - stops and deletes the process in staging mode with pm2
-   - `prod` - starts the application in production mode and saves the process list with pm2
-   - `prod:restart` - restarts the application in production mode using pm2
-   - `prod:delete` - stops and deletes the process in production mode with pm2
-   - `lint` - runs the linter (eslint) on all relevant files
-   - `lint:fix` - runs the linter with the --fix flag to fix any fixable errors
-   - `prettier:fix` - runs prettier to format relevant files
-   - `prepare` - installs husky as a git hook manager
-   - `precommit` - runs linting and testing before committing changes
-   - `prepush` - runs linting and testing before pushing changes
-   - `module` - creates a new module with the given name
-   - `check` - runs TypeScript's type checker (tsc) with the configuration file tsconfig.json
-   - `ci` - runs a series of commands for continuous integration, including formatting, linting, testing, and type checking.
-
 ## 🤌 Development culture
 
 - split by modules (scalability & better dev experience)

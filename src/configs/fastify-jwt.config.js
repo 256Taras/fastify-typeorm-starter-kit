@@ -1,6 +1,6 @@
 import { env } from "../../configs/env.js";
 
-export const fastifyJwtConfig = {
+export const FASTIFY_JWT_CONFIG = {
   accessTokenSecret: env.JWT_ACCESS_TOKEN_SECRET ?? "jwt",
   accessTokenExpirationTime: env.JWT_ACCESS_TOKEN_EXPIRATION_TIME,
   refreshTokenSecret: env.JWT_REFRESH_TOKEN_SECRET ?? "jwt",

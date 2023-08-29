@@ -1,7 +1,7 @@
 import fastifyJwt from "@fastify/jwt";
 import fp from "fastify-plugin";
 
-import { authConfig, fastifyJwtConfig as jwtConfig } from "#src/configs/index.js";
+import { AUTH_CONFIG, FASTIFY_JWT_CONFIG as jwtConfig } from "#src/configs/index.js";
 import { UnauthorizedException } from "#common/errors/index.js";
 import { logger } from "#common/infra/services/logger/logger.service.js";
 
@@ -53,7 +53,7 @@ async function authPlugin(app, options) {
    */
   async function defaultVerifyJwtRefreshToken(request) {
     try {
-      const refreshToken = request.headers[authConfig.refreshTokenKey];
+      const refreshToken = request.headers[AUTH_CONFIG.refreshTokenKey];
       // @ts-ignore
       const data = app.jwt.refreshToken.verify(refreshToken);
       app.diContainer.cradle.userRefreshTokenContext.set(data);

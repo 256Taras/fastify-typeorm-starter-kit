@@ -2,7 +2,7 @@
  *
  * Defining All Grants
  */
-export const permissionsConfig = {
+export const PERMISSIONS_CONFIG = {
   admin: {
     user: {
       "read:any": ["*"],

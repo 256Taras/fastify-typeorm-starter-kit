@@ -38,9 +38,9 @@ export class RestApiServer {
   }
 
   buildServerApp() {
-    const fastifyApp = Fastify(this.#options.configs.fastifyConfig);
+    const fastifyApp = Fastify(this.#options.configs.FASTIFY_CONFIG);
     // @ts-ignore
-    fastifyApp.register(fastifySwaggerPlugin, this.#options.configs.openapiConfig);
+    fastifyApp.register(fastifySwaggerPlugin, this.#options.configs.OPENAPI_CONFIG);
 
     fastifyApp.register(fastifyRequestContextPlugin, {
       defaultStoreValues: {
@@ -65,14 +65,14 @@ export class RestApiServer {
 
     // allows to rewrite via preHandler per route
     // @ts-ignore
-    fastifyApp.register(fastifyRateLimit, this.#options.configs.fastifyRateLimitConfig);
+    fastifyApp.register(fastifyRateLimit, this.#options.configs.FASTIFY_RATE_LIMIT_CONFIG);
     // `fastify-helmet` helps you secure your application
     // with important security headers. It's not a silver bullet™,
     // but security is an orchestration of multiple tools that work
     // together to reduce the attack surface of your application.
-    fastifyApp.register(fastifyHelmet, this.#options.configs.fastifyHelmetConfig);
-    fastifyApp.register(fastifyStatic, this.#options.configs.fastifyStaticConfig);
-    fastifyApp.register(fastifyMultipart, this.#options.configs.fastifyMultipartConfig);
+    fastifyApp.register(fastifyHelmet, this.#options.configs.FASTIFY_HELMET_CONFIG);
+    fastifyApp.register(fastifyStatic, this.#options.configs.FASTIFY_STATIC_CONFIG);
+    fastifyApp.register(fastifyMultipart, this.#options.configs.FASTIFY_MULTIPART_CONFIG);
     fastifyApp.register(fastifyFormBody);
     // This plugin is especially useful if you expect a high load
     // on your application, it measures the process load and returns
@@ -107,7 +107,7 @@ export class RestApiServer {
 
     await fastifyServer.listen({ port, host: ip });
     fastifyServer.ready(() => {
-      if (this.#options.configs.appConfig.isDebug) {
+      if (this.#options.configs.APP_CONFIG.isDebug) {
         logger.debug(fastifyServer.printRoutes({ commonPrefix: true }));
       }
       // you can check the plugin tree and their loading time

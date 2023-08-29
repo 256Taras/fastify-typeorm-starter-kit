@@ -4,7 +4,7 @@ import path from "node:path";
 import { pipeline } from "node:stream";
 import { randomUUID } from "node:crypto";
 
-import { TEMP_STORAGE_PATH } from "#common/constants/index.js";
+import { STORAGE_CONFIG } from "#src/configs/storage.config.js";
 
 export const generateFileName = (name) => {
   const extension = path.extname(name).substring(1);
@@ -37,7 +37,7 @@ const onFile = async (part) => {
     throw createPayloadTooLargeError();
   }
 
-  const filePath = `${TEMP_STORAGE_PATH}/${generateFileName(part.filename)}`;
+  const filePath = `${STORAGE_CONFIG.tempStoragePath}/${generateFileName(part.filename)}`;
 
   part.file.on("limit", () => {
     part.file.destroy(createPayloadTooLargeError());
@@ -67,7 +67,7 @@ const onFile = async (part) => {
  * @property {number} limits.fileSize - Maximum file size in bytes. Default: 104857600 (100 MB).
  * @property {function} onFile - Function to handle incoming files.
  */
-export const fastifyMultipartConfig = {
+export const FASTIFY_MULTIPART_CONFIG = {
   attachFieldsToBody: true,
   limits: {
     fileSize: 1024 * 1024 * 100,

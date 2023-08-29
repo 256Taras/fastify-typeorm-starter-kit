@@ -1,16 +1,20 @@
 // @ts-ignore
-import { tables } from "#common/constants/index.js";
 // @ts-ignore
 import { logger } from "#common/infra/services/logger/logger.service.js";
+// @ts-ignore
+import { TABLES } from "#common/constants.js";
 
 import DataSource from "../../infra/database/typeorm.config.js";
 import { env } from "../../configs/env.js";
+
+// @ts-ignore
+
 // @ts-ignore
 
 /**
  *  utility for working with the database.
  */
-export const seedTables = tables;
+export const seedTables = TABLES;
 
 /**
  * Re-seeds the database with the provided seeds.
@@ -55,7 +59,7 @@ async function cleanUp() {
   if (isSeedingAllowed) {
     await DataSource.createQueryRunner()
       .query(
-        `TRUNCATE  ${Object.values(tables)
+        `TRUNCATE  ${Object.values(TABLES)
           .map((t) => `"${t}" `)
           .join()};`,
       )

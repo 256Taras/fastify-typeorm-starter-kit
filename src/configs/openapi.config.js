@@ -1,8 +1,8 @@
 import { env } from "../../configs/env.js";
 
-import { authConfig } from "./auth.config.js";
+import { AUTH_CONFIG } from "./auth.config.js";
 
-export const openapiConfig = {
+export const OPENAPI_CONFIG = {
   routePrefix: "/docs",
   exposeRoute: true,
   openapi: {
@@ -27,7 +27,7 @@ export const openapiConfig = {
         },
         bearerAuthRefresh: {
           type: "apiKey",
-          name: authConfig.refreshTokenKey,
+          name: AUTH_CONFIG.refreshTokenKey,
           bearerFormat: "JWT",
           in: "header",
           description: "Refresh Token for obtaining new Access Token",

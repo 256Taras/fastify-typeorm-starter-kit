@@ -1,9 +1,9 @@
 import { FastifyInstance } from "fastify";
 
-import { tables } from "#common/constants";
+import { TABLES } from "#common/constants";
 
 interface ICreateTestingAppOption {
-  configs?: typeof tables;
+  configs?: typeof TABLES;
   infra?: {
     authService: object;
   };

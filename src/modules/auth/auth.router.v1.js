@@ -1,11 +1,10 @@
 import authSchemas from "#modules/auth/auth.schemas.js";
-import { useCase } from "#common/utils/common/use-case.js";
 import {
   BadRequestException,
   ResourceAlreadyExistException,
   ResourceNotFoundException,
 } from "#common/errors/index.js";
-import { ROLES_NAMES, STATUS_SUCCESS } from "#common/constants/index.js";
+import { ROLES_NAMES, STATUS_SUCCESS } from "#common/constants.js";
 
 /** @type {import("@fastify/type-provider-typebox").FastifyPluginAsyncTypebox } */
 export default async function authRouterV1(app) {
@@ -20,7 +19,8 @@ export default async function authRouterV1(app) {
 
   app.post("/sing-up", {
     schema: authSchemas.signUp,
-    handler: useCase(async ({ firstName, lastName, email, password }) => {
+
+    async handler({ body: { firstName, lastName, email, password } }) {
       logger.debug(`Try sign up user with email: ${email}`);
 
       const maybeUser = await usersRepository.findOneBy({ email });
@@ -44,12 +44,13 @@ export default async function authRouterV1(app) {
       delete user.password;
 
       return tokenService.generateTokens(user);
-    }),
+    },
   });
 
   app.post("/sing-in", {
     schema: authSchemas.signIn,
-    handler: useCase(async ({ email, password }) => {
+
+    async handler({ body: { email, password } }) {
       const user = await usersRepository.findOneBy({ email });
 
       if (!user) return ResourceNotFoundException.of(`User with email: ${email} not register`);
@@ -59,13 +60,14 @@ export default async function authRouterV1(app) {
       if (!isPasswordValid) throw new BadRequestException("Incorrect credentials");
 
       return tokenService.generateTokens(user);
-    }),
+    },
   });
 
   app.post("/log-out", {
     schema: authSchemas.logOut,
     preValidation: [app.auth([app.verifyJwtRefreshToken])],
-    handler: useCase(async () => {
+
+    async handler() {
       const { id: userId, ppid } = userRefreshTokenContext.get();
 
       const authToken = await authTokensRepository.delete({ ppid, userId });
@@ -73,13 +75,14 @@ export default async function authRouterV1(app) {
       if (!authToken.affected) throw new BadRequestException(`Access decided`);
 
       return STATUS_SUCCESS;
-    }),
+    },
   });
 
   app.put("/refresh-tokens", {
     schema: authSchemas.refreshTokens,
     preValidation: [app.auth([app.verifyJwtRefreshToken])],
-    handler: useCase(async () => {
+
+    async handler() {
       logger.debug("Refresh Tokens");
 
       const { id, ppid } = userRefreshTokenContext.get();
@@ -101,6 +104,6 @@ export default async function authRouterV1(app) {
       delete user.password;
 
       return tokenService.generateTokens(user);
-    }),
+    },
   });
 }

@@ -74,7 +74,7 @@ Within `module-name.errors.ts`, all the exceptions pertinent to that module get 
 *Example from `auth` module:*
 
 ```typescript
-import { defaultHttpErrorCollection } from "#errors";
+import { defaultHttpErrorCollection } from "#common/errors/index.js";
 import { EmailAlreadyExistException } from "./exceptions/email-already-exist.exception.js";
 import { PhoneNumberAlreadyExistException } from "./exceptions/phone-number-already-exist.exception.js";
 

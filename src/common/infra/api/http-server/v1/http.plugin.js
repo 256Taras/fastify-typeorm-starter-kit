@@ -5,14 +5,14 @@ import fastifyCors from "@fastify/cors";
 import fastifyAutoLoad from "@fastify/autoload";
 
 import { getDirName } from "#common/utils/common/index.js";
-import { fastifyCorsConfig } from "#src/configs/index.js";
+import { FASTIFY_CORS_CONFIG } from "#src/configs/index.js";
 // SHARED
 
 const httpPlugin = async (fastify, otp) => {
   fastify.register(fastifyAuth);
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  fastify.register(fastifyCors, fastifyCorsConfig);
+  fastify.register(fastifyCors, FASTIFY_CORS_CONFIG);
 
   await fastify.after(); // wait until previous plugin being registered
   // it allows us to be sure that further fastify instance will have fastifyAuth methods available

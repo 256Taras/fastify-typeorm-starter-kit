@@ -1,4 +1,4 @@
-import { ORDER_BY } from "#common/constants/index.js";
+import { ORDER_BY } from "#common/constants.js";
 
 /**
  * A DTO representing metadata about a paginated collection of items.

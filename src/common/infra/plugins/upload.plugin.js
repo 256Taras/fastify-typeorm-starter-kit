@@ -5,9 +5,9 @@ import fp from "fastify-plugin";
 import { isMappable } from "#common/utils/objects/index.js";
 import { validateSchema } from "#common/utils/schemas/index.js";
 import { logger } from "#common/infra/services/logger/logger.service.js";
-import { STORAGE_PATH, TEMP_STORAGE_PATH, UPLOAD_SERVER_PATH, UPLOAD_UI_PATH } from "#common/constants/index.js";
-import { appConfig } from "#src/configs/index.js";
+import { APP_CONFIG } from "#src/configs/index.js";
 import { UNSUPPORTED_MEDIA_TYPE_415 } from "#common/errors/index.js";
+import { STORAGE_CONFIG } from "#src/configs/storage.config.js";
 
 /**
  * A Fastify plugin that creates a dependency injection container using Awilix.
@@ -53,16 +53,16 @@ async function uploadPlugin(app, option) {
    * @throws {Error} - If the file failed to be uploaded.
    */
   async function uploadToStorage(uploadedFile, folder) {
-    const path = `${STORAGE_PATH}/${folder}`;
+    const path = `${STORAGE_CONFIG.storagePath}/${folder}`;
     try {
-      const newPath = uploadedFile.path.replace(TEMP_STORAGE_PATH, path.replace(/\/$/, ""));
+      const newPath = uploadedFile.path.replace(STORAGE_CONFIG.tempStoragePath, path.replace(/\/$/, ""));
       try {
         await fs.access(path, fs.constants.F_OK);
       } catch (err) {
         await fs.mkdir(path, { recursive: true });
       }
       await fs.rename(uploadedFile.path, newPath);
-      return newPath.replace(`${UPLOAD_SERVER_PATH}/`, "");
+      return newPath.replace(`${STORAGE_CONFIG.uploadServerPath}/`, "");
     } catch (e) {
       logger.error(e);
       throw new Error("Upload error");
@@ -79,16 +79,16 @@ async function uploadPlugin(app, option) {
    * @throws {Error} - If the file failed to be uploaded.
    */
   async function upload(uploadedFile) {
-    const path = `${UPLOAD_SERVER_PATH}/`;
+    const path = `${STORAGE_CONFIG.uploadServerPath}/`;
     try {
-      const newPath = uploadedFile.path.replace(TEMP_STORAGE_PATH, path.replace(/\/$/, ""));
+      const newPath = uploadedFile.path.replace(STORAGE_CONFIG.tempStoragePath, path.replace(/\/$/, ""));
       try {
         await fs.access(path, fs.constants.F_OK);
       } catch (err) {
         await fs.mkdir(path, { recursive: true });
       }
       await fs.rename(uploadedFile.path, newPath);
-      return newPath.replace(`${UPLOAD_SERVER_PATH}/`, "");
+      return newPath.replace(`${STORAGE_CONFIG.uploadServerPath}/`, "");
     } catch (e) {
       logger.error(e);
       throw new Error("Upload error");
@@ -141,15 +141,15 @@ async function uploadPlugin(app, option) {
 }
 
 export function toUiPath(filePath) {
-  return `${UPLOAD_UI_PATH}/${filePath}`;
+  return `${STORAGE_CONFIG.uploadUiPath}/${filePath}`;
 }
 
 export function toServerPath(filePath) {
-  return `${UPLOAD_SERVER_PATH}/${filePath}`;
+  return `${STORAGE_CONFIG.uploadServerPath}/${filePath}`;
 }
 
 export function toUrl(filePath) {
-  return filePath ? `${appConfig.applicationUrl}/${toUiPath(filePath)}` : null;
+  return filePath ? `${APP_CONFIG.applicationUrl}/${toUiPath(filePath)}` : null;
 }
 
 export default fp(uploadPlugin);

@@ -2,6 +2,7 @@ import fp from "fastify-plugin";
 import { requestContext } from "@fastify/request-context";
 
 import { SERVER_TIMEOUT_408 } from "#common/errors/index.js";
+import { SERVER_CONFIG } from "#src/configs/index.js";
 
 const TIMEOUT_KEY = "TIMEOUT_KEY";
 const CONTROLLER_KEY = "CONTROLLER_KEY";
@@ -45,7 +46,7 @@ async function requestTimeoutPlugin(app, options) {
         controller.abort();
         done(new SERVER_TIMEOUT_408());
         // @ts-ignore
-      }, reply.context.config.timeout ?? options.configs.serverConfig.requestTimeout);
+      }, reply.context.config.timeout ?? options.configs.SERVER_CONFIG.requestTimeout);
 
       // @ts-ignore
       requestContext.set(TIMEOUT_KEY, timeoutId);

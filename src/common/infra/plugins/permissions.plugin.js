@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import { AccessControl } from "accesscontrol";
 
-import { permissionsConfig } from "#src/configs/index.js";
+import { PERMISSIONS_CONFIG } from "#src/configs/index.js";
 import { userContext } from "#common/utils/common/index.js";
 import { ForbiddenException } from "#common/errors/index.js";
 
@@ -11,7 +11,7 @@ import { ForbiddenException } from "#common/errors/index.js";
  * @returns {Promise<void>}
  */
 async function accessControlPlugin(app) {
-  const accessControl = new AccessControl(permissionsConfig);
+  const accessControl = new AccessControl(PERMISSIONS_CONFIG);
   /**
 
     Decorates a Fastify instance with a "can" method that checks whether the user has the specified permission.

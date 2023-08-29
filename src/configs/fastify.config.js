@@ -2,7 +2,8 @@ import { randomUUID } from "node:crypto";
 
 import ajvErrors from "ajv-errors";
 import { ajvFilePlugin } from "@fastify/multipart";
-export const fastifyConfig = {
+
+export const FASTIFY_CONFIG = {
   genReqId: () => randomUUID(),
   disableRequestLogging: true, // we do it on our own
   logger: false,

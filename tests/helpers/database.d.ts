@@ -1,4 +1,4 @@
-import { tables } from "#src/common/constants/db-tables";
+import { TABLES } from "#common/constants";
 
 export declare interface ISeedData {
   name: string;
@@ -12,7 +12,7 @@ export declare interface ISeed {
 /**
  *  utility for working with the database.
  */
-export declare const seedTables: typeof tables;
+export declare const seedTables: typeof TABLES;
 /**
  * Re-seeds the database with the provided seeds.
  * @param seeds An object containing the table names and corresponding data to seed.

@@ -1,5 +1,5 @@
 import RestApi from "#common/infra/api/http-server/server.js";
-import { appConfig, serverConfig } from "#src/configs/index.js";
+import { APP_CONFIG, SERVER_CONFIG } from "#src/configs/index.js";
 import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import AppDataSource from "../infra/database/typeorm.config.js";
@@ -17,17 +17,17 @@ class Application {
   }
 
   async #gracefulShutdown() {
-    logger.info(`[${appConfig.applicationName}]: Stopping application on port ${serverConfig.port}...`);
+    logger.info(`[${APP_CONFIG.applicationName}]: Stopping application on port ${SERVER_CONFIG.port}...`);
 
     const forceShutdown = setTimeout(() => {
-      logger.info(`[${appConfig.applicationName}]: Application on port ${serverConfig.port} stopped forcefully`);
+      logger.info(`[${APP_CONFIG.applicationName}]: Application on port ${SERVER_CONFIG.port} stopped forcefully`);
       // eslint-disable-next-line no-process-exit
       process.exit(this.#EXIT_FAILURE);
-    }, serverConfig.shutdownTimeout);
+    }, SERVER_CONFIG.shutdownTimeout);
 
     await this.#stopInfrastructure();
 
-    logger.info(`[${appConfig.applicationName}]: Application successfully stopped`);
+    logger.info(`[${APP_CONFIG.applicationName}]: Application successfully stopped`);
     clearTimeout(forceShutdown);
     // eslint-disable-next-line no-process-exit
     process.exit(this.#EXIT_SUCCESS);
@@ -35,7 +35,7 @@ class Application {
 
   #initStopHandlers() {
     const handleSignal = async (signal) => {
-      logger.info(`[${appConfig.applicationName}]: ${signal} signal received`);
+      logger.info(`[${APP_CONFIG.applicationName}]: ${signal} signal received`);
       await this.#gracefulShutdown();
     };
 
@@ -64,17 +64,17 @@ class Application {
   }
 
   async #initInfrastructure() {
-    logger.info(`[${appConfig.applicationName}]: Initializing infrastructure...`);
+    logger.info(`[${APP_CONFIG.applicationName}]: Initializing infrastructure...`);
     try {
       await AppDataSource.initialize();
     } catch (error) {
       logger.error(error);
     }
-    logger.info(`[${appConfig.applicationName}]: Infrastructure initialized`);
+    logger.info(`[${APP_CONFIG.applicationName}]: Infrastructure initialized`);
 
-    if (appConfig.env === "development") {
-      logger.info(`[${appConfig.applicationName}]: See the documentation on ${appConfig.applicationUrl}/docs`);
-      logger.info(`[${appConfig.applicationName}]: You can check your database here: ${appConfig.adminerUrl}`);
+    if (APP_CONFIG.env === "development") {
+      logger.info(`[${APP_CONFIG.applicationName}]: See the documentation on ${APP_CONFIG.applicationUrl}/docs`);
+      logger.info(`[${APP_CONFIG.applicationName}]: You can check your database here: ${APP_CONFIG.adminerUrl}`);
     }
   }
 
@@ -83,7 +83,7 @@ class Application {
       this.#initStopHandlers();
       await this.#initInfrastructure();
       // Run servers (all kind of transports: Rest API, WS, etc.)
-      await RestApi.start({ ip: serverConfig.ip, port: serverConfig.port });
+      await RestApi.start({ ip: SERVER_CONFIG.ip, port: SERVER_CONFIG.port });
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
@@ -102,5 +102,5 @@ await new Application();
 
 process.on("exit", (code) =>
   // eslint-disable-next-line no-console
-  console.info(`\x1b[38;5;43m[${appConfig.applicationName}] Exit with code: ${code}.\x1b[0m`),
+  console.info(`\x1b[38;5;43m[${APP_CONFIG.applicationName}] Exit with code: ${code}.\x1b[0m`),
 );

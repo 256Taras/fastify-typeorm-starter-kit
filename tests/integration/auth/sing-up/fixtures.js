@@ -1,5 +1,5 @@
 import EncrypterService from "#common/infra/services/encrypter/encrypter.service.js";
-import { ROLES_NAMES } from "#common/constants/index.js";
+import { ROLES_NAMES } from "#common/constants.js";
 
 import { fixtureFactory } from "../../../helpers/index.js";
 import { FIRSTNAME, LASTNAME, PASSWORD, EMAIL, AUTHORIZED_MOCK_USER_ID } from "../../mocks/users/constants.js";

@@ -1,27 +1,27 @@
 import Pino from "pino";
 import { requestContext } from "@fastify/request-context";
 
-import { appConfig, loggerConfig } from "#src/configs/index.js";
+import { APP_CONFIG, LOGGER_CONFIG } from "#src/configs/index.js";
 
 const PinoPrettyTransport = {
   target: "pino-pretty",
   options: {
-    colorize: loggerConfig.enableColorizedPrint,
+    colorize: LOGGER_CONFIG.enableColorizedPrint,
     levelFirst: true,
     ignore: "serviceContext",
     translateTime: "SYS:HH:MM:ss.l",
   },
 };
 
-const TerminalTransport = loggerConfig.enablePrettyPrint ? PinoPrettyTransport : undefined;
+const TerminalTransport = LOGGER_CONFIG.enablePrettyPrint ? PinoPrettyTransport : undefined;
 
 export const TerminalOptions = {
-  level: loggerConfig.logLevel,
+  level: LOGGER_CONFIG.logLevel,
 
   base: {
     serviceContext: {
-      service: appConfig.applicationName,
-      version: appConfig.version,
+      service: APP_CONFIG.applicationName,
+      version: APP_CONFIG.version,
     },
   },
   redact: {

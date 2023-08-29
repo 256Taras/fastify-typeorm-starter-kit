@@ -1,10 +1,10 @@
-import { appConfig } from "./app.config.js";
+import { APP_CONFIG } from "./app.config.js";
 
-export const fastifyRateLimitConfig = {
+export const FASTIFY_RATE_LIMIT_CONFIG = {
   global: true,
-  max: appConfig.RATE_LIMIT_MAX, // default 1000
+  max: APP_CONFIG.RATE_LIMIT_MAX, // default 1000
   ban: null, // default null
-  timeWindow: appConfig.RATE_LIMIT_TIME_WINDOW, // default 1000 * 60
+  timeWindow: APP_CONFIG.RATE_LIMIT_TIME_WINDOW, // default 1000 * 60
   cache: 5000, // default 5000
   allowList: ["127.0.0.1"], // default []
   continueExceeding: true, // default false

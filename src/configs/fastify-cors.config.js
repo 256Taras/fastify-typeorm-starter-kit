@@ -1,4 +1,4 @@
-export const fastifyCorsConfig = {
+export const FASTIFY_CORS_CONFIG = {
   origin: "*",
   methods: "GET, POST, PUT, PATCH, POST, DELETE, OPTIONS",
   allowedHeaders:

@@ -2,7 +2,7 @@ import fp from "fastify-plugin";
 import { requestContext } from "@fastify/request-context";
 
 import defaultLogger from "#common/infra/services/logger/logger.service.js";
-import { appConfig, loggerConfig } from "#src/configs/index.js";
+import { APP_CONFIG, LOGGER_CONFIG } from "#src/configs/index.js";
 
 /**
  * @param {import('fastify').FastifyInstance} app
@@ -33,7 +33,7 @@ async function requestLoggerPlugin(app) {
    * @param {import('fastify').DoneFuncWithErrOrRes} done
    */
   function requestLogger(request, reply, done) {
-    if (loggerConfig.enableRequestLogging) {
+    if (LOGGER_CONFIG.enableRequestLogging) {
       defaultLogger.info({
         requestId: request.id,
         request: {
@@ -61,7 +61,7 @@ async function requestLoggerPlugin(app) {
    * @param {import('fastify').DoneFuncWithErrOrRes} done
    */
   function responseLogger(request, reply, done) {
-    if (loggerConfig.enableRequestLogging) {
+    if (LOGGER_CONFIG.enableRequestLogging) {
       defaultLogger.info({
         requestId: request.id,
         request: {
@@ -69,7 +69,7 @@ async function requestLoggerPlugin(app) {
           url: request.url,
           query: request.query,
           params: request.params,
-          body: appConfig.env !== "production" ? request.body : undefined,
+          body: APP_CONFIG.env !== "production" ? request.body : undefined,
           ip: request.ip,
           ips: request.ips,
           hostname: request.hostname,

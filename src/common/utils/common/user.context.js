@@ -1,6 +1,6 @@
 import { requestContext } from "@fastify/request-context";
 
-import { TOKENS } from "#common/constants/index.js";
+import { TOKENS } from "#common/constants.js";
 
 /**
  *  Fastify wrapper on AsyncLocalStorage

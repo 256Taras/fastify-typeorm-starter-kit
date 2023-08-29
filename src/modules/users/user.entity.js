@@ -1,6 +1,6 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 
-import { tables } from "#common/constants/index.js";
+import { TABLES } from "#common/constants.js";
 
 export default class User extends BaseEntity {
   /** @type {string} */
@@ -37,7 +37,7 @@ export default class User extends BaseEntity {
   static get schema() {
     return new EntitySchema({
       name: User.name,
-      tableName: tables.user,
+      tableName: TABLES.user,
       columns: {
         id: {
           type: "uuid",

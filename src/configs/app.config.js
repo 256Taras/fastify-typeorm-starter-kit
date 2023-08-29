@@ -1,6 +1,6 @@
 import { env } from "../../configs/env.js";
 
-export const appConfig = {
+export const APP_CONFIG = {
   env: env.ENV_NAME,
   isDebug: env.ENABLE_DEBUG === 1,
   isSeedsEnabled: env.ENABLE_SEEDS === 1,

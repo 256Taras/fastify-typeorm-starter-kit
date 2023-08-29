@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 
-import { LIMIT, OFFSET, ROLES_NAMES } from "#common/constants/index.js";
 import { Enum } from "#common/utils/schemas/enum.js";
+import { LIMIT, OFFSET, ROLES_NAMES } from "#common/constants.js";
 
 const createdAt = Type.Object({ createdAt: Type.String({ format: "date-time" }) });
 const updatedAt = Type.Object({ updatedAt: Type.String({ format: "date-time" }) });
