@@ -1,6 +1,6 @@
-import { TEncryptionAlgorithm } from "#services/encrypter/encryption-algorithm.type";
-import { IUuidOptions } from "#services/encrypter/uuid-options.interface.d.js";
-import { IEncrypterInterface } from "#services/encrypter/encrypter.interface";
+import { IEncrypterInterface } from "#common/infra/services/encrypter/encrypter.interface";
+import { TEncryptionAlgorithm } from "#common/infra/services/encrypter/encryption-algorithm.type";
+import { IUuidOptions } from "#common/infra/services/encrypter/uuid-options.interface.d";
 
 export declare class EncrypterService implements IEncrypterInterface {
   private key;

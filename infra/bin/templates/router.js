@@ -8,9 +8,9 @@ export function generateRouterCode({
   isAuthorization,
 }) {
   return `
-import { STATUS_SUCCESS } from "#constants";
-import { ResourceNotFoundException } from "#errors";
-import { createPageOptionsDto, paginateQueryBuilder } from "#utils/common/index.js";
+import { createPageOptionsDto, paginateQueryBuilder } from "#common/utils/common/index.js";
+import { ResourceNotFoundException } from "#common/errors/index.js";
+import { STATUS_SUCCESS } from "#common/constants/index.js";
 import ${LowerCaseName}Schemas from "#modules/${camelToHyphenCase(ModuleName)}/${camelToHyphenCase(
     ModuleName,
   )}.schemas.js";

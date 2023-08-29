@@ -21,7 +21,9 @@ export declare function convertHttpErrorToFastifyAjvSchemaError(httpFastifyError
     };
   };
 };
-export declare function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(httpErrorCollection: THttpErrorCollection): {
+export declare function convertHttpErrorCollectionToFastifyAjvSchemaErrorList(
+  httpErrorCollection: THttpErrorCollection,
+): {
   [x: string]: {
     type: string;
     required: string[];

@@ -2,8 +2,8 @@ import * as querystring from "node:querystring";
 
 import { request } from "undici";
 
-import { HttpRequestError } from "#services/http/http-request.error.js";
-import { UndiciResponse } from "#services/http/undici-response.js";
+import { HttpRequestError } from "#common/infra/services/http/http-request.error.js";
+import { UndiciResponse } from "#common/infra/services/http/undici-response.js";
 
 export class HttpClientService {
   get(path, options) {

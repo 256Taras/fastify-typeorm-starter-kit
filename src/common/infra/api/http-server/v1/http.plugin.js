@@ -4,8 +4,8 @@ import fastifyAuth from "@fastify/auth";
 import fastifyCors from "@fastify/cors";
 import fastifyAutoLoad from "@fastify/autoload";
 
-import { fastifyCorsConfig } from "#configs";
 import { getDirName } from "#common/utils/common/index.js";
+import { fastifyCorsConfig } from "#src/configs/index.js";
 // SHARED
 
 const httpPlugin = async (fastify, otp) => {

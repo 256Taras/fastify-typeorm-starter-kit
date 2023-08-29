@@ -1,4 +1,4 @@
-import { ILogger } from "#services/logger/logger.interface";
+import { ILogger } from "#common/infra/services/logger/logger.interface";
 
 export declare const TerminalOptions: {
   level: any;

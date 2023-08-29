@@ -1,5 +1,5 @@
 import { TEncryptionAlgorithm } from "./encryption-algorithm.type";
-import { IUuidOptions } from "./uuid-options.interface.d.js";
+import { IUuidOptions } from "./uuid-options.interface.d";
 
 /**
  * Interface for encrypting and hashing data.

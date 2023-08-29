@@ -26,14 +26,7 @@
           "#tests": "./tests",
           "#src": "./src",
           "#modules": "./src/modules",
-          "#configs": "./src/configs",
-          "#common": "./src/common",
-          "#types": "./src/@types",
-          "#constants": "./src/common/constants",
-          "#services": "./src/common/infra/services",
-          "#errors": "./src/common/errors",
-          "#utils": "./src/common/utils",
-          "#v1": "./src/common/infra/api/http-server/v1"
+          "#common": "./src/common"
         },
         "extensions": [
           ".js",

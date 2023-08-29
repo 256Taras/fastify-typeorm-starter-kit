@@ -2,14 +2,14 @@ export function generateSchemasFunction({ SchemaName, LowerCaseName, TypeBoxAttr
   return `
 import { Type } from "@sinclair/typebox";
 
-import { BadRequestException, ResourceNotFoundException } from "#errors";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
-} from "#utils/schemas/index.js";
+} from "#common/utils/schemas/index.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
-import { COMMON_SCHEMAS_V1 } from "#v1";
-import { pick } from "#utils/objects/index.js";
+import { COMMON_SCHEMAS_V1 } from "#common/infra/api/http-server/v1/index.js";
+import { BadRequestException, ResourceNotFoundException } from "#common/errors/index.js";
+import { pick } from "#common/utils/objects/pick.js";
 
 /** Common schemas start */
 

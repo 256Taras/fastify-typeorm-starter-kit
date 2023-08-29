@@ -1,6 +1,6 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 
-import { tables } from "#constants";
+import { tables } from "#common/constants/index.js";
 
 export default class User extends BaseEntity {
   /** @type {string} */

@@ -1,7 +1,7 @@
 import fp from "fastify-plugin";
 import { requestContext } from "@fastify/request-context";
 
-import { SERVER_TIMEOUT_408 } from "#errors";
+import { SERVER_TIMEOUT_408 } from "#common/errors/index.js";
 
 const TIMEOUT_KEY = "TIMEOUT_KEY";
 const CONTROLLER_KEY = "CONTROLLER_KEY";

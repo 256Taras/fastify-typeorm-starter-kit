@@ -1,9 +1,9 @@
 import fastifyJwt from "@fastify/jwt";
 import fp from "fastify-plugin";
 
-import { authConfig, fastifyJwtConfig as jwtConfig } from "#configs";
-import { UnauthorizedException } from "#errors";
-import { logger } from "#services/logger/logger.service.js";
+import { authConfig, fastifyJwtConfig as jwtConfig } from "#src/configs/index.js";
+import { UnauthorizedException } from "#common/errors/index.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 const ACCESS_DENIED_MESSAGE = "Access denied";
 
@@ -17,8 +17,11 @@ async function authPlugin(app, options) {
 
   // @ts-ignore
   app.decorate("verifyJwt", options?.infra?.authService.verifyJwt ?? defaultVerifyJwt);
-  // @ts-ignore
-  app.decorate("verifyJwtRefreshToken", options?.infra?.authService.verifyJwtRefreshToken ?? defaultVerifyJwtRefreshToken);
+  app.decorate(
+    "verifyJwtRefreshToken",
+    // @ts-ignore
+    options?.infra?.authService.verifyJwtRefreshToken ?? defaultVerifyJwtRefreshToken,
+  );
 
   /**
    * Default middleware to verify JWT access tokens.
@@ -59,9 +62,6 @@ async function authPlugin(app, options) {
       throw new UnauthorizedException(ACCESS_DENIED_MESSAGE);
     }
   }
-
 }
-
-
 
 export default fp(authPlugin);

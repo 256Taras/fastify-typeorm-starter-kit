@@ -1,4 +1,4 @@
-import { BadRequestException } from "#errors";
+import { BadRequestException } from "#common/errors/index.js";
 
 /**
  * Formats error messages for object validation errors according to the given schema.

@@ -2,15 +2,14 @@ import { diContainer, fastifyAwilixPlugin } from "@fastify/awilix";
 import * as awilix from "awilix";
 import fp from "fastify-plugin";
 
-import * as nconf from "#configs";
-import { userContext, userRefreshTokenContext } from "#utils/common/user.context.js";
 import { getDirName } from "#common/utils/common/index.js";
-import { logger } from "#services/logger/logger.service.js";
+import * as nconf from "#src/configs/index.js";
+import { userContext, userRefreshTokenContext } from "#common/utils/common/user.context.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import AppDataSource from "../../../../infra/database/typeorm.config.js";
 
 const basePath = "../../../";
-
 
 /**
  * A Fastify plugin that creates a dependency injection container using Awilix.
@@ -51,7 +50,6 @@ async function diContainerPlugin(app, otp) {
   });
 }
 
-
 /**
  * Convert a string to camelCase.
  *
@@ -60,7 +58,6 @@ async function diContainerPlugin(app, otp) {
  */
 export const toCamelCase = (srt) =>
   srt.toLowerCase().replace(/([_-][a-z])/g, (g) => g.toUpperCase().replace("-", "").replace("_", ""));
-
 
 /**
  * Load and register entity repositories into the container.
@@ -83,7 +80,7 @@ async function loadEntityRepositories(__dirname) {
         const modelName = toCamelCase(splat[0]);
         return `${modelName}sRepository`;
       },
-    }
+    },
   );
 }
 
@@ -109,7 +106,7 @@ async function loadServicesAndRepositories(__dirname) {
       },
       formatName: "camelCase",
       esModules: true,
-    }
+    },
   );
 }
 
@@ -132,6 +129,5 @@ async function loadUseCases(__dirname) {
     esModules: true,
   });
 }
-
 
 export default fp(diContainerPlugin, { name: "container" });

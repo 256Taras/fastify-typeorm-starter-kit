@@ -1,4 +1,4 @@
-import { logger } from "#services/logger/logger.service.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 export class DatabaseLoggerService {
   logQuery(query, parameters) {

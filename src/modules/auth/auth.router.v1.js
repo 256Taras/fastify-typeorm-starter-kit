@@ -1,7 +1,11 @@
-import { BadRequestException, ResourceAlreadyExistException, ResourceNotFoundException } from "#errors";
-import { ROLES_NAMES, STATUS_SUCCESS } from "#constants";
 import authSchemas from "#modules/auth/auth.schemas.js";
-import { useCase } from "#utils/common/use-case.js";
+import { useCase } from "#common/utils/common/use-case.js";
+import {
+  BadRequestException,
+  ResourceAlreadyExistException,
+  ResourceNotFoundException,
+} from "#common/errors/index.js";
+import { ROLES_NAMES, STATUS_SUCCESS } from "#common/constants/index.js";
 
 /** @type {import("@fastify/type-provider-typebox").FastifyPluginAsyncTypebox } */
 export default async function authRouterV1(app) {

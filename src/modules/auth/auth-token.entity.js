@@ -1,7 +1,7 @@
 import { BaseEntity, EntitySchema } from "typeorm";
 
 import User from "#modules/users/user.entity.js";
-import { tables } from "#constants";
+import { tables } from "#common/constants/index.js";
 
 export default class AuthToken extends BaseEntity {
   /** @type {string} */

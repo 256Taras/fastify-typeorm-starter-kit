@@ -17,7 +17,7 @@ import {
   globalHttpFastifyErrorHandler,
 } from "#common/errors/fastify-error-handler.js";
 import sharedHealthCheckRouter from "#modules/health-check/router.js";
-import * as configs from "#configs";
+import * as configs from "#src/configs/index.js";
 
 import appV1Plugin from "./v1/http.plugin.js";
 

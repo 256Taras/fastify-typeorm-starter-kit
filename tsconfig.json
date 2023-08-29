@@ -26,14 +26,7 @@
       "#tests/*": ["./tests/*"],
       "#src/*": ["./src/*"],
       "#modules/*": ["./src/modules/*"],
-      "#configs": ["./src/configs/index.js"],
-      "#types/*": ["./src/@types/*"],
-      "#common/*": ["./src/common/*"],
-      "#constants": ["./src/common/constants/index.js"],
-      "#services/*": ["./src/common/infra/services/*"],
-      "#errors": ["./src/common/errors/index.js"],
-      "#utils/*": ["./src/common/utils/*"],
-      "#v1": ["./src/common/infra/api/http-server/v1/index.js"]
+      "#common/*": ["./src/common/*"]
     }
   },
   "include": [

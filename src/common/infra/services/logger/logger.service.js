@@ -1,7 +1,7 @@
 import Pino from "pino";
 import { requestContext } from "@fastify/request-context";
 
-import { loggerConfig, appConfig } from "#configs";
+import { appConfig, loggerConfig } from "#src/configs/index.js";
 
 const PinoPrettyTransport = {
   target: "pino-pretty",

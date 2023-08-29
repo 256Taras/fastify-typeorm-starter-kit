@@ -1,8 +1,8 @@
 import { diContainer } from "@fastify/awilix";
 
-import { ROLES_NAMES } from "#constants";
-import { UnauthorizedException } from "#errors";
-import { logger } from "#services/logger/logger.service.js";
+import { UnauthorizedException } from "#common/errors/index.js";
+import { ROLES_NAMES } from "#common/constants/index.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import {
   AUTHORIZED_MOCK_USER_ID,

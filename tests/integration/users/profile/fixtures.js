@@ -1,5 +1,5 @@
-import { ROLES_NAMES } from "#constants";
-import EncrypterService from "#services/encrypter/encrypter.service.js";
+import EncrypterService from "#common/infra/services/encrypter/encrypter.service.js";
+import { ROLES_NAMES } from "#common/constants/index.js";
 
 import {
   FIRSTNAME,

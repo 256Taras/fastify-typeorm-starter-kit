@@ -9,8 +9,6 @@
  */
 import { requestContext } from "@fastify/request-context";
 
-import { appConfig } from "#configs";
-import { logger } from "#services/logger/logger.service.js";
 import {
   EndpointNotFoundException,
   PAYLOAD_TO_LARGE_413,
@@ -23,6 +21,8 @@ import {
   INVALID_JSON_SYNTAX_400,
 } from "#common/errors/index.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
+import { appConfig } from "#src/configs/index.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 /**
  * @param {Object} param

@@ -1,12 +1,12 @@
 import { Type } from "@sinclair/typebox";
 
 import { Enum } from "#src/common/utils/schemas/enum.js";
-import { ROLES_NAMES } from "#constants";
+import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
-} from "#utils/schemas/index.js";
-import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
+} from "#common/utils/schemas/index.js";
+import { ROLES_NAMES } from "#common/constants/index.js";
 
 export const USER_ENTITY_SCHEMA = Type.Object(
   {

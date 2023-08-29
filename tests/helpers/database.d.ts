@@ -1,4 +1,4 @@
-import { tables } from "#constants";
+import { tables } from "#src/common/constants/db-tables";
 
 export declare interface ISeedData {
   name: string;

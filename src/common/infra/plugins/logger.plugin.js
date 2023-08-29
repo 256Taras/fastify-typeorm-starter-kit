@@ -2,7 +2,7 @@ import fp from "fastify-plugin";
 import { requestContext } from "@fastify/request-context";
 
 import defaultLogger from "#common/infra/services/logger/logger.service.js";
-import { appConfig, loggerConfig } from "#configs";
+import { appConfig, loggerConfig } from "#src/configs/index.js";
 
 /**
  * @param {import('fastify').FastifyInstance} app
@@ -85,8 +85,6 @@ async function requestLoggerPlugin(app) {
     }
     done();
   }
-
 }
-
 
 export default fp(requestLoggerPlugin);

@@ -1,14 +1,19 @@
 import { Type } from "@sinclair/typebox";
 
-import { COMMON_SCHEMAS_V1 } from "#v1";
 import {
   convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors,
   mixinTagForSchemas,
 } from "#common/utils/schemas/index.js";
 import { USER_ENTITY_SCHEMA, USER_OUTPUT_SCHEMA } from "#modules/users/users.schemas.js";
 import { defaultHttpErrorCollection } from "#common/errors/default-http-error-collection.js";
-import { BadRequestException, ConflictException, ResourceNotFoundException, UnauthorizedException } from "#errors";
-import { pick } from "#utils/objects/index.js";
+import {
+  BadRequestException,
+  ConflictException,
+  ResourceNotFoundException,
+  UnauthorizedException,
+} from "#common/errors/index.js";
+import { pick } from "#common/utils/objects/pick.js";
+import { COMMON_SCHEMAS_V1 } from "#common/infra/api/http-server/v1/index.js";
 
 const ACCESS_TOKEN_SCHEMA = Type.Object(
   {

@@ -1,6 +1,6 @@
 import { Dispatcher } from "undici";
 
-import { IHttpClient, IHttpRequestOptions } from "#services/http/http-client.interface";
+import { IHttpClient, IHttpRequestOptions } from "#common/infra/services/http/http-client.interface";
 
 export declare class HttpClientService implements IHttpClient {
   get(path: string, options?: IHttpRequestOptions): Promise<Dispatcher.ResponseData>;

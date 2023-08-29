@@ -1,8 +1,11 @@
-import { logger } from "#services/logger/logger.service.js";
-import { tables } from "#constants";
+// @ts-ignore
+import { tables } from "#common/constants/index.js";
+// @ts-ignore
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import DataSource from "../../infra/database/typeorm.config.js";
 import { env } from "../../configs/env.js";
+// @ts-ignore
 
 /**
  *  utility for working with the database.

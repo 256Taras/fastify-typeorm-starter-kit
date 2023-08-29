@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { DataSource } from "typeorm";
 
-import { DatabaseLoggerService } from "#services/logger/database-logger.service.js";
+import { DatabaseLoggerService } from "#common/infra/services/logger/database-logger.service.js";
 
 import { env } from "../../configs/env.js";
 

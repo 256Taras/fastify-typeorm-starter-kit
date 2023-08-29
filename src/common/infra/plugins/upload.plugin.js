@@ -2,18 +2,17 @@ import fs from "node:fs/promises";
 
 import fp from "fastify-plugin";
 
-import { isMappable } from "#utils/objects/index.js";
-import { UNSUPPORTED_MEDIA_TYPE_415 } from "#errors";
-import { validateSchema } from "#utils/schemas/index.js";
-import { STORAGE_PATH, TEMP_STORAGE_PATH, UPLOAD_SERVER_PATH, UPLOAD_UI_PATH } from "#constants";
-import { appConfig } from "#configs";
-import { logger } from "#services/logger/logger.service.js";
-
+import { isMappable } from "#common/utils/objects/index.js";
+import { validateSchema } from "#common/utils/schemas/index.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
+import { STORAGE_PATH, TEMP_STORAGE_PATH, UPLOAD_SERVER_PATH, UPLOAD_UI_PATH } from "#common/constants/index.js";
+import { appConfig } from "#src/configs/index.js";
+import { UNSUPPORTED_MEDIA_TYPE_415 } from "#common/errors/index.js";
 
 /**
-* A Fastify plugin that creates a dependency injection container using Awilix.
-* @type {import('fastify').FastifyPluginAsync} app
-*/
+ * A Fastify plugin that creates a dependency injection container using Awilix.
+ * @type {import('fastify').FastifyPluginAsync} app
+ */
 async function uploadPlugin(app, option) {
   // @ts-ignore
   app.decorate("parseMultipartFields", option?.parseMultipartFields ?? parseMultipartFields);
@@ -43,7 +42,6 @@ async function uploadPlugin(app, option) {
     }
   }
 
-
   /**
    * Uploads a file to the server storage.
    *
@@ -70,7 +68,6 @@ async function uploadPlugin(app, option) {
       throw new Error("Upload error");
     }
   }
-
 
   /**
    * Uploads a file to the server
@@ -102,7 +99,7 @@ async function uploadPlugin(app, option) {
    * Pre-handler for parsing multipart request body to extract values.
    * Parses multipart request body and mutates the request object with the parsed fields.
    */
-  function parseMultipartFields (schema) {
+  function parseMultipartFields(schema) {
     /**
      * @param {import('fastify').FastifyRequest} req - The request object
      * @returns {Promise<void>}
@@ -141,7 +138,6 @@ async function uploadPlugin(app, option) {
       req.body = { ...(req?.body || {}), ...parsedFields };
     };
   }
-
 }
 
 export function toUiPath(filePath) {

@@ -4,7 +4,7 @@ import path from "node:path";
 import { pipeline } from "node:stream";
 import { randomUUID } from "node:crypto";
 
-import { TEMP_STORAGE_PATH } from "#constants";
+import { TEMP_STORAGE_PATH } from "#common/constants/index.js";
 
 export const generateFileName = (name) => {
   const extension = path.extname(name).substring(1);

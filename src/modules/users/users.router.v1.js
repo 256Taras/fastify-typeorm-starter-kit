@@ -1,6 +1,6 @@
-import { logger } from "#services/logger/logger.service.js";
 import { ForbiddenException } from "#src/common/errors/common.errors.js";
-import { omit } from "#utils/objects/omit.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
+import { omit } from "#common/utils/objects/index.js";
 
 import usersSchemas from "./users.schemas.js";
 

@@ -1,6 +1,6 @@
-import { serverConfig, appConfig } from "#configs";
-import { logger } from "#services/logger/logger.service.js";
 import RestApi from "#common/infra/api/http-server/server.js";
+import { appConfig, serverConfig } from "#src/configs/index.js";
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import AppDataSource from "../infra/database/typeorm.config.js";
 

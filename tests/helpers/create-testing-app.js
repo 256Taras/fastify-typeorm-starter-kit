@@ -3,8 +3,10 @@
 
 // @ts-ignore
 import { RestApiServer } from "#common/infra/api/http-server/server.js";
-import { logger } from "#services/logger/logger.service.js";
-import * as configs from "#configs";
+// @ts-ignore
+import * as configs from "#src/configs/index.js";
+// @ts-ignore
+import { logger } from "#common/infra/services/logger/logger.service.js";
 
 import DataSource from "../../infra/database/typeorm.config.js";
 

@@ -2,7 +2,7 @@ import { IncomingHttpHeaders } from "http";
 
 import { Dispatcher } from "undici";
 
-import { IHttpRequestOptions } from "#services/http/http-client.interface";
+import { IHttpRequestOptions } from "#common/infra/services/http/http-client.interface";
 
 export declare class HttpRequestError extends Error {
   readonly statusCode: number;

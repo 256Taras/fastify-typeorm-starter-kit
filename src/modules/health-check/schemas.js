@@ -1,7 +1,7 @@
 import { Type } from "@sinclair/typebox";
 
-import { convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors } from "#utils/schemas/index.js";
-import { defaultHttpErrorCollection } from "#errors";
+import { convertHttpErrorCollectionToFastifyAjvSchemaErrorCollection as convertHttpErrorCollectionToAjvErrors } from "#common/utils/schemas/index.js";
+import { defaultHttpErrorCollection } from "#common/errors/index.js";
 
 export const SIMPLE_SYSTEM_HEALTH_SCHEMA = Type.Object(
   {

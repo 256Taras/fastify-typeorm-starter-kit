@@ -1,6 +1,6 @@
-import { fastifyJwtConfig } from "#configs";
-
 /** @typedef {import('../users/types.js').IUser} IUser */
+import { fastifyJwtConfig } from "#src/configs/index.js";
+
 /** @typedef {import('@fastify/awilix').Cradle} Deps */
 
 export default class TokenService {
